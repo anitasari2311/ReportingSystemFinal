@@ -1,0 +1,319 @@
+<html>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  #myList {width: 200; list-style: none; margin: 0; auto 0 auto;}
+  #myList li {list-style-type: none; float: left; width: 100px;}
+  #myList li label{width: 200px; padding: 2px 10px 0 8px; display: inline-block;}
+</style>
+
+  <title> Add New Schedule </title>
+<!-- 
+<body>
+  <div class="nav">
+    <ul>
+      <li>Home </li>
+      <li>Master</li>
+      <li>Template
+        <ul>
+            <li>New Template</li>
+            <li>Query Template</li>
+            <li>Finalisasi</li>
+        </ul>
+      </li>
+      <li>Perubahan</li>
+      <li>Preview</li>
+      <li>Scheduling
+        <ul>
+            <li>Add Schedule</li>
+            <li>Edit Schedule</li>
+            <li>Run Schedule</li>
+        </ul>
+      </li>
+      <li>List Report</li>
+      <li>Log Off</li>
+      <li>Keluar</li>
+    </ul>
+  </div>
+</body> -->
+
+
+<body>
+<div class ="containerJudul">
+  <center>  <h1> Add New Schedule </h1> </center>
+</div>
+
+<form action = "/prosesAddNewSchedule" method ='POST' enctype="multipart/form-data">
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="kodeReport">Choose Report : </label>
+  </div>
+
+<div>
+
+  <input name="valKode" list="listKodeR">
+
+<datalist id="listKodeR">
+  {% for row in listKodeReportS %}
+  <option value="{{row[0]}}">
+    {% endfor %}
+</datalist>
+
+   
+
+  </div>
+
+
+<br>
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="header">Header : </label>
+  </div>
+    <input type="text" id="header" name="header" placeholder="">
+</div>
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="keterangan">Description : </label>
+  </div>
+    <textarea id="keterangan" name="keterangan"></textarea>
+</div>
+
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="note">Note : </label>
+  </div>
+    <input type="text" id="note" name="note" placeholder="">
+</div>
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="PIC">PIC: </label>
+  </div>
+   <div class ="myBoxPIC">
+           
+              <input type="text" id="myInput" onkeyup="funcSearchPIC()" placeholder="Search for names.." title="Type in a name">
+              <table id="list">
+                      <tr>
+                        <th></th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                      </tr>
+                  
+                      {% for liPIC in listPIC %}
+                      <tr>
+                        <td><input type ="checkbox" name="{{liPIC[0]}}"  value =""></td>
+                        <td>{{liPIC[0]}}</td>
+                        <td>{{liPIC[1]}}</td>
+                        <td>{{liPIC[2]}}</td>
+                      </tr>
+                      {% endfor %}
+              </table>
+          
+      </div>
+</div>
+<br>
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="Penerima">Receiver: </label>
+  </div>
+   <div class ="myBoxPIC">
+           
+              <input type="text" id="myInput1" onkeyup="funcSearchPen()" placeholder="Search for names.." title="Type in a name">
+              <table id="listkedua">
+                      <tr>
+                        <th></th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                      </tr>
+                  
+                      {% for liPen in listPen %}
+                      <tr>
+                        <td><input type ="checkbox" name="{{liPen[2]}}"  value =""></td>
+                        <td>{{liPen[0]}}</td>
+                        <td>{{liPen[1]}}</td>
+                        <td>{{liPen[2]}}</td>
+                      </tr>
+                      {% endfor %}
+              </table>
+          
+      </div>
+</div>
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="grouping">Grouping : </label>
+  </div>
+    <input type="text" id="grouping" name="grouping" placeholder="">
+</div>
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="grouping">Schedule : </label>
+  </div>
+  <input type ="radio" id="dm" value="hb" name="rutin" onclick="myFunction2()" checked="checked">Day+Month</input>
+  <input type ="radio" id="dm2" value="tb" name="rutin" onclick ="myFunction3()">Date+Month</input>
+
+     
+</div>
+
+<br>
+
+
+<div class ="row">
+  <div class ="col-15">
+
+  </div>
+
+      <div class ="myBox">
+            <ul id="Month">
+              <li><input type="checkbox" name="Jan" value="January">January</li>
+              <li><input type="checkbox" name="Feb" value="February">February</li>
+              <li><input type="checkbox" name="Mar" value="March">March</li>
+              <li><input type="checkbox" name="Apr" value="April">April</li>
+              <li><input type="checkbox" name="Mei" value="May">May</li>
+              <li><input type="checkbox" name="Jun" value="June">June</li>
+              <li><input type="checkbox" name="Jul" value="July">July</li>
+              <li><input type="checkbox" name="Agu" value="August">August</li>
+              <li><input type="checkbox" name="Sep" value="September">September</li>
+              <li><input type="checkbox" name="Okt" value="October">October</li>
+              <li><input type="checkbox" name="Nov" value="November">November</li>
+              <li><input type="checkbox" name="Des" value="December">December</li>
+            </ul>
+      </div>
+
+      <div class ="myBox">
+            <ul id="Day">
+              <li><input type="checkbox" name="senin" value="Monday">Monday</li>
+              <li><input type="checkbox" name="selasa" value="Tuesday">Tuesday</li>
+              <li><input type="checkbox" name="rabu" value="Wednesday">Wednesday</li>
+              <li><input type="checkbox" name="kamis" value="Thursday">Thursday</li>
+              <li><input type="checkbox" name="jumat" value="Friday">Friday</li>
+              <li><input type="checkbox" name="sabtu" value="Saturday">Saturday</li>
+              <li><input type="checkbox" name="minggu" value="Sunday">Sunday</li>
+            </ul>
+            <ul id="Date">
+                    <li><input type="checkbox" name="t1" value="1">1<br></li>
+                    <li><input type="checkbox" name="t2" value="2">2<br></li>
+                    <li><input type="checkbox" name="t3" value="3">3<br></li>
+                    <li><input type="checkbox" name="t4" value="4">4<br></li>
+                    <li><input type="checkbox" name="t5" value="5">5<br></li>
+                    <li><input type="checkbox" name="t6" value="6">6<br></li>
+                    <li><input type="checkbox" name="t7" value="7">7<br></li>
+                    <li><input type="checkbox" name="t8" value="8">8<br></li>
+                    <li><input type="checkbox" name="t9" value="9">9<br></li>
+                  
+                    <li><input type="checkbox" name="t10" value="10">10<br></li>
+                    <li><input type="checkbox" name="t11" value="11">11<br></li>
+                    <li><input type="checkbox" name="t12" value="12">12<br></li>
+                    <li><input type="checkbox" name="t13" value="13">13<br></li>
+                    <li><input type="checkbox" name="t14" value="14">14<br> </li>
+                    <li><input type="checkbox" name="t15" value="15">15<br></li>
+                    <li><input type="checkbox" name="t16" value="16">16<br></li>
+                    <li><input type="checkbox" name="t17" value="17">17<br></li>
+                    <li><input type="checkbox" name="t18" value="18">18<br></li>
+                  
+                    <li><input type="checkbox" name="t19" value="19">19<br></li>
+                    <li><input type="checkbox" name="t20" value="20">20<br></li>
+                    <li><input type="checkbox" name="t21" value="21">21<br> </li>
+                    <li><input type="checkbox" name="t22" value="22">22<br></li>
+                    <li><input type="checkbox" name="t23" value="23">23<br></li>
+                    <li><input type="checkbox" name="t24" value="24">24<br></li>
+                    <li><input type="checkbox" name="t25" value="25">25<br></li>
+                    <li><input type="checkbox" name="t26" value="26">26<br></li>
+                    <li><input type="checkbox" name="t27" value="27">27<br></li>
+                  
+                    <li><input type="checkbox" name="t28" value="28">28<br></li>
+                    <li><input type="checkbox" name="t29" value="29">29<br></li>
+                    <li><input type="checkbox" name="t30" value="30">30<br></li>
+                    <li><input type="checkbox" name="t31" value="31">31<br></li>
+            </ul>
+      </div>
+
+      
+
+</div>
+
+</form>
+
+<br><br>
+<center>
+<button class="Submit" value="Submit">Save</button>
+<button class="Submit" value="Cancel">Cancel</button>
+</center>
+</body>
+
+<script>
+
+/*                   RADIO BUTTON JADWAL            */
+  function myFunction2(){
+  var check1 = document.getElementById("dm");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+
+      if(check1.selected == false){ Days.style.display = "none"; Months.style.display ="none";}
+          else{ Days.style.display = "block"; Months.style.display ="block";
+                Dates.style.display ="none";}
+}
+function myFunction3(){
+  var check2 = document.getElementById("dm2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  if(check2.selected == false){ Dates.style.display = "none"}
+          else{ Dates.style.display = "block"; Months.style.display ="block";
+                Days.style.display ="none";}
+}
+
+/*                     SEARCH BY NAME                   */
+function funcSearchPIC() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+function funcSearchPen() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput1");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("listkedua");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+</script>
+</html>

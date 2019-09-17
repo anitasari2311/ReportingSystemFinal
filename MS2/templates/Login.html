@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+
+    <body>
+       <div>
+            <center>
+                <div style="padding-top: 30px;padding-bottom: 20px; font-family: 'Arial';font-size: 20px;">
+                     <h1>REPORTING SYSTEM</h1>
+                </div>
+               
+              <!--  <form action="/showmenu"> -->
+
+                    <div class="container" >
+                        <form action="/authLogin" method="post">
+                            <div>
+                                <label for="uname"><b>Username</b></label>
+                                    <div class="" style="float: center; width: 250px">
+                                        <input type="text" placeholder="Input Username" name="username" value="{{
+                                        request.form.username }}">
+                                    </div>
+                            </div>
+
+                            <div>
+                                <label for="psw"><b>Password</b></label>
+                                <div class="" style="float: center; width: 250px">
+                                    <input type="password" placeholder="Input Password" name="password" value="{{
+                                    request.form.password }}" id="myPassword">
+                                </div>
+                            </div>
+
+                            <br>
+                            
+                            <input type="checkbox" onclick="myFunction()">Show Password
+
+
+                            <div class="row" style="padding-top: 15px" >
+                                <button type="submit"class="submit">Login</button>
+                            </div>
+                        </form>
+                        {% if error %}
+                        <p class="error"><strong>Error:</strong> {{ error }}</p>
+                         {% endif %}
+                    </div>
+               <!-- </form> -->
+
+            </center>
+       </div>
+    </body>
+    <script>
+        function myFunction() {
+  var x = document.getElementById("myPassword");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+
+    </script>
+</html>

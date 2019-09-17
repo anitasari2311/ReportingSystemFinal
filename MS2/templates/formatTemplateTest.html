@@ -1,0 +1,234 @@
+<html>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+  <title> Edit Report </title>
+
+
+
+
+<div class ="containerJudul">
+  <center>  <h1> Format Template </h1> </center>
+</div>
+<form action="/prosesFormatTemplate" method="POST">
+
+
+
+{% if detailTemplate %}
+{% for row in detailTemplate %}
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="kodeReport">Kode Report : </label>
+  </div>
+        <input type="text" class = "col-10" id="kodeLaporan" name="kodLap" value="{{row[0]}}">
+
+  <div class ="col-15">
+    <label for="periode">Periode : </label>
+  </div>
+        <input type="text" class = "col-10" id="periode" name="periode" value="{{row[1]}}">
+
+  <div class ="col-15">
+    <label for="periode">Print All : </label>
+  </div>
+        <input type="text" class = "col-10" id="printAll" name="printAll" value="{{row[2]}}">
+
+</div>
+
+
+
+<br><br>
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="namaReport">Nama Report : </label>
+  </div>
+    <input type="text" id="namaReport" name="namaReport" value="{{row[3]}}">
+</div>
+
+
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="jmlHeader">Jumlah Header : </label>
+  </div>
+        <input type="text" class = "col-10" id="jmlHeader" name="jmlHeader" value="{{row[4]}}">
+
+  <div class ="col-15">
+    <label for="jmlFooter">Jumlah Footer : </label>
+  </div>
+        <input type="text" class = "col-10" id="jmlFooter" name="jmlFooter" value="{{row[5]}}">
+
+  <div class ="col-15">
+    <label for="jmlKolom">Jumlah Kolom : </label>
+  </div>
+        <input type="text" class = "col-10" id="jmlKolom" name="jmlKolom" value="{{row[6]}}">
+
+</div>
+
+
+<div class ="row">
+  <div class ="col-15">
+    <label for="rataTengah">Kolom rata tengah : </label>
+  </div>
+        <input type="text" class = "col-10" id="rateTengah" name="rataTengah" >
+
+  <div class ="col-15">
+    <label for="rataKanan">Kolom rata kanan : </label>
+  </div>
+        <input type="text" class = "col-10" id="rataKanan" name="rataKanan">
+
+</div>
+
+
+
+{% set x = row[6] %}
+{% endfor %}
+
+<!-- LOOPING KOLOM -->
+
+ <!-- ENDFOR AWAL -->
+{% for i in range (0, detailFormatTemplate|length) %}
+<div class ="row">
+  <div class =" col-15">
+    <label for="kolom">Kolom {{i+1}} : </label>
+
+  </div>
+         
+
+        
+        <input type="text" class = "col-10" id="kol" name="{{i+1}}" value="{{detailFormatTemplate[i][0]}}">
+               
+        
+        <select id="lok" class = "col-10" name="lokasi{{i+1}}">
+          <option value="{{detailFormatTemplate[i][1]}}">{{detailFormatTemplate[i][1]}}</option>
+          {% for row3 in detailFormatTemplate %}
+          <option value="{{detailFormatTemplate[i][1]}}">{{row3[1]}}</option>
+          {% endfor %}
+          <!-- <option value="B7">B7</option>
+          <option value="C6">C6</option>
+          <option value="C7">C7</option>
+          <option value="D6">D6</option>
+          <option value="D7">D7</option>
+          <option value="E6">E6</option>
+          <option value="E7">E7</option>
+          <option value="F6">F6</option>
+          <option value="F7">F7</option>
+          <option value="G6">G6</option>
+          <option value="G7">G7</option>
+          <option value="H6">H6</option>
+          <option value="H7">H7</option>
+          <option value="I6">I6</option>
+          <option value="I7">I7</option>
+          <option value="J6">J6</option>
+          <option value="J7">J7</option>
+          <option value="K6">K6</option>
+          <option value="K7">K7</option>
+          <option value="L6">L6</option>
+          <option value="L7">L7</option>
+          <option value="M6">M6</option>
+          <option value="M7">M7</option>
+          <option value="N6">N6</option>
+          <option value="N7">N7</option> -->
+        </select>
+
+        <select id="format" class = "col-10" name="formatKolom{{i+1}}" value="{{detailFormatTemplate[i][2]}}">
+          <option value="String">String</option>
+          <option value="Integer">Integer</option>
+          <option value="Decimal">Decimal</option>
+          <option value="Percentage">Percentage</option>
+          <option value="Date">Date</option>
+          <option value="Time">Time</option>
+          <option value="Datetime">Datetime</option>
+        </select>
+
+        <input type="text" class = "col-10" id="lebar" name="lebar{{i+1}}" value="{{detailFormatTemplate[i][3]}}">
+
+        
+
+  </div>
+
+        
+
+  </div>
+{% endfor %} 
+
+
+ 
+
+
+      
+{% for i in range(2) %}
+<div class ="row">
+  <div class ="col-15">
+    <label for="footer">Footer {{i+1}} : </label>
+  </div>
+        <input type="text" class = "col-10" id="kolF" name="kolomFooter" >
+
+<!-- CHECKBOX UNTUK LETAK FOOTER -->
+<input type="checkbox" name="B{{i+1}}" value="B">B
+<input type="checkbox" name="C{{i+1}}" value="C">C
+<input type="checkbox" name="D{{i+1}}" value="D">D
+<input type="checkbox" name="E{{i+1}}" value="E">E
+<input type="checkbox" name="F{{i+1}}" value="F">F
+<input type="checkbox" name="G{{i+1}}" value="G">G
+<input type="checkbox" name="H{{i+1}}" value="H">H
+<input type="checkbox" name="I{{i+1}}" value="I">I
+<input type="checkbox" name="J{{i+1}}" value="J">J
+<input type="checkbox" name="K{{i+1}}" value="K">K
+<input type="checkbox" name="L{{i+1}}" value="L">L
+<input type="checkbox" name="M{{i+1}}" value="M">M
+<input type="checkbox" name="N{{i+1}}" value="N">N
+
+
+{% endfor %}
+
+
+
+ <!-- ENDFOR AWAL2 -->
+
+
+<br><br><br>
+
+<button> SAVE </button>
+
+</form>
+
+<button> CANCEL </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% else %}
+
+<br>
+
+<center>
+
+
+
+<h3> Template untuk kode Laporan: </h3>
+<h2>{{kode_laporan}}</h2>
+<h3> tidak ditemukan :( </h3>
+</center>
+
+{% endif %}
+
+
+
+
+
+
+
+  </html>
