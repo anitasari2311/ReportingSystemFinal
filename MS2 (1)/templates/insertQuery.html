@@ -1,0 +1,197 @@
+<html>
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+  <title> Add New Query </title>
+  <body>
+
+<!-- {% if editQ %}
+ -->
+<form action="/prosesInsertQuery" method = "POST">
+    <div class ="containerJudul">
+      <center>  <h1>Edit Query</h1> </center>
+    </div>
+
+    
+    <div class ="row">
+      <div class ="col-15">
+        <label for="kodeReport">Pilih Report : </label>
+      </div>
+            <select name="kodLap">
+          
+          <!-- apakah tambah text-transform: uppercase? coba dulu-->
+          <option name="kodLap" value="{{kode_laporan}}">{{kode_laporan}}</option>
+        
+        </select>
+
+  <br><br>
+  {% for i in range (0, 7) %}
+  <div class="rowF">
+    {%if editQ[i] != '' and editQ[i] != none %}
+      <label for="kodeReport">Query {{i+1}} : </label>
+      <div class ="column">
+        <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}">{{editQ[i][0]}}</textarea>
+      </div>
+    {%else%}
+      <label for="kodeReport">Query {{i+1}} : </label>
+      <div class ="column">
+        <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}"></textarea>
+      </div>
+    {%endif%}
+    {%if editQ[i+7] != '' and editQ[i+7] != none %}
+      <label for="kodeReport">Query {{i+8}} : </label>
+      <div class ="column">
+        <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}">{{editQ[i+7][0]}}</textarea>
+      </div>
+    {%else%}
+      <label for="kodeReport">Query {{i+8}} : </label>
+      <div class ="column">
+        <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}"></textarea>
+      </div>
+    {%endif%}
+  </div>
+  {%endfor%}
+
+
+<center>
+<button>Save</button>
+</form>
+
+
+
+
+<button>Cancel</button>
+</center>
+
+
+
+  </body>
+
+  <!-- {% else %} -->
+
+    <form action="/prosesInsertQuery" method = "POST">
+    <div class ="containerJudul">
+      <center>  <h1>Insert Query</h1> </center>
+    </div>
+
+    
+    <div class ="row">
+      <div class ="col-15">
+        <label for="kodeReport">Pilih Report : </label>
+      </div>
+            <select name="kodLap">
+          {% for row in clearQ %}
+          <option name="kodLap" value="{{row[0]}}">{{row[0]}}</option>
+        {% endfor %}        
+        </select>
+
+            
+  <br><br>
+
+
+<div class="rowF">
+      <label for="kodeReport">Query 1 : </label><div class ="column">
+
+        <textarea  id = "q1" class = "textQuery" name="query1"></textarea>
+      </div>
+
+      <label for="kodeReport">Query 8 : </label>
+          <div class ="column">
+
+            <textarea  id = "q8" class = "textQuery" name="query8"></textarea>
+          </div>
+  </div>
+</div>
+
+<div class="rowF">
+      <label for="kodeReport">Query 2 : </label><div class ="column">
+
+        <textarea  id = "q2" class = "textQuery" name="query2"></textarea>
+      </div>
+
+      <label for="kodeReport">Query 9 : </label>
+          <div class ="column">
+
+            <textarea  id = "q9" class = "textQuery" name="query9"></textarea>
+          </div>
+</div>
+
+<div class="rowF">
+      <label for="kodeReport">Query 3 : </label><div class ="column">
+
+        <textarea  id = "q3" class = "textQuery" name="query3"></textarea>
+      </div>
+
+      <label for="kodeReport">Query 10 : </label>
+          <div class ="column">
+
+            <textarea  id = "q10" class = "textQuery" name="query10"></textarea>
+          </div>
+</div>
+
+<div class="rowF">
+      <label for="kodeReport">Query 4 : </label><div class ="column">
+
+        <textarea  id = "q4" class = "textQuery" name="query4"></textarea>
+      </div>
+
+    <label for="kodeReport">Query 11 : </label>
+        <div class ="column">
+
+          <textarea  id = "q11" class = "textQuery" name="query11"></textarea>
+        </div>
+</div>
+
+<div class="rowF">
+      <label for="kodeReport">Query 5 : </label><div class ="column">
+
+        <textarea  id = "q5" class = "textQuery" name="query5"></textarea>
+      </div>
+
+    <label for="kodeReport">Query 12 : </label>
+        <div class ="column">
+
+          <textarea  id = "q12" class = "textQuery" name="query12"></textarea>
+        </div>
+</div>
+
+<div class="rowF">
+      <label for="kodeReport">Query 6 : </label><div class ="column">
+
+        <textarea  id = "q6" class = "textQuery" name="query6"></textarea>
+      </div>
+
+    <label for="kodeReport">Query 13 : </label>
+        <div class ="column">
+
+          <textarea  id = "q13" class = "textQuery" name="query13"></textarea>
+        </div>
+</div>
+
+<div class="rowF">
+      <label for="kodeReport">Query 7 : </label><div class ="column">
+
+        <textarea  id = "q7" class = "textQuery" name="query7"></textarea>
+      </div>
+
+    <label for="kodeReport">Query 14 : </label>
+        <div class ="column">
+
+          <textarea  id = "q14" class = "textQuery" name="query14"></textarea>
+        </div>
+</div>
+
+<center>
+<button>Save</button>
+</form>
+<button>Cancel</button>
+</center>
+
+
+
+  </body>
+<!-- {% endif %} -->
+
+</html>

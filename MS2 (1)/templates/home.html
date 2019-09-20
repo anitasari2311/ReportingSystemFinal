@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="topnav">
+  <form action="/menu">
+    <a class="active" href="menu">Home</a>
+  </form>
+
+  <form action="/changePass">
+    <a href="changePass">Modify User</a>
+  </form>
+
+  <a href="#Task">Task</a>
+
+  <div class="subnav">
+    <button class="subnavbtn">Template</button>
+    <div class="subnav-content">
+      <form action="/addTemplate">
+        <a href="addTemplate">New Template</a>
+      </form>
+      <form action="/insertQuery">
+        <a href="insertQuery">Insert Query</a>
+      </form>
+      <a href="final">Finalisasi</a>
+    </div>
+  </div>
+
+  <form action="/editQuery">
+    <a href="editQuery">Perubahan</a>
+  </form>
+
+  <a href="preview">Preview</a>
+
+  <div class="subnav">
+    <button class="subnavbtn">Scheduling</button>
+    <div class="subnav-content">
+      <form action="/addSchedule">
+        <a href="addSchedule">Add Schedule</a>
+      </form>
+      <form action="/editSchedule">
+        <a href="editSchedule">Edit Schedule</a>
+      </form>
+      <a href="#run">Run Schedule</a>
+    </div>
+  </div>
+
+  <a href="listReport">List Report</a>
+
+  <a href="logoff">Log Off</a>
+
+  <a href="keluar">Keluar</a>
+</div>
+
+<!-- <div style="padding-left:16px">
+  <h2>Top Navigation Example</h2>
+  <p>Some content..</p>
+</div> -->
+
+<img src="C:\internal\app\static\images\cms1.png" width="500" height="333"/>
+
+</body>
+</html>

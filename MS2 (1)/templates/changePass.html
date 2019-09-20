@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<title>Edit Profile</title>
+</head>
+<body>
+
+	<div class ="containerJudul">
+		<center>  <h1> Edit Profile </h1> </center>
+	</div>
+
+	<center><h3>Input new password here</h3></center>
+
+	<div class ="row">
+  		<div class ="col-25">
+    		<label for="oldPass">Old Password  </label>
+  		</div>
+        
+        <div class="col-75">
+        	<input type="text" id="oldPass" name="oldPass">
+        </div>
+    </div>
+
+
+    <div class="row">
+    	<div class="col-25">
+    		<label for="newPass">New Password  </label>
+    	</div>
+
+    	<div class="col-75">
+    		<input type="text" id="newPass" name="newPass">
+    	</div>
+    </div>
+
+        <div class="row">
+    	<div class="col-25">
+    		<label for="newPass">Confirm New Password </label>
+    	</div>
+
+    	<div class="col-75">
+    		<input type="text" id="newPass" name="confPass">
+    	</div>
+    </div>
+    <br><br>
+<center>
+    <button>Save</button>
+    <button>Cancel</button>
+</center>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<html>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+	
+
+{% if listKodeReportQuery %}
+
+<title>Change Query</title>
+
+	<div class ="containerJudul">
+	  <center>  <h1> Change Query Report </h1> </center>
+	</div>
+
+
+
+<br><br>
+<center>
+
+	<form action="/editQuery" method = "POST">
+<div class="row">
+
+		<label for="kodLap"> Template:  </label>
+
+		<input name="kodLap" list="listKodeQ">
+
+<datalist id="listKodeQ">
+  {% for row in listKodeReportQuery %}
+  <option value="{{row[0]}}">
+    {% endfor %}
+</datalist>
+
+		
+
+</div>
+</center>
+
+<br>
+<br><br>
+
+<center>
+	
+		<button class="submit"> Go </button> 
+	</form>
+
+	<form action="/menu">
+		<button class="submit"> Cancel </button>
+	</form>
+	
+	
+
+{% else %}
+
+<title>Format Template</title>
+
+	<div class ="containerJudul">
+	  <center>  <h1> Format Template </h1> </center>
+	</div>
+
+<form  action="/formatTemplate" method ="POST">
+  <div class ="row">
+    <div class ="col-15">
+      <label for="kodeReport">Kode Report : </label>
+    </div>
+
+
+    <input name="kodeLaporan" list="listKodeL">
+
+			<datalist id="listKodeL">
+			  {% for row in listKodeReport %}
+			  <option value="{{row[0]}}">
+			    {% endfor %}
+			  </datalist>
+      
+    
+      <button class="submit">Cek Report</button>
+    
+  </div>
+</form>
+
+
+
+
+
+{% endif %}
+
+</center>
+</html>
