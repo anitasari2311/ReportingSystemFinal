@@ -1,0 +1,187 @@
+<html>
+  <head>
+     <title>Menu</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+    <body>
+    
+     <center>   <div style="padding-top: 30px;padding-bottom: 20px; font-family: 'Arial';font-size: 20px;"> 
+                     
+                </div> </center>
+      <div class="container2">
+         <h2> Welcome, {{session['username']}}</h2>
+            <center>
+             <h2>List Finished</h2>
+              <br>
+    
+                <div class="row">
+                  <form action='/formRequest'>
+                    <button class="submit" value="Request Laporan">New Request Report</button> <br>
+                  </form>
+                
+                  <form action ='/editRequest'>
+                    <button class="submit" value="Edit Laporan">Edit Report</button> <br>
+                  </form>
+
+                  <form action ='/logout'>
+                    <button class="submit" value="Log Out">Log Out</button> <br>
+                  </form>
+
+                  
+
+                
+                </div>
+            </center> <br><br><br>
+
+      
+       
+                          <h3>List Request </h3>
+
+                   <!-- <div class="col-25" style ="float: right">
+                              <select id="country" name="tanggalselesai">
+                                <option value="Sort">Filter</option>
+                                <option value="Status">Status</option>
+                                <option value="PIC">PIC</option>
+                              </select>
+                            </div> -->
+                           
+                   
+                      
+                  <!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name"> -->
+
+                    <table id="list">
+                      <tr>
+                        <th>Request Code</th>
+                        <th>Title</th>
+                        <th>Request Date</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>PIC</th>
+                        <th></th>
+                      </tr>
+                  
+                  {% for row in listReqUser %}
+                      <tr>
+                        <td> {{row[0]}} </td>            
+                        <td> {{row[1]}} </td>
+                        <td>{{row[2]}}</td>
+                        
+                        <td>{{row[3]}}</td>
+                       
+                        
+                       {% if row[4] == 'Finished' %}
+                       <td>{{row[6]}}</td>
+                       {% else %}
+                        <td>{{row[4]}}</td>
+                        {% endif %}
+                        <td>{{row[5]}}</td>
+
+                        {% if row[4] == 'Waiting' %}
+                        <td> 
+                          <form action="/revisi" method="post">  
+                            <button class="submitOr" name="btnRevisi" value="{{row[0]}}">Revision</button>
+                          </form>
+                          <form action = "/cancel" method = "post">
+                            <button class="submitRed" name="btnCancel" value = "{{row[0]}}">Cancel</button></form></td>
+
+
+
+
+                        {% elif row[4] == 'Finished' %}
+                        <td>
+                          <form action = "/revisi" method = "post">
+                          <button class="submitOr" name="btnRevisi" value="{{row[0]}}">Revision</button>
+                        </form>
+                          <form action ="/confirmRequest" method ="POST">
+                            <button class="submit" name="confirmReq" value ="{{row[0]}}">Confirm</button> </td>
+                          </form>
+
+
+
+
+                        {% elif row[4] == 'On Process' %}
+                        <td><button class="submit2" disabled>Revision</button><br>
+                            <button class="submit2" disabled>Confirm</button> </td>
+
+
+
+
+
+                        {% elif row[4] == 'Confirmed' %}
+                        <td>"Done"</td>{% endif %}
+
+
+                       <!--  <td><button class="submit2">Revision</button><br>
+                            <button class="submit2">Confirm</button> </td>
+                        <td><img src="download2.png"></td> -->
+
+
+                        
+                      </tr>
+                      {% endfor %}
+
+
+                      <!-- <tr>
+                        <td>Req-005</td>
+                        <td>Lap 2</td>
+                        <td>6 May 2019</td>
+                        <td>12 May 2019</td>
+                        <td>Confirmed</td>
+                        <td>Nita</td>
+                        <td>Confirmed</td>
+                        <td><img src="download2.png"></td>
+                      </tr>
+
+                      <tr>
+                        <td>Req-006</td>
+                        <td>Lap 3</td>
+                        <td>8 May 2019</td>
+                        <td>14 May 2019</td>
+                        <td>Waiting</td>
+                        <td> </td>
+                        <td>
+                          <form action='/revision'><button class="submitOr">Revision</button></form>
+                        <a href ="menu.html"><button class="submitRed">Cancel</button><a> </td>
+                        <td></td>
+                      </tr>
+
+                      <tr>
+                        <td>Req-008</td>
+                        <td>Lap 4</td>
+                        <td>10 May 2019</td>
+                        <td>16 May 2019</td>
+                        <td>Finished</td>
+                        <td>Yoshua</td>
+                        <td><form action='/revision'><button class="submitOr">Revision</button></form>
+                            <button class="submit">Confirm</button> </td>
+                        <td><img src="download2.png"></td>
+                      </tr> -->
+
+                    </table> 
+                  <!-- </form> -->
+      </div>
+     
+<!-- <script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script> -->
+
+    </body>
+</html>
+
