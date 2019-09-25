@@ -1,0 +1,155 @@
+<html>
+  <head>
+     <title>Menu</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body bgcolor="#F0FFF0">
+    
+<div class="topnav">
+        <a href="user">HOME</a>
+        <a href="changePass"> MODIFY USER</a>
+        <a href="formRequest">NEW REQUEST</a>
+        <a href="editReport">EDIT REPORT</a>
+       
+      <div class="dropdown">
+        <button class="dropbtn">LIST     
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+      <div class="dropdown-content">
+        <a href="list">LIST REQUEST</a>
+        <a class="active" href="listFinished">LIST FINISHED REQUEST</a>
+      </div>
+      </div>
+        <a href="logout">LOG OUT </a>
+    </div>
+
+    <br>
+
+{% if listKelar %}
+  <center>
+  <div class="judul">LIST FINISHED REQUEST</div>
+  </center>
+
+   <table id="list">
+        <tr>
+          <th>Request Code</th>
+          <th>Report Code</th>
+          <th>Title</th>
+          <th>Request Date</th>
+          <th>Finished Date</th>
+          <th>PIC</th>
+          <th> Rating </th>
+        </tr>
+
+        {% for row in  listKelar %}
+        <tr >
+          <td>{{row[5]}}</td>
+          <td>{{row[0]}}</td>
+          <td>{{row[1]}}</td>
+          <td>{{row[2]}}</td>
+          <td>{{row[4]}}</td>
+          <td>{{row[3]}}</td>
+        {% if row[6] == 0 %}
+
+      <td>
+    <button id ="{{row[5]}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row[5]}}">Rating</button>
+
+
+
+    <div id="modal2{{row[5]}}" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" onclick="closeModal2()">&times;</span>
+        <strong>{{row[5]}}</strong>
+        <p> Input Rating : </p>
+
+    <form action ="/finishRating" method = 'POST'>
+        <select name="fRating">
+          <option value="1">1 - Tidak Baik</option>
+          <option value="2">2 - Kurang Baik</option>
+          <option value="3">3 - Normal</option>
+          <option value="4">4 - Cukup Baik</option>
+          <option value="5">5 - Sangat Baik</option>
+        </select>
+
+
+        <p> Keterangan: <p>
+        <textarea name="inputKeterangan" style="height:200px"></textarea>
+
+
+         <button name="finishRat" value ="{{row[5]}}"> OK </button>
+        </form>
+      </div>
+
+    </div>
+          </td>
+        {% else %}
+          <td>{{row[6]}} / 5</td>
+        {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+      </div>
+
+
+
+
+{% else %}
+      <center>
+      <div class="judul">LIST FINISHED REQUEST</div>
+      </center>
+      <center><p>Belum ada Task yang diselesaikan</p></center>
+
+{% endif %}
+
+ </body>
+
+
+
+<script>    
+  var btnProcess;
+  var modalItem;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal() {
+    modalItem.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem = document.getElementById(modalId);
+    modalItem.style.display = 'block';
+  }
+  function alertCancel(processId){
+    show_modal('modal'+processId);
+    //alert('modal'+processId);
+  }
+
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+</script>
+</html>

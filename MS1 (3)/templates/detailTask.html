@@ -1,0 +1,231 @@
+<html>
+      <head>
+        <title>Detail Task</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+      </head>
+  <body>
+      <center>
+        <h2>Detail Task</h2>
+      </center>
+    <!-- <div class="container"> -->
+
+                  <div class="row">
+
+                      <div class="col-25">
+                        <label for="fname">Report Code</label>
+                      </div>
+
+                      <div class="col-75">{% if detail_task %}
+                        {% if detail_task[12] is none %}
+                        <input type="text" id="fname" name="namalaporan" placeholder="-" disabled>
+                        {% else %}
+                        <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task[12]}}" disabled>
+                        {% endif %}
+                        
+                      </div>
+
+                    </div> 
+
+
+                  <div class="row">
+
+                      <div class="col-25">
+                        <label for="fname">Request Code</label>
+                      </div>
+
+                      <div class="col-75">
+                        <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task[0]}}" disabled>
+                      </div>
+
+                    </div>  
+
+
+
+                  <div class="row">
+
+                    <div class="col-25">
+                      <label for="fname">Title</label>
+                    </div>
+
+                    <div class="col-75">
+                      <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task[1]}}" disabled>
+                    </div>
+
+                  </div>
+
+
+                  <div class="row">
+
+                    <div class="col-25">
+                      <label for="fname">Purpose</label>
+                    </div>
+
+                    <div class="col-75">
+                      <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task[13]}}" disabled>
+                    </div>
+
+                  </div>
+
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Description</label>
+                        </div>
+
+                        <div class="col-75">
+                          <textarea id="subject" name="keteranganlaporan" placeholder="{{detail_task[2]}}" style="height:200px" disabled></textarea>
+                        </div>
+                        
+                      </div>
+
+                      {% if detail_task[3] != "" and detail_task[3] is not none %}
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Organization</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task[3]}}" disabled>
+                        </div>
+
+                      </div>
+                      {% endif %}
+
+                      {% if detail_task[4] != "" and detail_task[4] is not none %}
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Department</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task[4]}}" disabled>
+                        </div>
+
+                      </div>
+                      {% endif %}
+
+                    
+                    <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Display</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task[5]}}" disabled>
+                        </div>
+
+                      </div>
+
+                      {% if detail_task[6] != "" and detail_task[6] is not none %}
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Period</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task[6]}}" disabled>
+                        </div>
+
+                      </div>
+                      {% endif %}
+
+                      <div class="row">
+
+                          <div class="col-25">
+                            <label for="lname">Deadline</label>
+                          </div>
+
+                          <div class="col-75">
+                             <input type="text" placeholder="{{detail_task[7]}}" disabled>
+                          </div>
+
+                      </div>
+
+                      <div class="row">
+
+                          <div class="col-25">
+                            <label for="lname">File</label>
+                          </div>
+
+                          <div class="col-75">
+                             
+                             <img  src="data:image/base64, {{detail_task[8]}}"  style = "width: 600px; height: 400px"!important >
+                          </div>
+
+
+                      </div>
+                    
+                    <div class="row">
+
+                          <div class="col-25">
+                            <label for="lname">Schedule</label>
+                          </div>
+
+                          
+                          {% if detail_task[9] != "" and detail_task[9] is not none %}
+                          <div class="row">
+                          <div class="col-25">
+                            <label for="lname"> </label>
+                          </div>
+
+                          <div class="col-75">
+                             <label for="Day">Date</label>
+                             <input type="text" placeholder="{{detail_task[9]}}" disabled>
+                          </div>
+
+
+                      </div>
+                      {% endif %}
+
+
+                      <div class="row">
+                          <div class="col-25">
+                            <label for="lname"> </label>
+                          </div>
+
+                          <div class="col-75">
+                            <label for="Day">Month</label>
+                            <input type="text" placeholder="{{detail_task[10]}}" disabled>
+                          </div>
+                      </div>
+
+                      {% if detail_task[11] != "" or detail_task[11] is none %}
+                      <div class="row">
+                          <div class="col-25">
+                            <label for="lname">        </label>
+                          </div>
+
+                          <div class="col-75">
+                            <label for="Day">Day</label>
+                            <input type="text" placeholder="{{detail_task[11]}}" disabled>
+                          </div>
+                      </div>
+                      {% endif %}
+
+      
+
+
+                           <br><br>              <center>
+
+            <div class="row"><form action ="/accRequest" method = "post">
+              <button class="submit" value="{{detail_task[0]}}" name="btnConfirmReq" >Accept</button></form>
+                    <br><form action ="/cancelTask">
+              <button class="submitRed" value="Cancel">Cancel</button></form>
+            </div>
+            {% endif %}
+          </center>
+
+       </div>
+
+
+
+  </body>
+</html>

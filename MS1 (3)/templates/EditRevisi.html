@@ -1,0 +1,379 @@
+<html>
+        <head>
+          <title>Edit Report</title>
+          <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        </head>
+  <body>
+        <center>
+          <h1>EDIT REPORT</h1>
+        </center>
+    <div class="container2">
+      <form action='/EditRev' method="POST">
+
+
+
+       <div class="row">
+          <div class="col-25">
+            <label for="fname">Current Display</label>
+          </div>
+          <div class="col-25">
+            
+            {% for row in listrevisidisplay %}
+              <label>{{[row[1]]}}</label>
+            
+            
+          </div>
+       </div>
+ 
+
+
+        <div class="row">
+          <div class="col-25">
+            <label for="fname">New Display</label>
+          </div>
+          <div class="col-25">
+            <input type="text" id="inputNum" name="inputNewDisplay" placeholder="Example: Procon, Comco, OutCode">
+          </div>
+        </div>
+
+
+  
+
+
+          <div class="row">
+            <div class="col-25">
+              <label for="fname"></label>
+            </div>
+          </div>
+      
+          <div class= "row">
+            <div class= "col-25" id="demo">
+            </div>
+          </div>
+                
+               <div class="row">
+
+              <!-- <div class="col-25">
+                <label for="fname">Delete Display</label>
+              </div>
+
+              <div class ="row">
+                <div class ="col-25">
+                  <input type="checkbox" name="PT">PT<br>
+                  <input type="checkbox" name="Procod">Procod<br>
+                  <input type="checkbox" name="Prodesc">Prodesc<br>
+                </div>
+              </div> -->
+
+            </div>
+
+              <div class="row">
+                <div class="col-25">
+                  <label for="lname">Desired Change</label>
+                </div>
+                <div class="col-75">
+                  <textarea id="subject" name="inputFilterBaru" placeholder="Input change " style="height:200px"></textarea>
+                </div>
+              </div>
+
+
+              <!-- <div class="row">
+                            <div class="col-25">
+                              <label for="tanggalselesai">Deadline</label>
+                            </div>
+
+                            <div class="col-15">
+                              <select id="country" name="tanggalSelesai">
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                              </select>
+                            </div>
+
+                            <div class="col-15">
+                              <select id="country" name="bulanSelesai">
+                                <option value="01">June</option>
+                                <option value="02">July</option>
+                                <option value="03">August</option>
+                              </select>
+                            </div>
+
+                            <div class="col-15">
+                              <select id="country" name="tahunSelesai">
+                                <option value="01">2018</option>
+                                <option value="02">2019</option>
+                                <option value="03">2020</option>
+                              </select>
+                            </div>
+              </div> -->
+                <div class="row">
+                    <div class="col-25">
+                      <label for="deadline">Deadline</label>
+                    </div>
+
+                    <div class="col-25">
+                        <input type="date" name="deadline">
+                    </div>
+                </div>
+
+              <br>
+<div class="row">
+                    <div class = "col-25">
+                      <tr>
+                        <td valign ="top">
+                          <label for="attach_file">Attachment</label>
+                        </td>
+                    </div>
+                      <div>
+                        <td valign="top">
+                          <input class ="attach" name="inputFile" value ="Attach File">
+                        </td>
+                      </div>
+
+                        <td valign="top">
+                          <label for ="attach_file">No file selected </label>
+                        </td>
+                      </tr>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-25">
+                      <label for="fname"></label>
+                    </div>
+
+                    <div class="col-25">               
+                     <input type="checkBox" name="routine" id="myCheck"  onclick="myFunction()">Routine
+                      <br>
+                 
+                    </div>
+                  </div>
+
+
+
+
+              <div class="row"  id ="text2" style="display:none">
+                <div class="col-25">
+                  <label for="fname"></label>
+                </div>
+
+                <div class="col-25">               
+                  <input type="checkBox" name="Hari" id="myCheck2" onclick="myFunction2()">Day</input>
+                  <input type="checkBox" name="Tanggal" id="myCheck3" onclick="myFunction3()">Date</input>
+                  <input type="checkBox" name="Bulan" id="myCheck4" onclick="myFunction4()">Month</input>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-25">
+                  <label for="fname"></label>
+                </div>
+                    
+
+
+              <div class ="row" id="text" style="display:none">
+                <div id="Day" style="display: none">
+                  <div class ="col-15" >
+
+                    <input type="checkbox" name="Senin">Senin<br>
+                    <input type="checkbox" name="Selasa">Selasa<br>
+                    <input type="checkbox" name="Rabu">Rabu<br>
+                    <input type="checkbox" name="Kamis">Kamis<br>
+                    <input type="checkbox" name="Jumat">Jumat<br>
+                    <input type="checkbox" name="Sabtu">Sabtu<br>
+                    <input type="checkbox" name="Minggu">Minggu<br>  
+                                                              
+                  </div>
+                </div>
+                <div id="Date" style="display: none">
+                  <div class ="col-5" >
+                    <input type="checkbox" name="1">1<br>
+                    <input type="checkbox" name="2">2<br>
+                    <input type="checkbox" name="3">3<br>
+                    <input type="checkbox" name="4">4<br>
+                    <input type="checkbox" name="5">5<br>
+                    <input type="checkbox" name="6">6<br>
+                    <input type="checkbox" name="7">7<br>
+                    <input type="checkbox" name="8">8<br>
+                    <input type="checkbox" name="9">9<br>
+                   </div>
+                  
+                   <div class ="col-5" >
+                    <input type="checkbox" name="10">10<br>
+                    <input type="checkbox" name="11">11<br>
+                    <input type="checkbox" name="12">12<br>
+                    <input type="checkbox" name="13">13<br>
+                    <input type="checkbox" name="14">14<br> 
+                    <input type="checkbox" name="15">15<br>
+                    <input type="checkbox" name="16">16<br>
+                    <input type="checkbox" name="17">17<br>
+                    <input type="checkbox" name="18">18<br>
+                  </div>
+
+                  <div class ="col-5" >
+                    <input type="checkbox" name="19">19<br>
+                    <input type="checkbox" name="20">20<br>
+                    <input type="checkbox" name="21">21<br> 
+                    <input type="checkbox" name="22">22<br>
+                    <input type="checkbox" name="23">23<br>
+                    <input type="checkbox" name="24">24<br>
+                    <input type="checkbox" name="25">25<br>
+                    <input type="checkbox" name="26">26<br>
+                    <input type="checkbox" name="27">27<br>
+                  </div>
+                  <div class ="col-15" >
+                    <input type="checkbox" name="28">28<br>
+                    <input type="checkbox" name="29">29<br>
+                    <input type="checkbox" name="30">30<br>
+                    <input type="checkbox" name="31">31<br>
+                  </div> 
+                </div>                      
+                <div id="Month" style="display: none">
+                  <div class ="col-15" >
+                    <input type="checkbox" name="Januari">Januari<br>
+                    <input type="checkbox" name="Februari">Februari<br>
+                    <input type="checkbox" name="Maret">Maret<br>
+                    <input type="checkbox" name="April">April<br>
+                    <input type="checkbox" name="Mei">Mei<br> 
+                    <input type="checkbox" name="Juni">Juni<br>
+                  </div>
+                   <div class ="col-15" >
+                    <input type="checkbox" name="Juli">Juli<br>
+                    <input type="checkbox" name="Agustus">Agustus<br>
+                    <input type="checkbox" name="September">September<br>
+                     <input type="checkbox" name="Oktober">Oktober<br>
+                    <input type="checkbox" name="November">November<br>
+                    <input type="checkbox" name="Desember">Desember<br>
+                  </div>
+                </div>
+                
+              
+
+                  <div class="row">
+                    <div class="col-25">
+                        <label for="fname"></label>
+                    </div>
+                  
+                  </div>
+                    
+                    <div class="row">
+                    <div class="col-25">
+                        <label for="fname">Send to</label>
+                    </div>
+
+                        <div class ="row" id="text">
+                          <div class ="col-25" >
+
+                            
+                            <div class="row" id="text">
+                              <div class="" style="width: 500px">
+                                <label for="fname">PIC (Orang yang bertanggung jawab atas tindak lanjut laporan)</label>
+                              </div>
+                            </div>
+
+                            <select id="country" name="emailPIC">
+                              <option value="01">andi@pharos.co.id</option>
+                              <option value="02">budi@pharos.co.id</option>
+                              <option value="03">nana@pharos.co.id</option>
+                            </select>
+    
+                            <textarea id="subject" name="keteranganlaporan"  style="height:200px"></textarea>                      
+                          </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                    <div class="col-25">
+                        <label for="fname"></label>
+                    </div>
+
+                     <div class ="row" id="text">
+                         <div class ="col-25" >
+
+                            <div class="row" id="text">
+                              <div class="" style="width: 500px">
+                                <label for="fname">Penerima(CC)</label>
+                              </div>
+                            </div>
+
+                            <select id="country" name="emailPenerima">
+                                <option value="01">andi@pharos.co.id</option>
+                                <option value="02">budi@pharos.co.id</option>
+                                <option value="03">nana@pharos.co.id</option>
+                              </select>
+
+                          
+                              
+                              <textarea id="subject" name="keteranganlaporan"  style="height:200px"></textarea>
+                                                 
+                                                  
+                          </div>
+                        </div>
+
+</div></div>
+
+              <br><br>
+
+            <center>
+              <div class="row">
+                  <button class="submit" name="submitRev" value="{{row[0]}}">Submit</button>
+                  {% endfor %}
+                  <button class="submitRed" name="cancel" value="Cancel" onclick ="menu.html">Cancel</button>
+              </div>
+            </center>
+          </form>
+        </div>
+
+
+        </body>
+</html>
+
+
+
+<script>
+function myFunction() {
+  var checkBox = document.getElementById("myCheck");
+  var text = document.getElementById("text");
+  var text2 = document.getElementById("text2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  var check1 = document.getElementById("myCheck2");
+  var check2 = document.getElementById("myCheck3");
+  var check3 = document.getElementById("myCheck4");
+  if (checkBox.checked == true){
+    text.style.display = "block";
+    text2.style.display = "block";
+  } else {
+    text.style.display = "none";
+    text2.style.display = "none";
+    Days.style.display = "none";
+    Dates.style.display = "none";
+    Months.style.display = "none";
+    check1.checked = false
+    check2.checked = false
+    check3.checked = false
+  }
+}
+function myFunction2(){
+  var check1 = document.getElementById("myCheck2");
+  var Days = document.getElementById("Day");
+      if(check1.checked == false){ Days.style.display = "none"}
+          else{ Days.style.display = "block";}
+}
+function myFunction3(){
+  var check2 = document.getElementById("myCheck3");
+  var Dates = document.getElementById("Date");
+  if(check2.checked == false){ Dates.style.display = "none"}
+          else{ Dates.style.display = "block";}
+}
+function myFunction4(){
+  var check3 = document.getElementById("myCheck4");
+  var Months = document.getElementById("Month");
+   if(check3.checked == false){ Months.style.display = "none"}
+          else{ Months.style.display = "block";}
+}
+
+</script>
+
