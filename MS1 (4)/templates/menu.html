@@ -1,0 +1,298 @@
+<html>
+  <head>
+     <title>Menu</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    
+     <center>   <div style="padding-top: 30px;padding-bottom: 20px; font-family: 'Arial';font-size: 20px;"> 
+                     
+                </div> </center>
+      <div class="container2">
+        
+        
+
+         <h2> Welcome, {{session['username']}}</h2>
+         <form action ='/logout'>
+                  <button class="submitRed" value="Log Out">Log Out</button> <br>
+                </form>
+            <center>
+             <h2>MENU</h2>
+              <br>
+                
+
+                <div class="row">
+                  <form action='/formRequest'>
+                  <button class="submit" value="Request Laporan">New Request Report</button> <br>
+
+                </form>
+                <form action ='/editReport'>
+                  <button class="submit" value="Edit Laporan">Edit Report</button> <br>
+                </form>
+
+                </form>
+                
+
+                
+                </div>
+            </center> <br><br><br>
+
+      
+{% if listReqUser %}
+
+
+
+
+
+       
+                          <h3>List Request </h3>
+
+                    <table id="list">
+                      <tr>
+                        <th>Request Code</th>
+                        <th>Title</th>
+                        <th>Request Date</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>PIC</th>
+                        <th></th>
+                        
+                      </tr>
+                  
+                  {% for row in listReqUser %}
+                      <tr>
+                        <td> {{row[0]}} </td>            
+                        <td> {{row[1]}} </td>
+                        <td>{{row[2]}}</td>
+                        <td>{{row[3]}}</td>
+                       
+                        
+                       {% if row[4] == 'Finished' %}
+                       <td>{{row[6]}}</td>
+                       {% else %}
+                        <td>{{row[4]}}</td>
+                        {% endif %}
+                        <td>{{row[5]}}</td>
+
+                        {% if row[4] == 'Waiting' %}
+                        <td> 
+                          
+                          <!-- <form action = "/cancel" method = "post"> -->
+                            <button id ="{{row[0]}}" class="submitRed"  value = "{{row[0]}}" onclick="alertCancel(this.id)">Cancel</button>
+                        </td>
+
+                            <div id="modal{{row[0]}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <p> Cancel {{row[1]}} ? </p>
+                             
+                    <form action ="/cancel" method = 'POST'>
+                      <center>
+                         <button  class = "submit" value ="{{row[0]}}" name="btnCancel"> YES </button>
+                    </form>
+                      <br>
+
+                         <button  class = "submitRed" value ="{{row[0]}}" onclick="closeModal()"> NO </button>
+                      </center>
+                        
+                      </div>
+
+                    </div>
+                    {% elif 'Rejected' in row[4] %}
+                      <td>Rejected</td>
+</td>
+
+                        {% elif row[4] == 'Finished' %}
+                        <!-- <td>
+                          <form action = "/revisi" method = "post">
+                          <button class="submitOr" name="btnRevisi" value="{{row[0]}}">Revision</button>
+                        </form>
+                          <form action ="/confirmRequest" method ="POST">
+                            <button class="submit" name="confirmReq" value ="{{row[0]}}">Confirm</button> </td>
+                          </form> -->
+                        <!--   <td></td> -->
+
+
+                        {% elif row[4] == 'On Process' %}
+                        <!-- <td><button class="submit2" disabled>Revision</button><br>
+                            <button class="submit2" disabled>Confirm</button> </td> -->
+              <!--               <td></td> -->
+
+                        {% elif row[4] == 'Confirmed' %}
+                        <td>"Done"</td>
+
+
+                        {% endif %}
+
+                      </tr>
+                      {% endfor %}
+                      
+                    </table> 
+           
+                                <br><br><br>
+                <h2>______________________________________________________________________________</h2>
+                                <br><br><br>
+
+
+{% else %}
+
+                  <h3>List Request </h3>
+
+                    <center><p>Anda belum melakukan request Laporan </p></center>
+                    <br><br><br>
+
+
+{% endif %}
+
+
+
+
+{% if listKelar %}
+
+                      <h3>List Finished Request</h3>
+
+                      <table id="list">
+                        <tr>
+                          <th>Request Code</th>
+                          <th>Report Code</th>
+                          <th>Title</th>
+                          <th>Request Date</th>
+                          <th>Finished Date</th>
+                          <th>PIC</th>
+                          <th> Rating </th>
+                        </tr>
+
+                        {% for row in  listKelar %}
+                        <tr >
+                          <td>{{row[5]}}</td>
+                          <td>{{row[0]}}</td>
+                          <td>{{row[1]}}</td>
+                          <td>{{row[2]}}</td>
+                          <td>{{row[4]}}</td>
+                          <td>{{row[3]}}</td>
+                        {% if row[6] == 0 %}
+
+                          <td>
+
+                            
+                    <button id ="{{row[5]}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row[5]}}">Rating</button>
+
+
+
+                    <div id="modal2{{row[5]}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal2()">&times;</span>
+                        <strong>{{row[5]}}</strong>
+                        <p> Input Rating : </p>
+                    <form action ="/finishRating" method = 'POST'>
+                        <select name="fRating">
+                          <option value="1">1 - Tidak Baik</option>
+                          <option value="2">2 - Kurang Baik</option>
+                          <option value="3">3 - Normal</option>
+                          <option value="4">4 - Cukup Baik</option>
+                          <option value="5">5 - Sangat Baik</option>
+                        </select>
+  
+
+                        <p> Keterangan: <p>
+                        <textarea name="inputKeterangan" style="height:200px"></textarea>
+
+
+                         <button name="finishRat" value ="{{row[5]}}"> OK </button>
+                        </form>
+                      </div>
+
+                    </div>
+                          </td>
+
+                        {% else %}
+
+                          <td>{{row[6]}} / 5</td>
+                        {% endif %}
+
+                        </tr>
+                        {% endfor %}
+                      </table>
+
+      </div>
+
+
+
+
+{% else %}
+                <h3>List Report</h3>
+                <center><p>Belum ada Task yang diselesaikan</p></center>
+
+{% endif %}
+     
+<!-- <script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script> -->
+
+  </body>
+<script>    
+  var btnProcess;
+  var modalItem;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal() {
+    modalItem.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem = document.getElementById(modalId);
+    modalItem.style.display = 'block';
+  }
+  function alertCancel(processId){
+    show_modal('modal'+processId);
+    //alert('modal'+processId);
+  }
+
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+</script>
+</html>

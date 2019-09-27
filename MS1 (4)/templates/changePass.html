@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Edit Profile</title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+    <div class="topnav">
+        <a href="user">HOME</a>
+        <a class="active" href="changePass"> MODIFY USER</a>
+        <a href="formRequest">NEW REQUEST</a>
+        <a href="editReport">EDIT REPORT</a>
+       
+      <div class="dropdown">
+        <button class="dropbtn">LIST     
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+      <div class="dropdown-content">
+        <a href="list">LIST REQUEST</a>
+        <a href="listFinished">LIST FINISHED REQUEST</a>
+      </div>
+      </div>
+        <a href="logout">LOG OUT </a>
+    </div>
+
+    <div class ="judul">
+        <center> EDIT PROFILE </center>
+    </div>
+    <br>
+
+<center>
+    <form action="/changePassProcess", method="POST">
+    <div class="containModify">
+        <br>
+        <div class ="row">
+            <div class ="col-25">
+                <label for="oldPass">Old Password</label>
+            </div>
+            
+            <div class="col-75">
+                <input type="password" placeholder="Input old password" id="oldPass" name="oldPass">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-25">
+                <label for="newPass">New Password </label>
+            </div>
+
+            <div class="col-75">
+                <input type="password" placeholder="Input new password" id="newPass" name="newPass">
+            </div>
+        </div>
+
+            <div class="row">
+            <div class="col-25">
+                <label for="newPass">Confirm New Password</label>
+            </div>
+
+            <div class="col-75">
+                <input type="password" placeholder="Confirm password" id="confPass" name="newPass" onblur="cekPassword()">
+            </div>
+        </div>
+
+            <br><br>
+        <center>
+            <button class="submit">Save</button><br></form>
+            <button class="submitRed">Cancel</button>
+        </center>
+       </center>
+    </div>
+</body>
+
+<script type="text/javascript">
+    function cekPassword(){
+        var newPass = document.getElementById("newPass").value;
+        var confPass = document.getElementById("confPass").value;
+
+        if (newPass != confPass){
+            alert("konfirmasi password harus sesuai dengan password baru")
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</html>
