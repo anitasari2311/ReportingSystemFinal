@@ -1,0 +1,99 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <title></title>
+ </head>
+ <body>
+   <div class="row">
+                    <div class = "col-25">
+                      <tr>
+                        <td valign ="top">
+                          <label for="attach_file">Attachment</label>
+                        </td>
+                    </div>
+                      <div>
+                        <td valign="top">
+                          <input type="file" name="inputFile" value ="Attach File" accept="image/*">
+                        </td>
+                      </div>
+                        
+                      </tr>
+
+                      <div class="col-25">
+                        <form action="/submit">
+                          <button class="submit" name="button" value="1">Submit</button>
+                        </form>
+                      </div>
+
+
+
+                      <button class="submit" name="buttonPriority" value="{{taskSPV[2]}}" onclick="alertPrioritas(this.id)">Priority</button>
+                           
+                              </td>
+
+                              <div id="modal{{taskSPV[2]}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <p> Are you sure? </p>
+                             
+                    <form action ="/prioritas" method = 'POST'>
+                      <center>
+                         <button  class = "submit" value ="{{taskSPV[2]}}" name="btnCancel"> YES </button>
+                    </form>
+                      <br>
+
+                         <button  class = "submitRed" value ="{{taskSPV[2]}}" onclick="closeModal()"> NO </button>
+                      </center>
+                        
+                      </div>
+
+                    </div>
+    </div>
+ </body>
+ </html>
+ <script>
+var btnProcess;
+  var modalItem;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal() {
+    modalItem.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem = document.getElementById(modalId);
+    modalItem.style.display = 'block';
+  }
+  function alertPrioritas(processId){
+    show_modal('modal'+processId);
+    //alert('modal'+processId);
+  }
+
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function alertPrioritas(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+  </script>
