@@ -423,6 +423,15 @@ input[type=cancel] {
   margin-top: 6px;
 }
 
+.colBut {
+  float: center;
+  width: 130px;
+  margin-left: 10;
+  margin-right: 10;
+  margin-top: 6;
+  display: inline-table;
+}
+
 /* Clear floats after the columns */
 .row:after {
   content: "";

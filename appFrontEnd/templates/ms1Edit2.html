@@ -346,13 +346,13 @@
 
           <div class="row">
           <center>              
-                <div class="submitEd">
+                <div class="colBut">
                   <button class="submit" name="submit" 
                   value="Submit" text-align="center">Submit</button>
-                </form>
+                </form></div>
     
                 
-    
+                <div class="colBut">
                   <form action="/editReport">
                     <button class="submitRed" name="cancel" 
                     value="Cancel" text-align="center">Cancel</button>
@@ -389,10 +389,13 @@
            </div>
          </option>
   <center>
-                <button class="submit" value="edit" type="submit">Submit</button>
+              <div class="colBut">
+                <button class="submit" value="edit" type="submit">Submit</button></div>
                   </form>
 
-<form action="/user"> <button class="submitRed" >Cancel</button></form>
+              <div class="colBut">
+                  <form action="/user">
+                    <button class="submitRed" >Cancel</button></div></form>
 
   {% endif %}
 
