@@ -1,0 +1,93 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+	<title>Format Template</title>
+
+</head>
+
+<body>
+    <div class="topnav"><ul>
+        <li><a href="menu">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+        <li><a href="task">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a class="active" href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+<br><br>
+
+	<div class ="judul">
+	  <center>Format Template</center>
+	</div>
+
+<br><br>
+<center>
+
+	<form action="/formatTemplate" method = "POST">
+<div class="row">
+
+		<label for="kodLap"> Template:  </label>
+		<select id= "report" name= "kodLap">
+			{% for report in listKodeReport %}
+				<option name = "kodLap" value="{{report.report_id}}">{{report.report_id}}</option>
+			{% endfor %}
+
+		</select>
+
+</div>
+</center>
+
+<br>
+<br><br>
+
+<center>
+	
+		<button> Go </button> 
+	</form>
+
+	<form action="/menu">
+		<button> Cancel </button>
+	</form>
+	
+	
+</center>
+</body>
+</html>

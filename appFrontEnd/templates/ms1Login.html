@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body bgcolor="#F0FFF0">
+        <div>
+            <center>
+                <div class="judul">REPORTING SYSTEM</div>          
+
+                <div class="containLogin" >
+                    <div class="subjudul"><h2>LOG IN</h2></div>
+                    <br><br>    
+                    <form action="/login" method="post">
+                        
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="uname"><b>Username</b></label>
+                            </div>
+
+                            <div class="col-75">
+                                <input type="text" 
+                                placeholder="  Input Username" 
+                                name="username" 
+                                value="{{request.form.username}}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="psw"><b>Password</b></label>
+                            </div>
+
+                            <div class="col-75">
+                                <input type="password" 
+                                placeholder="Input Password" 
+                                name="password" 
+                                value="{{request.form.password}}">
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row" style="padding-top: 40px" >
+                            <button type="submit" class="submit">Login</button>
+                        </div>
+                    </form>
+
+                        {% if error %}
+                            <p class="error"><strong>Error:</strong> {{ error }}</p>
+                        {% endif %}
+                </div>
+
+            </center>
+        </div>
+    </body>
+</html>

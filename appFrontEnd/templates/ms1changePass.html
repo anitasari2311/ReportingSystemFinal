@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Edit Profile</title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'User' %}
+    <div class="topnav"><ul>
+      <li><a href="user">HOME</a></li>
+      <li class="active"><a href="changePass">MODIFY USER</a></li>
+      <li><a href="newRequest">NEW REQUEST</a></li>
+      <li><a href="editReport">EDIT REPORT</a></li>
+
+      <div class="dropdown">
+          <button class="dropbtn">LIST     
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+        <div class="dropdown-content">
+          <a href="list">LIST REQUEST</a>
+          <a href="listFinished">LIST FINISHED REQUEST</a>
+        </div>
+      </div>
+
+      <li><a href="login">LOGOUT</a></li>
+        
+      </ul>
+     </div>
+
+     <br>
+
+{% else %}
+  <div class="topnav"><ul>
+        <li><a href="menu">HOME</a></li>
+        <li class="active"><a href="changePass">ACCOUNT</a></li>
+        <li><a href="">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+{% endif %}
+
+<br><br>
+
+<div class ="judul">
+        <center> EDIT PROFILE </center>
+    </div> 
+
+<center>
+    <form action="/sendDataPassword", method="POST">
+    <div class="containModify">
+        <br>
+        <div class ="row">
+            <div class ="col-25">
+                <label for="oldPass">Old Password</label>
+            </div>
+            
+            <div class="col-75">
+                <input type="password" placeholder="Input old password" id="oldPass" name="oldPass">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-25">
+                <label for="newPass">New Password </label>
+            </div>
+
+            <div class="col-75">
+                <input type="password" placeholder="Input new password" id="newPass" name="newPass">
+            </div>
+        </div>
+
+            <div class="row">
+            <div class="col-25">
+                <label for="newPass">Confirm New Password</label>
+            </div>
+
+            <div class="col-75">
+                <input type="password" placeholder="Confirm password" id="confPass" name="confPass" onblur="cekPassword()">
+            </div>
+        </div>
+
+            <br><br>
+        <center>
+            <button class="submit">Save</button><br></form>
+            <button class="submitRed">Cancel</button>
+        </center>
+       </center>
+    </div>
+</body>
+
+<script type="text/javascript">
+    function cekPassword(){
+        var newPass = document.getElementById("newPass").value;
+        var confPass = document.getElementById("confPass").value;
+
+        if (newPass != confPass){
+            alert("konfirmasi password harus sesuai dengan password baru")
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</html>

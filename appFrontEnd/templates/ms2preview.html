@@ -1,0 +1,49 @@
+<html>
+<link rel="stylesheet" href="style.css">
+
+  <title> Preview Report </title>
+
+<div class ="containerJudul">
+  <center>  <h1> Preview Report </h1> </center>
+</div>
+
+
+
+<br><br><br>
+<form action ="/preview" method = 'POST'>
+<div class="row">
+    <div class="col-25">
+      <label for="template">Template yang ingin di-preview  </label>
+    </div>
+
+    <div class="col-15">
+        <select id="report"  name="kodLap">
+            {% for row in kodeReportAdaQuery %}
+            <option value="{{row.reportId}}">{{row.reportId}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+
+
+
+
+
+<br><br>
+
+<center>
+<button>Preview</button>
+</form>
+<button>Cancel</button>
+</center>
+
+
+
+
+
+
+
+
+
+</html>

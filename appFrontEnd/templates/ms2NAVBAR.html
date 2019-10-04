@@ -1,0 +1,84 @@
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% endblock %}
+  </head>
+  <body bgcolor="#F0FFF0">
+    <div id="navbar">
+  	<div class="topnav">
+        <a class="active" href="menu">HOME</a> 
+        <a href="changePass">ACCOUNT</a>
+        <a href="">TASK</a>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <a href="preview">PREVIEW</a>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <a href="">LIST REPORT</a>
+        <a href="login">LOGOUT</a>
+    </div>
+
+    
+    <div id="content">{% block content %}{% endblock %}</div>
+
+    </div>
+
+    
+    <div id="footer">
+      {% block footer %}
+      &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div>
+
+
+
+
+    <script>
+    window.onscroll = function() {myFunction()};
+
+    var navbar = document.getElementById("navbar");
+    var sticky = navbar.offsetTop;
+
+    function myFunction() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+  </script>
+  </body>
+</html>

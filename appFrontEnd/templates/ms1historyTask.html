@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<title>History Task</title>
+</head>
+<body>
+		<div class="topnav"><ul>
+        <li><a href="menu">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a class="active" href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+    <br>
+
+	<div class="judul">
+		<center>HISTORY TASK</center>
+	</div>
+
+{% if historyTask != None %}
+
+
+
+         <table id="list">
+                  <tr>
+                    <th>Request Code</th>
+                    <th>Title</th>
+                    <th>Request Name</th>
+                    <th>Department</th>
+                    <th>Request Date</th>
+                    <th>Finished Date</th>
+                    <th>Report Code </th>
+                    
+                  
+                  </tr>
+                  {% for row in historyTask %}
+                  
+                    <tr >
+                      <td>{{row['requestId']}}</td>
+                      <td>{{row['requestJudul']}}</td>
+                      <td>{{row['userName']}}</td>
+                      <td>{{row['requestKategori']}}</td>
+                      <td>{{row['requestTanggal']}}</td>
+                      <td>{{row['requestEndDate']}}</td>   
+                      <td>{{row['requestKodeLaporan']}}</td>
+                      
+                      
+                    </tr>
+                  
+                  {% endfor %}
+                 
+          </table>
+
+{% else %}
+
+<p> Tidak ada history task </p>
+{% endif %}
+</body>
+</html>
