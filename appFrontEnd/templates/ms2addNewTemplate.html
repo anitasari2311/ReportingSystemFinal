@@ -5,11 +5,21 @@
 </head>
 
 <body bgcolor="#F0FFF0">
-
     <div class="topnav"><ul>
-        <li><a href="menu">HOME</a></li>
+        <li><a href="admin">HOME</a></li>
         <li><a href="changePass">ACCOUNT</a></li>
-        <li><a href="task">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
       
       <div class="dropdown">
         <button class="dropbtn">TEMPLATE
@@ -50,129 +60,185 @@
         <li><a href="">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
     </ul></div>
-
 <br>
     <div class="judul"><center>INSERT TEMPLATE</center></div>
 
 <div class ="containInsert">
     <br><br><br>
-    <form id="myForm" action="/sendNewTemplate" method="POST"> 
+    <form id="myForm" action="/sendNewTemplate" method="POST">
       
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="kodeReport">Kode Report : </label>
         </div>
-          <input type="text" id="kodeLaporan2" name="kodeLaporan2" placeholder="Kode Laporan">
-          
-          <select id="kategori" name="kategori">
+
+        <div class="col-55">
+          <input type="text" id="kodeLaporan2" name="kodeLaporan2" placeholder="Kode Laporan" style="width: 120px">
+          <select id="kategori" name="kategori" style="width: 235px">
             {% for row in listKategori %}
               <option value="{{row.Id}}">{{row.Id+" - "+ row.Name}}</option>
             {% endfor %}
           </select>
-          <input type="text" name="noLap" placeholder="Nomor Laporan">
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="kodeLaporan2" name="noLap" placeholder="Nomor Laporan" style="width: 120px">
+        </div>
       </div>
 
+      <br>
+
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="organisasi">Organisasi : </label>
         </div>
-          
+      
+        <div class="col-45">
           <select id="organisasi" name="organisasi">
             {% for row in listOrg %}
               <option value="{{row.Id}}">{{row.Id+" - "+ row.Name}}</option>
             {% endfor %}
           </select>
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="server">Server : </label>
         </div>
-          
+        
+        <div class="col-45">
           <select id="server" name="server">
             {% for row in listServer %}
               <option value="{{row.serverId}}">{{row.serverId+" - "+ row.serverName}}</option>
             {% endfor %}
           </select>
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="namaReport">Nama Report : </label>
         </div>
+
+        <div class="col-85">
           <input type="text" id="kodeReport" name="namaLaporan" >
+        </div>
       </div>
+      <br>
 
       <div class="row">
-        <div class="col-15">
+        <div class="col-35">
           <label for="tujuan">Tujuan : </label>
         </div>
-          <textarea id="tujuan" name="tujuan" placeholder=""></textarea>
+
+        <div class="col-85">
+          <textarea rows="4" cols="50" id="tujuan" 
+          name="tujuan" ></textarea>
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="filter">Filter : </label>
         </div>
-          <textarea id="filter" name="filter" placeholder=""></textarea>
+
+        <div class="col-85">
+          <textarea rows="4" cols="50" id="filter" name="filter"></textarea>
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="jmlKolom">Jumlah Kolom : </label>
         </div>
-          <input type="text" id="jmlKolom" name="jmlTampilan" >
+
+        <div class="col-55">
+          <input type="text" id="jmlKolom" name="jmlTampilan" 
+          style="width: 120px">
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="jmlHeader">Jumlah Header : </label>
         </div>
-          <select id="jmlHeader" name="jmlHeader">
+
+        <div class="col-55">
+          <select id="jmlHeader" name="jmlHeader" style="width: 120px">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
           </select>
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="jmlFooter">Jumlah Footer : </label>
         </div>
-        <select id="jmlFooter" name="jmlFooter">
-          <option value="0">0</option>
-          <option value="1">1</option> 
-          <option value="2">2</option>
-        </select>
+
+        <div class="col-55">
+          <select id="jmlFooter" name="jmlFooter" style="width: 120px">
+            <option value="0">0</option>
+            <option value="1">1</option> 
+            <option value="2">2</option>
+          </select>
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="periode">Periode : </label>
         </div>
-          <input type="text" id="periode" name="periode">
+
+        <div class="col-55">
+          <input type="text" id="periode" name="periode" style="width: 120px">
+        </div>
       </div>
+      <br>
 
       <div class ="row">
-        <div class ="col-15">
+        <div class ="col-35">
           <label for="printAll">Print All : </label>
         </div>
-        <select id="printAll" name="printAll">
-          <option value="Y">Y</option>
-          <option value="N">N</option>
-        </select>
-      </div>
-    
-    <center>
-      <button class="submit" type="Submit">Go</button>
-    
 
-    </form>
-      <input type="button" class="submit" onclick="myFunction()" value="Reset">
-      <button class="submit">Exit</button>
+        <div class="col-55">
+          <select id="printAll" name="printAll" style="width: 120px">
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+        </select>
+        </div>
+      </div>
+    <br><br><br><br>
+
+    <center>
+      <div class="colBut">
+        <button class="submit" type="Submit">Next</button>
+      </div>
+     </form>
+
+      <div class="colBut">
+        <input type="button" class="submitRed" onclick="myFunction()" value="Reset">
+      </div>
+
+      <div class="colBut">
+        <form action="/admin">
+          <button class="submitRed">Exit</button>
+        </form>
+      </div>
+      
     </center>
 </body>
 </html>
+
 
 <script>
   /*                      RESET INPUTAN                     */

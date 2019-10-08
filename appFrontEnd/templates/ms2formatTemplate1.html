@@ -6,11 +6,23 @@
 
 </head>
 
-<body>
+<body bgcolor="#F0FFF0">
+
     <div class="topnav"><ul>
-        <li><a href="menu">HOME</a></li>
+        <li><a href="admin">HOME</a></li>
         <li><a href="changePass">ACCOUNT</a></li>
-        <li><a href="task">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
       
       <div class="dropdown">
         <button class="dropbtn">TEMPLATE
@@ -55,38 +67,36 @@
 <br><br>
 
 	<div class ="judul">
-	  <center>Format Template</center>
+	  <center>FORMAT TEMPLATE</center>
 	</div>
 
 <br><br>
+
+<form action="/formatTemplate" method = "POST">
 <center>
+  <div class="containEdit">
+      <div class="tulisan" style="width: 350px; text-align: left;">
+          <label for="kodLap"> Template:  </label>
+          <input name="kodLap" list="report">
+          <datalist id= "report" name= "kodLap">
+        			{% for report in listKodeReport %}
+        				<option name = "kodLap" value="{{report.report_id}}">{{report.report_id}}</option>
+        			{% endfor %}
+        	</datalist>
+      </div>
 
-	<form action="/formatTemplate" method = "POST">
-<div class="row">
-
-		<label for="kodLap"> Template:  </label>
-		<select id= "report" name= "kodLap">
-			{% for report in listKodeReport %}
-				<option name = "kodLap" value="{{report.report_id}}">{{report.report_id}}</option>
-			{% endfor %}
-
-		</select>
-
-</div>
-</center>
-
-<br>
 <br><br>
+      <div class="colBut">
+    		<button class="submit"> Go </button></div>
+    	</form>
 
-<center>
+    <div class="colBut">
+    	<form action="/admin">
+    		<button class="submitRed"> Cancel </button>
+    	</form>
+    </div>
 	
-		<button> Go </button> 
-	</form>
-
-	<form action="/menu">
-		<button> Cancel </button>
-	</form>
-	
+  </div> <!-- punya contain edit -->
 	
 </center>
 </body>

@@ -1,5 +1,5 @@
 <html>
-
+<head>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <!-- <style>
   #myList {width: 200; list-style: none; margin: 0; auto 0 auto;}
@@ -8,14 +8,14 @@
 </style> -->
 
   <title> Add New Schedule </title>
-
+</head>
 <!--   {% extends "ms2NAVBAR.html" %}
 {% block content %} -->
 
 
-<body>
+<body bgcolor="#F0FFF0">
 
-  <div class="topnav"><ul>
+ <!--  <div class="topnav"><ul>
         <li><a href="menu">HOME</a></li>
         <li><a href="changePass">ACCOUNT</a></li>
       
@@ -69,13 +69,13 @@
 
         <li><a href="">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
-    </ul></div>
+    </ul></div> -->
 
 <br>
 
 
-<div class ="containerJudul">
-  <center>  <h1> Add New Schedule </h1> </center>
+<div class ="judul">
+  <center>Add New Schedule</center>
 </div>
 
 <form action = "/sendAddNewSchedule" method ='POST' enctype="multipart/form-data">
@@ -287,13 +287,13 @@
 <center>
 <button class="Submit" value="Submit">Save</button>
 </form>
-<button class="Submit" value="Cancel">Cancel</button>
+<button class="Submitred" value="Cancel">Cancel</button>
 </center>
 
 
 
 </body>
-{% endblock %}
+<!-- {% endblock %} -->
 <script>
 
 /*                   RADIO BUTTON JADWAL            */

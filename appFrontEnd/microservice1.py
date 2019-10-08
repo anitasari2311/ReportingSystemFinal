@@ -590,7 +590,7 @@ class RequestLaporan:
             db = databaseCMS.db_template()
             cursor = db.cursor()
             
-            cursor.execute(' select report_id from cms_template.m_report a left join cms_request.t_request b on a.report_id = b.req_kodelaporan where user_id = "'+uId+'" ')
+            cursor.execute(' select distinct report_id from cms_template.m_report a left join cms_request.t_request b on a.report_id = b.req_kodelaporan where user_id = "'+uId+'" ')
             # cursor.execute('select report_id from m_report')
             
             listKodeEditReport = cursor.fetchall()

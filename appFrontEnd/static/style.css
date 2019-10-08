@@ -359,7 +359,15 @@ input[type=cancel] {
 }
 
 
-
+.containInsert {
+  border-radius: 7px;
+  background-color: #E5E4E2;
+  border: 5px solid;
+  border-color: #E5E4E2;
+  width: 95%;
+  padding: 20px;
+  margin: auto;
+}
 
 
 .judul {
@@ -420,6 +428,32 @@ input[type=cancel] {
 .col-75 {
   float: left;
   width: 75%;
+  margin-top: 6px;
+}
+
+.col-85{
+  float: left;
+  width: 700px;
+  margin-top: 6px;
+}
+
+.col-35{
+  float: left;
+  width: 150px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+
+.col-55{
+  float: left;
+  width: 40%;
+  margin-top: 6px;
+}
+
+.col-45{
+  float: left;
+  width: 358px;
   margin-top: 6px;
 }
 

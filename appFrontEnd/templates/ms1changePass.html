@@ -34,9 +34,20 @@
 
 {% else %}
   <div class="topnav"><ul>
-        <li><a href="menu">HOME</a></li>
+        <li><a href="admin">HOME</a></li>
         <li class="active"><a href="changePass">ACCOUNT</a></li>
-        <li><a href="">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
       
       <div class="dropdown">
         <button class="dropbtn">TEMPLATE
@@ -68,7 +79,7 @@
         </button>
 
         <div class="dropdown-content">
-          <a href="addSchedule">NEW SCHEDULE</a>
+          <a href="addNewSchedule">NEW SCHEDULE</a>
           <a href="editSchedule">EDIT SCHEDULE</a>
           <a href="">RUN SCHEDULE</a>
         </div>

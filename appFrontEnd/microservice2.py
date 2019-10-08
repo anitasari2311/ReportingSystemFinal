@@ -575,7 +575,7 @@ class Schedule:
             db = databaseCMS.db_template()
             cursor = db.cursor()
 
-            listKodeEditSchedule = cursor.execute(' select report_id from t_schedule where sch_aktifYN IN ("D", "Y") ')
+            listKodeEditSchedule = cursor.execute(' select distinct report_id from t_schedule where sch_aktifYN IN ("D", "Y") ')
             listKodeEditSchedule = cursor.fetchall()
 
             listKodeEdit = []

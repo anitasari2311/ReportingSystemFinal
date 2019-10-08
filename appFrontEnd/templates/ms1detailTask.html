@@ -226,11 +226,12 @@
 
                            <br><br>              <center>
 
-            <div class="row"><form action ="/acceptRequest" method = "post">
-              <button class="submit" value="{{detail_task['requestId']}}" name="btnConfirmReq" >Accept</button></form>
-                    <br><form action ="/cancelTask">
-              <button class="submitRed" value="Cancel">Cancel</button></form>
-            </div>
+            <div class="colBut"><form action ="/acceptRequest" method = "post">
+              <button class="submit" value="{{detail_task['requestId']}}" name="btnConfirmReq" >Accept</button></form></div>
+            
+            <div class="colBut"><form action ="/availableTask">
+              <button class="submitRed" value="Cancel">Cancel</button></form></div>
+            
             {% endfor %}
           </center>
 

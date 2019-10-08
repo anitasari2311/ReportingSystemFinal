@@ -108,9 +108,9 @@ def listFinished():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        a = session['user_id']
+        uId = session['user_id']
 
-        listFinished = requests.get(''.join(['http://127.0.0.1:5001/listFinished/'+a]))
+        listFinished = requests.get(''.join(['http://127.0.0.1:5001/listFinished/'+uId]))
         finishedResp = json.dumps(listFinished.json())
         loadFinished = json.loads(finishedResp)
 
@@ -1185,6 +1185,10 @@ def testKolom(kode_laporan):
        print("Key: " + k)
        print("Value: " + str(v))
     return fLoad
+
+@app.route('/testQuery')
+def testQuery():
+    return render_template('ms2insertQuery_baru.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

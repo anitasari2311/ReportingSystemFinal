@@ -10,10 +10,22 @@
   <title> Edit Schedule </title>
 </head>
 
-<body>
+<body bgcolor="#F0FFF0">
 <div class="topnav"><ul>
+        <li><a href="admin">HOME</a></li>
         <li><a href="changePass">ACCOUNT</a></li>
-        <li><a href="task">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
       
       <div class="dropdown">
         <button class="dropbtn">TEMPLATE
@@ -63,33 +75,27 @@
 
 <form action="/editSchedule" method = 'POST'>
 
-  
-<div class ="row"> 
-
-  <div class ="col-15">
+<center>
+<div class ="containEdit">
+  <center>
+  <div class="tulisan" style="width: 350px; text-align: left;">
     <label for="kodeRep">Kode Report : </label>
+    <input name="valKode" list="listKodeR">
+    <datalist id="listKodeR">
+      {% for row in listKodeLap %}
+        <option value="{{row['reportId']}}"></option>
+      {% endfor %}
+    </datalist>
   </div>
   
+<br><br><br><br>
+ 
+    <button class="submit">OK</button>
+  </center>
 
-    <input name="valKode" list="listKodeR">
-
-<datalist id="listKodeR">
-  {% for row in listKodeLap %}
-  <option value="{{row['reportId']}}">
-    {% endfor %}
-  </datalist>
-                
-                <button>OK</button>    
-
-
-          
-
-
-  </div>
-
-
-  </form>
-
+</div>
+</form>
+</center>
 
 <br>
 
