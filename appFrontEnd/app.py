@@ -854,7 +854,7 @@ def sendAddNewSchedule():
 
         requests.post('http://127.0.0.1:5002/addSchedule/'+data_schedule)
 
-        return redirect(url_for('task'))
+        return redirect(url_for('admin'))
 
 
 
@@ -1185,10 +1185,6 @@ def testKolom(kode_laporan):
        print("Key: " + k)
        print("Value: " + str(v))
     return fLoad
-
-@app.route('/testQuery')
-def testQuery():
-    return render_template('ms2insertQuery_baru.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
