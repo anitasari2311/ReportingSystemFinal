@@ -64,6 +64,7 @@ class Template:
                     db.close()
             print("MySQL connection is closed")
 
+    
     #Mengambil semua list Kode Report
     @app.route('/getKodeReportAll')
     def getKodeReportAll():
@@ -133,11 +134,40 @@ class Template:
             print("MySQL connection is closed")
 
 
-    
+    @app.route('/viewReport/<email>', methods=['POST','GET'])
+    def viewReport(email):
+        try:
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
 
+            cursor.execute('SELECT a.report_id, org_id, report_judul, report_deskripsi\
+                            FROM m_report a LEFT JOIN t_schedule b ON a.report_id = b.report_id WHERE sch_reportPIC\
+                            LIKE "%'+email+'%" OR sch_penerima LIKE "%'+email+'%" ')
 
+            listReport = cursor.fetchall()
 
-   
+            LR = []
+            for row in listReport:
+                listDict={
+                'reportId' : row[0],
+                'orgId' : row[1],
+                'reportJudul' : row[2],
+                'reportDeskripsi': row[3]
+                }
+                LR.append(listDict)
+
+            result = json.dumps(LR)
+
+            return result
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+            #Closing DB Connection.
+            if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+            print("MySQL connection is closed")   
 
 
     @app.route('/getServer', methods=['POST','GET'])
@@ -250,7 +280,41 @@ class Template:
                     db.close()
             print("MySQL connection is closed")
 
-    
+    @app.route('/formatTemplate/<kode_laporan>', methods=['POST','GET'])
+    def formatTemplate(kode_laporan):
+        try: 
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+
+            cursor.execute(' SELECT report_id, report_periode, report_printAllYN, report_judul, report_header, report_footer, report_jumlahTampilan FROM m_report WHERE report_id = "'+kode_laporan+'" ')
+
+            detailFormatTemplate = cursor.fetchall()
+
+            detList = []
+            for row in detailFormatTemplate:
+                detDict={
+                'reportId' : row[0],
+                'reportPeriode' : row[1],
+                'reportPrintAll' : row[2],
+                'reportJudul' : row[3],
+                'reportHeader' : row[4],
+                'reportFooter' : row[5],
+                'reportJmlTampilan' : row[6],
+                }
+                detList.append(detDict)
+
+            detTemplate = json.dumps(detList)
+
+            return detTemplate
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+        #Closing DB Connection.
+            if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+            print("MySQL connection is closed")
 
     @app.route('/detailFormatTemplate/<kode_laporan>', methods=['POST','GET'])
     def detailFormatTemplate(kode_laporan):
@@ -812,12 +876,10 @@ class Schedule:
             db = databaseCMS.db_template()
             cursor = db.cursor()
 
-            cursor.execute('SELECT report_id, report_judul, report_deskripsi, report_periode, report_footer, org_id FROM m_report WHERE report_id = "'+kode_laporan+'" ')
+            cursor.execute('SELECT report_id, report_judul, report_deskripsi, report_periode, report_footer, org_id, report_header, LEFT(report_createdDate,11), report_userUpdate FROM m_report WHERE report_id = "'+kode_laporan+'" ')
 
             result = cursor.fetchone()
-
             
-
             return json.dumps(result)
         except Error as e :
             print("Error while connecting file MySQL", e)

@@ -127,6 +127,27 @@ class RequestLaporan:
 
 
         return reqIdFin
+
+    @app.route('/getEmail/<uId>', methods=['POST','GET'])
+    def getEmail(uId):
+        try:
+            db = databaseCMS.db_request()
+            cursor = db.cursor()
+
+            cursor.execute('SELECT user_email FROM m_user WHERE user_id = "'+uId+'" ')
+
+            resultEmail = cursor.fetchall()
+            
+            return json.dumps(resultEmail)
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
     @app.route('/getNamaOrg/<idOrg>', methods=['POST','GET'])
     def getNamaOrg(idOrg):
         try:

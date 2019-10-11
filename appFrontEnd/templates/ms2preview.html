@@ -1,29 +1,34 @@
 <html>
-<link rel="stylesheet" href="style.css">
+<head>
+<link rel="stylesheet" 
+  href="{{ url_for('static', filename='style.css') }}">
 
   <title> Preview Report </title>
+</head>
 
-<div class ="containerJudul">
-  <center>  <h1> Preview Report </h1> </center>
+<body bgcolor="#F0FFF0">
+
+<div class ="judul">
+  <center>PREVIEW REPORT</center>
 </div>
-
-
 
 <br><br><br>
+<center>
+<div class="containEdit">
 <form action ="/preview" method = 'POST'>
-<div class="row">
-    <div class="col-25">
-      <label for="template">Template yang ingin di-preview  </label>
-    </div>
+  <div class="row">
+      <div class="col-35">
+        <label for="template">Template yang ingin di-preview  </label>
+      </div>
 
-    <div class="col-15">
-        <select id="report"  name="kodLap">
-            {% for row in kodeReportAdaQuery %}
-            <option value="{{row.reportId}}">{{row.reportId}}</option>
-            {% endfor %}
-        </select>
-    </div>
-</div>
+      <div class="col-55">
+          <select id="report"  name="kodLap">
+              {% for row in kodeReportAdaQuery %}
+              <option value="{{row.reportId}}">{{row.reportId}}</option>
+              {% endfor %}
+          </select>
+      </div>
+  </div>
 
 
 
@@ -33,17 +38,17 @@
 <br><br>
 
 <center>
-<button>Preview</button>
+<button class="submit">Preview</button>
 </form>
-<button>Cancel</button>
+<button class="submitred">Cancel</button>
+</center>
+
+
+</div> <!-- akhiran div containEdit -->
 </center>
 
 
 
 
-
-
-
-
-
+</body>
 </html>

@@ -54,7 +54,7 @@
 <br>
 
 <div class ="judul">
-  <center>Format Template</center>
+  <center>EDIT TEMPLATE</center>
 </div>
 
 <div class="containInsert">
@@ -63,7 +63,6 @@
 
 
 {% if detailTemplate %}
-
 
 
 <div class ="row">
@@ -170,7 +169,7 @@
   </div>
 </div>
       
-    <div id="containerq"/>
+    <!-- <div id="containerq"/> -->
     
 
 {% set x = detailTemplate[0].reportJmlTampilan %}
@@ -218,8 +217,8 @@
 
 
     <input type="text" class = "col-10" id="lebar" name="lebar{{i+1}}" value="{{detailFormatTemplate[i].lebarKolomH}}">
-  </div>
 </div>
+
 
         
 
@@ -246,19 +245,19 @@
 
 <!-- CHECKBOX UNTUK LETAK FOOTER -->
 <div class ="myBox">
-<input type="checkbox" name="B{{i+1}}" value="B">B
-<input type="checkbox" name="C{{i+1}}" value="C">C
-<input type="checkbox" name="D{{i+1}}" value="D">D
-<input type="checkbox" name="E{{i+1}}" value="E">E
-<input type="checkbox" name="F{{i+1}}" value="F">F
-<input type="checkbox" name="G{{i+1}}" value="G">G
-<input type="checkbox" name="H{{i+1}}" value="H">H
-<input type="checkbox" name="I{{i+1}}" value="I">I
-<input type="checkbox" name="J{{i+1}}" value="J">J
-<input type="checkbox" name="K{{i+1}}" value="K">K
-<input type="checkbox" name="L{{i+1}}" value="L">L
-<input type="checkbox" name="M{{i+1}}" value="M">M
-<input type="checkbox" name="N{{i+1}}" value="N">N
+  <input type="checkbox" name="B{{i+1}}" value="B">B
+  <input type="checkbox" name="C{{i+1}}" value="C">C
+  <input type="checkbox" name="D{{i+1}}" value="D">D
+  <input type="checkbox" name="E{{i+1}}" value="E">E
+  <input type="checkbox" name="F{{i+1}}" value="F">F
+  <input type="checkbox" name="G{{i+1}}" value="G">G
+  <input type="checkbox" name="H{{i+1}}" value="H">H
+  <input type="checkbox" name="I{{i+1}}" value="I">I
+  <input type="checkbox" name="J{{i+1}}" value="J">J
+  <input type="checkbox" name="K{{i+1}}" value="K">K
+  <input type="checkbox" name="L{{i+1}}" value="L">L
+  <input type="checkbox" name="M{{i+1}}" value="M">M
+  <input type="checkbox" name="N{{i+1}}" value="N">N
 </div>
 
 {% endfor %}
@@ -276,9 +275,8 @@
 </form>
 
 <div class="colBut">
-<form action="/admin"><button class="submit"> CANCEL </button></form></div>
+<form action="/admin"><button class="submitred"> CANCEL </button></form></div>
 </center>
-
 
 
 {% else %}
@@ -295,6 +293,10 @@
 </center>
 
 {% endif %}
+
+</div> <!-- akhiran div containInsert -->
+
+
 
 {% block javascript %}
 

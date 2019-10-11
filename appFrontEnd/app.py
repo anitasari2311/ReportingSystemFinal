@@ -31,6 +31,7 @@ def login():
         return auth.auth_login()
 
     return render_template('ms1login.html')
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -88,7 +89,7 @@ def user():
 
         return render_template('ms1home1.html', day=day)
 
-
+#================[List request user]=================
 @app.route('/list', methods = ['POST','GET'])
 def list():
     if session.get('user_id') is None:
@@ -102,7 +103,7 @@ def list():
 
         return render_template('ms1listReq.html', listReqUser = loadListReq)
 
-
+#==============[List request yang telah selesai ]===========
 @app.route('/listFinished', methods = ['POST','GET'])
 def listFinished():
     if session.get('user_id') is None:
@@ -116,6 +117,31 @@ def listFinished():
 
         return render_template('ms1listFinished.html', listKelar = loadFinished)
 
+#============[Read Report]========================
+@app.route('/readReport', methods=['POST','GET'])
+def readReport():
+    # if session.get('user_id') is None:
+    #     return render_template('ms1login.html')
+    # else:
+
+        uId = session['user_id']
+
+        eml = requests.get('http://127.0.0.1:5001/getEmail/'+uId)
+        emlResp = json.dumps(eml.json())
+        loadEmail = json.loads(emlResp)
+        for i in loadEmail:
+            emailUser = i[0]
+
+        print('Read Report: ',emailUser)
+
+        listRep = requests.get('http://127.0.0.1:5002/viewReport/'+emailUser)
+        listResp = json.dumps(listRep.json())
+        loadListReport = json.loads(listResp)
+
+        print(loadListReport)
+        return render_template('ms4viewReport.html', readReport = loadListReport)
+
+#================[Saat user memberi rating]=================
 @app.route('/sendRating', methods=['POST','GET'])
 def sendRating():
     if request.method == 'POST':
@@ -133,9 +159,7 @@ def sendRating():
 
         return redirect(url_for('listFinished'))
 
-
-
-
+#================[Menampilkan layar Request Laporan]=================
 @app.route('/newRequest', methods = ['GET','POST'])
 def newRequest():
     if session.get('user_id') is None:
@@ -162,10 +186,7 @@ def newRequest():
         return render_template('ms1requestLaporan.html', listOrg = loadOrg, 
                                 listDept = loadCat, listPIC = loadPIC, listPen = loadPen)
 
- 
-
-
-
+#================[Mengirim data request ke MS1/addNewRequest]================= 
 @app.route('/sendDataRequest', methods=['POST','GET'])
 def sendDataRequest():
     PIC = requests.get('http://127.0.0.1:5001/namaPIC')
@@ -271,7 +292,7 @@ def sendDataRequest():
 
         return redirect(url_for('list'))
 
-
+#==[Ketika user membatalkan request. Mengirim ReqID yang dicancel ke MS1/cancR]========
 @app.route('/cancelRequest', methods=['POST','GET'])
 def cancelRequest():
 
@@ -293,8 +314,8 @@ def cancelRequest():
 
         return redirect(url_for('list'))
 
-
-
+#================[Menampilkan kode laporan yang ingin di edit]=================
+#================[Menampilkan form edit laporan]=================
 @app.route('/editReport', methods=['POST','GET'])
 def editReport():
     if session.get('user_id') is None:
@@ -327,7 +348,7 @@ def editReport():
 
         return render_template('ms1Edit2.html', listKodeReport = loadListRep)
 
-
+#===[Mengirim data edit laporan sebagai request baru ke MS1/editRequest]=================
 @app.route('/sendEditRequest', methods = ['POST','GET'])
 def sendEditRequest():
     if request.method == 'POST':
@@ -558,6 +579,8 @@ def rejectRequest():
 #=========================[         PROGRAMMER             ]==============================
 #=========================================================================================
 #=========================================================================================
+
+#============[Menampilkan homepage programmer]============
 @app.route('/admin')
 def admin():
     if session.get('user_id') is None:
@@ -566,6 +589,7 @@ def admin():
 
         return render_template('ms2home.html')
 
+#============[Menampilkan list task yang bisa dikerjakan]============
 @app.route('/availableTask')
 def availableTask():
     if session.get('user_id') is None:
@@ -588,6 +612,7 @@ def availableTask():
         return render_template('ms1availableTask.html', listAvailTask = loadAvailTask,
                                 listKodeLap = loadListRep)
 
+#============[Menampilkan list task yang harus dikerjakan]============
 @app.route('/listTask')
 def listTask():
     if session.get('user_id') is None:
@@ -607,6 +632,7 @@ def listTask():
         return render_template('ms1listTask.html', listTask = loadTask, 
                                 listKodeLap = loadListRep)
 
+#============[Menampilkan list task yang sudah selesai dikerjakan]============
 @app.route('/historyTask')
 def historyTask():
     if session.get('user_id') is None:
@@ -626,6 +652,7 @@ def historyTask():
         return render_template('ms1historyTask.html', historyTask = loadHist, 
                                 listKodeLap = loadListRep)
 
+#=====[Saat programmer mengklik request yang ada]===========
 @app.route('/detailRequest', methods=['POST','GET'])
 def detailRequest():
     request_id = request.form['buttonDetail']
@@ -644,7 +671,7 @@ def detailRequest():
     # print(cba)
     return render_template('ms1detailTask.html', detail_task = loadDetailTask)
 
-
+#============[Mengirim data accept request ke MS1/accRequest]============
 @app.route('/acceptRequest', methods=['POST','GET'])
 def acceptRequest():
 
@@ -673,7 +700,7 @@ def acceptRequest():
             return redirect(url_for("listRequestSPV"))
 
 
-
+#============[Mengirim data finish request ke MS1/finReq]============
 @app.route('/finishRequest', methods=['POST','GET'])
 def finishRequest():
     if request.method == 'POST':
@@ -712,7 +739,7 @@ def finishRequest():
 #=========================================================================================
 #=========================================================================================
 
-
+#============[Menampilkan menu add new Schedule]============
 @app.route('/addNewSchedule', methods = ['POST','GET'])
 def addNewSchedule():
     if session.get('user_id') is None:
@@ -734,6 +761,7 @@ def addNewSchedule():
         return render_template('ms2addNewSchedule.html', listKodeReportS = loadKodeNewSchedule,
                                 listPIC = loadPIC,listPen = loadPen)
 
+#============[Mengirim data add new schedule ke MS2/addSchedule]============
 @app.route('/sendAddNewSchedule', methods=['POST','GET'])
 def sendAddNewSchedule():
     if request.method == 'POST':
@@ -856,8 +884,8 @@ def sendAddNewSchedule():
 
         return redirect(url_for('admin'))
 
-
-
+#============[Memilih kode laporan yang akan diubah schedulenya]============
+#============[Menampilkan form edit schedule]============
 @app.route('/editSchedule', methods=['POST','GET'])
 def editSchedule():
     if session.get('user_id') is None:
@@ -888,7 +916,7 @@ def editSchedule():
 
         return render_template('ms2editSchedule.html', listKodeLap = loadKodeAll)
 
-
+#============[Mengirim data edit schedule ke MS2/editSched]============
 @app.route('/sendEditSchedule', methods=['POST','GET'])
 def sendEditSchedule():
     PIC = requests.get('http://127.0.0.1:5001/namaPIC')
@@ -992,6 +1020,7 @@ def sendEditSchedule():
 #=========================================================================================
 #=========================================================================================
 
+#============[Menampilkan layar insert query]============
 @app.route('/insertQuery', methods=['POST','GET'])
 def addQuery():
     if session.get('user_id') is None:
@@ -1003,6 +1032,7 @@ def addQuery():
 
         return render_template('ms2insertQuery.html', kodeNewQuery = kLoad)
 
+#============[Mengirim data query ke MS2/addQuery]============
 @app.route('/sendNewQuery', methods=['POST','GET'])
 def sendNewQuery():
     quer = []
@@ -1023,6 +1053,8 @@ def sendNewQuery():
 
         return redirect(url_for('admin'))
 
+#============[Memilih kode laporan yang akan diubah querynya]============
+#============[Menampilkan menu insert Query]============
 @app.route('/editQuery', methods=['POST','GET'])
 def editQuery():
     if session.get('user_id') is None:
@@ -1052,7 +1084,7 @@ def editQuery():
 #=========================================================================================
 #=========================================================================================
 
-
+#============[Menampilkan menu untuk membuat template baru]============
 @app.route('/addTemplate', methods=['POST','GET'])
 def addTemplate():
     if session.get('user_id') is None:
@@ -1074,8 +1106,10 @@ def addTemplate():
         return render_template('ms2addNewTemplate.html', listKategori = loadCat, listOrg = loadOrg,
                                 listServer = loadSer)
 
+#============[Mengirim data template baru ke MS2/addNewTemplate]============
 @app.route('/sendNewTemplate', methods=['POST','GET'])
 def sendNewTemplate():
+
     if request.method == 'POST':
         userName = session['username']
 
@@ -1120,15 +1154,26 @@ def sendNewTemplate():
         'report_tujuan'       : str(report_tujuan)
         }
         
+        detTem = requests.get('http://127.0.0.1:5002/formatTemplate/'+kode_laporan)
+        detDump = json.dumps(detTem.json())
+        loadDetail = json.loads(detDump)
+
+
         dataTemplate = json.dumps(data)
 
 
-
         requests.post('http://127.0.0.1:5002/addNewTemplate/'+dataTemplate)
+
         
 
-        return redirect(url_for('admin'))
+        
+        
+        # return redirect(url_for('admin'))
 
+        return render_template('addTemplate.html', kode_laporan=kode_laporan, detailFormatTemplate = loadDetail)
+
+#============[Memilih kode laporan]============
+#============[Menampilkan form format template]============
 @app.route('/formatTemplate', methods=['POST','GET'])
 def formatTemplate():
     kodeReport = requests.get('http://127.0.0.1:5002/getKodeReportAll')
@@ -1150,8 +1195,6 @@ def formatTemplate():
     return render_template('ms2formatTemplate1.html', listKodeReport = loadKodeAll)
         
 
-
-
 #=========================================================================================
 #=========================================================================================
 #==================================[    PREVIEW      ]====================================
@@ -1159,32 +1202,43 @@ def formatTemplate():
 #=========================================================================================
 
 
+#============[Menampilkan seluruh list report yang ada]============
+@app.route('/listReport', methods=['POST','GET'])
+def listReport():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+
+        detR = requests.get('http://127.0.0.1:5002/getListReport')
+        detResp = json.dumps(detR.json())
+        loadListReport = json.loads(detResp)
+
+        return render_template('ms2listReport.html', listReport = loadListReport)
+
+
+#============[Memilih kode laporan yang akan dipreview]============
+#============[Mengirim kode laporan ke MS3/previewLaporan]============
 @app.route('/preview', methods=['POST','GET'])
 def preview():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
+
         kEQuery = requests.get('http://127.0.0.1:5002/getKodeEditQuery')
         kEDump = json.dumps(kEQuery.json())
         kELoad = json.loads(kEDump)
+
+
         if request.method == 'POST':
             kode_laporan = request.form['kodLap']
 
-            requests.post('http://127.0.0.1:5003/generateToExcel/'+kode_laporan)
+            requests.post('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+
+
+            return redirect(url_for('admin'))
 
         return render_template('ms2preview.html', kodeReportAdaQuery = kELoad)
 
-
-@app.route('/testKolom/<kode_laporan>', methods=['POST','GET'])
-def testKolom(kode_laporan):
-    formatTemplate = requests.get('http://127.0.0.1:5002/detailFormatTemplate/'+kode_laporan)
-    fDump = json.dumps(formatTemplate.json())
-    fLoad = json.loads(fDump)
-
-    for (k, v) in fLoad.items():
-       print("Key: " + k)
-       print("Value: " + str(v))
-    return fLoad
 
 if __name__ == "__main__":
     app.run(debug=True)
