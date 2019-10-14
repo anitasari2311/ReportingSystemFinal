@@ -10,7 +10,7 @@
 {% if session.get('position') == 'User' %}
     <div class="topnav"><ul>
       <li><a href="user">HOME</a></li>
-      <li class="active"><a href="changePass">MODIFY USER</a></li>
+      <li class="active"><a href="changePass">ACCOUNT</a></li>
       <li><a href="newRequest">NEW REQUEST</a></li>
       <li><a href="editReport">EDIT REPORT</a></li>
 
@@ -99,7 +99,7 @@
 <center>
     <form action="/sendDataPassword", method="POST">
     <div class="containModify">
-        <br>
+        <br><br><br>
         <div class ="row">
             <div class ="col-25">
                 <label for="oldPass">Old Password</label>
@@ -127,14 +127,15 @@
             </div>
 
             <div class="col-75">
-                <input type="password" placeholder="Confirm password" id="confPass" name="confPass" onblur="cekPassword()">
+                <input type="password" placeholder="Confirm password" id="confPass" name="confPass">
             </div>
         </div>
 
-            <br><br>
+            <br><br><br><br><br><br>
+
         <center>
           <div class="colBut">
-            <button class="submit">Save</button><br></div></form>
+            <button class="submit" id="save" onsubmit="cekPassword()">Save</button><br></div></form>
               
           <div class="colBut">
             <button class="submitRed">Cancel</button>
@@ -152,8 +153,17 @@
         if (newPass != confPass){
             alert("konfirmasi password harus sesuai dengan password baru")
             return false;
+        }else(){
+          alert("password berhasil diganti")
+          return false;
         }
         return true;
+    }
+
+    function success(){
+      var success = document.getElementById("save").value;
+
+
     }
 </script>
 

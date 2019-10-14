@@ -90,7 +90,7 @@
                 <table id="list">
                   <tr>
                     <th>Request Code</th>
-                    <th>Title</th>
+                    <th>Report Title</th>
                     <th>Request Name</th>
                     <th>Department</th>
                     <th>Request Date</th>
@@ -106,7 +106,7 @@
                     <td>{{row['requestKategori']}}</td>
                     <td>{{row['requestTanggal']}}</td>
                     <td>{{row['requestDeadline']}}</td>    
-                    {% if row['requestPrioritas'] == '1' %}
+                    {% if row['requestPrioritas'] == '2' %}
                     <td> <a class ="pri3"> </a></td>
                     {% else %}
                     <td> <a class ="pri1"> </a></td>

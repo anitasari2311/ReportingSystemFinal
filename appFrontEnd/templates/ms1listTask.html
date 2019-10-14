@@ -89,10 +89,10 @@
                 <td>{{row['requestTanggal']}}</td>
                 <td>{{row['requestDeadline']}}</td>
 
-                {% if row['requestPrioritas'] == '1' %}
-                    <td> <a class ="pri1"> </a></td>
-                    {% else %}
+                {% if row['requestPrioritas'] == '2' %}
                     <td> <a class ="pri3"> </a></td>
+                    {% else %}
+                    <td> <a class ="pri1"> </a></td>
                     {% endif %}
                 
 

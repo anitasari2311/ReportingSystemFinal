@@ -1,69 +1,86 @@
 <html>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title> List Report </title>
+</head>
+
+<body bgcolor="#F0FFF0">
+  <div class="topnav"><ul>
+      <li class="active"><a href="user">HOME</a></li>
+      <li><a href="changePass">ACCOUNT</a></li>
+      <li><a href="newRequest">NEW REQUEST</a></li>
+      <li><a href="editReport">EDIT REPORT</a></li>
+
+      <div class="dropdown">
+          <button class="dropbtn">LIST     
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+        <div class="dropdown-content">
+          <a href="list">LIST REQUEST</a>
+          <a href="listFinished">LIST FINISHED REQUEST</a>
+          <a href="readReport">LIST REPORT</a>
+        </div>
+      </div>
+
+      <li><a href="login">LOGOUT</a></li>
+
+  </ul>
+ </div>
+ <br><br>
 
 <div class ="judul">
-  <center>List Report</center>
+  <center>LIST REPORT</center>
+</div>
+  
 </div>
 
+    <table id="list">
+      <tr>
+        <th>Report Code</th>
+        <th>Organization</th>
+        <th>Report Title</th>
+        <th>Description</th>
+        <th>Last Update</th>
+        <th>Read Report</th>
+      </tr>
+    {% for row in readReport %}
+      <tr>
+        <td>{{row.reportId}}</td>
+        <td>{{row.orgId}}</td>
+        <td>{{row.reportJudul}}</td>
+        <td>{{row.reportDeskripsi}}</td>
+        <td>NULL</td>
+        <td>
+      <center>
+          <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Preview</button>
+      </center>
+      
+   <!-- Modal content -->
+          <div id="modal2{{row.reportId}}" class="modal">
+    <form action='/preview' method='POST'>
+            <div class="modal-content">
+              <span class="close" onclick="closeModal2()">&times;</span>
+              <center>
+              <strong>Preview {{row.reportId}} - {{row.reportJudul}} </strong>
+              <br><br><br>
+              <p>Confirm preview ?</p>
+            </center>
+               <button name="kodLap" value ="{{row.reportId}}"> OK </button>
+            </div>
+    </form>
+          </div>
 
+        </td>
+    {% endfor %}
+</tr>
 
-<br><br><br>
-
-        
-                      <table id="list">
-                        <tr>
-                          <th>Report Code</th>
-                          <th>Organization</th>
-                          <th>Report Title</th>
-                          <th>Deskripsi</th>
-                          <th>Last Update</th>
-                          <th>Read</th>
-                        </tr>
-                      {% for row in readReport %}
-                        <tr >
-                          <td>{{row.reportId}}</td>
-                          <td>{{row.orgId}}</td>
-                          <td>{{row.reportJudul}}</td>
-                          <td>{{row.reportDeskripsi}}</td>
-                          <td>NULL</td>
-                          <td>
-                            <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Preview</button>
-
-                            <div id="modal2{{row.reportId}}" class="modal">
-
-                      <!-- Modal content -->
-
-              <form action='/preview' method='POST'>
-                      <div class="modal-content">
-                        <span class="close" onclick="closeModal2()">&times;</span>
-                        <center>
-                        <strong>Preview {{row.reportId}} - {{row.reportJudul}} </strong>
-                        <br><br><br>
-                        <p>Confirm preview ?</p>
-                      </center>
-                         <button name="kodLap" value ="{{row.reportId}}"> OK </button>
-                      </div>
-              </form>
-                    </div>
-
-                          </td>
-                      {% endfor %}
-
-                            
-                      </table>
-
-
-
-
-
-
+    </table>
 <br><br>
+</body>
 
-
-
-
+</html>
 
 <script>
   var btnProcess2;
@@ -86,11 +103,4 @@
     show_modal('modal2'+processId);
     //alert('modal'+processId);
   }
-
 </script>
-
-
-
-
-
-</html>

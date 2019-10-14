@@ -416,7 +416,7 @@ class RequestLaporan:
             req_dateAccept = None
             req_endDate=None
             req_status='Waiting'
-            req_prioritas='1'
+            req_prioritas='2'
             reqSch_lastUpdate = datetime.datetime.now()
             req_date = datetime.datetime.now()
 
@@ -922,7 +922,7 @@ class RequestLaporan:
             db = databaseCMS.db_request()
 
             cursor = db.cursor()
-            cursor.execute(''.join(['SELECT a.req_id, req_judul, req_deskripsi, org_nama, ktgri_nama, req_tampilan, req_periode, req_deadline, req_file, reqSch_tanggal, reqSch_bulan, reqSch_hari, req_kodeLaporan, req_tujuan  FROM t_request a LEFT JOIN m_organisasi b ON a.org_id = b.org_id LEFT JOIN m_kategori c ON a.ktgri_id = c.ktgri_id LEFT JOIN t_reqSchedule d ON a.req_id = d.req_id  WHERE a.req_id = "'+request_id+'"']))            
+            cursor.execute(''.join(['SELECT a.req_id, req_judul, req_deskripsi, org_nama, ktgri_nama, req_tampilan, req_periode, req_deadline, req_file, reqSch_tanggal, reqSch_bulan, reqSch_hari, req_kodeLaporan, req_tujuan, req_prioritas  FROM t_request a LEFT JOIN m_organisasi b ON a.org_id = b.org_id LEFT JOIN m_kategori c ON a.ktgri_id = c.ktgri_id LEFT JOIN t_reqSchedule d ON a.req_id = d.req_id  WHERE a.req_id = "'+request_id+'"']))            
            
             resultDetail = cursor.fetchall()
 
@@ -943,7 +943,8 @@ class RequestLaporan:
                 'reqSchBulan' : row[10],
                 'reqSchHari' : row[11],
                 'requestKodeLaporan' : row[12],
-                'requestTujuan' : row[13]
+                'requestTujuan' : row[13],
+                'requestPrioritas' : row[14]
                 }
                 detailTaskList.append(detailDict)
 
@@ -962,6 +963,72 @@ class RequestLaporan:
                         db.close()
                     print("MySQL connection is closed")
 
+    #GET BERAPA BANYAK REQUEST NORMAL YANG UDAH DIAMBIL SAMA PROGRAMMER CODINGANBARU
+    @app.route('/countRequestNormal/<uName>')
+    def countRequestNormal(uName):
+        
+        try: 
+            db = databaseCMS.db_request()
+
+            cursor = db.cursor()
+            cursor.execute(''.join(['SELECT COUNT(req_id) as req_id FROM t_request WHERE req_prioritas = "2" AND req_PIC = "'+uName+'"']))            
+           
+            resultNormal = cursor.fetchall()
+
+            detailNormal = []
+
+            for row in resultNormal:
+                normalDict = {
+                'requestId' : row[0],
+                }
+                detailNormal.append(normalDict)
+
+            detail_normal = json.dumps(detailNormal)
+
+            return detail_normal
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
+
+    #GET BERAPA BANYAK REQUEST IMPORTANT YANG UDAH DIAMBIL SAMA PROGRAMMER CODINGANBARU
+    @app.route('/countRequestImportant/<uName>')
+    def countRequestImportant(uName):
+        
+        try: 
+            db = databaseCMS.db_request()
+
+            cursor = db.cursor()
+            cursor.execute(''.join(['SELECT COUNT(req_id) as req_id FROM t_request WHERE req_prioritas = "1" AND req_PIC = "'+uName+'"']))            
+           
+            resultImportant = cursor.fetchall()
+
+            detailImportant = []
+
+            for row in resultImportant:
+                importantDict = {
+                'requestId' : row[0],
+                }
+                detailImportant.append(importantDict)
+
+            detail_important = json.dumps(detailImportant)
+
+            return detail_important
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
 
     @app.route('/accRequest/<detail>', methods=['POST','GET'])
     def accRequest(detail):
@@ -973,6 +1040,7 @@ class RequestLaporan:
             request_id = detailR['request_id']
             uId = detailR['uId']
             uName = detailR['uName']
+
 
 
         try: 

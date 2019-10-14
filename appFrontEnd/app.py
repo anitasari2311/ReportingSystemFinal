@@ -86,8 +86,9 @@ def user():
         now = datetime.datetime.now()
 
         day = now.strftime("%A")
+        date = now.strftime("%H:%M:%S")
 
-        return render_template('ms1home1.html', day=day)
+        return render_template('ms1home1.html', day=day, date=date)
 
 #================[List request user]=================
 @app.route('/list', methods = ['POST','GET'])
@@ -124,6 +125,11 @@ def readReport():
     #     return render_template('ms1login.html')
     # else:
 
+    kode = requests.get('http://127.0.0.1:5001/getReportId')
+    kodeRep = json.dumps(kode.json())
+    loadKode = json.loads(kodeRep)
+
+    if request.method == 'POST':
         uId = session['user_id']
 
         eml = requests.get('http://127.0.0.1:5001/getEmail/'+uId)
@@ -140,6 +146,17 @@ def readReport():
 
         print(loadListReport)
         return render_template('ms4viewReport.html', readReport = loadListReport)
+
+    return render_template('ms4SelectReport.html', listKodeReport = loadKode)
+
+@app.route('/test', methods=['POST', 'GET'])
+def test():
+
+    kode = requests.get('http://127.0.0.1:5001/getReportId')
+    kodeRep = json.dumps(kode.json())
+    loadKode = json.loads(kodeRep)
+
+    return render_template('ms4selectreport.html', listKodeReport = loadKode)
 
 #================[Saat user memberi rating]=================
 @app.route('/sendRating', methods=['POST','GET'])
@@ -655,21 +672,33 @@ def historyTask():
 #=====[Saat programmer mengklik request yang ada]===========
 @app.route('/detailRequest', methods=['POST','GET'])
 def detailRequest():
+
     request_id = request.form['buttonDetail']
+    sessionName = session['username']
 
     detailTask = requests.get('http://127.0.0.1:5001/getDetailTask/'+request_id)
     detTask = json.dumps(detailTask.json())
     loadDetailTask = json.loads(detTask)
 
+    detailNormal = requests.get('http://127.0.0.1:5001/countRequestNormal/'+sessionName)
+    detNormal = json.dumps(detailNormal.json())
+    loadDetailNormal = json.loads(detNormal)
 
-    # UNTUK MENGAMBIL VALUE DALAM JSON
-    for x in loadDetailTask:
-        aaa = x['requestId']
-        bbb = x['requestTujuan']
+    detailImportant = requests.get('http://127.0.0.1:5001/countRequestImportant/'+sessionName)
+    detImportant = json.dumps(detailImportant.json())
+    loadDetailImportant = json.loads(detImportant)
 
-    # cba = detTask["requestId"]
-    # print(cba)
-    return render_template('ms1detailTask.html', detail_task = loadDetailTask)
+    if '2' in loadDetailNormal:
+        return render_template('ms1login.html')
+    else:
+        # UNTUK MENGAMBIL VALUE DALAM JSON
+        for x in loadDetailTask:
+            aaa = x['requestId']
+            bbb = x['requestTujuan']
+
+        # cba = detTask["requestId"]
+        # print(cba)
+        return render_template('ms1detailTask.html', detail_task = loadDetailTask)
 
 #============[Mengirim data accept request ke MS1/accRequest]============
 @app.route('/acceptRequest', methods=['POST','GET'])
@@ -1154,23 +1183,17 @@ def sendNewTemplate():
         'report_tujuan'       : str(report_tujuan)
         }
         
-        detTem = requests.get('http://127.0.0.1:5002/formatTemplate/'+kode_laporan)
-        detDump = json.dumps(detTem.json())
-        loadDetail = json.loads(detDump)
-
-
         dataTemplate = json.dumps(data)
-
 
         requests.post('http://127.0.0.1:5002/addNewTemplate/'+dataTemplate)
 
-        
-
-        
+        detTem = requests.get('http://127.0.0.1:5002/formatTemplate/'+kode_laporan)
+        detDump = json.dumps(detTem.json())
+        loadDetail = json.loads(detDump)
         
         # return redirect(url_for('admin'))
 
-        return render_template('addTemplate.html', kode_laporan=kode_laporan, detailFormatTemplate = loadDetail)
+        return render_template('addTemplate.html', detailFormatTemplate = loadDetail)
 
 #============[Memilih kode laporan]============
 #============[Menampilkan form format template]============
@@ -1189,7 +1212,7 @@ def formatTemplate():
 
 
         return render_template('testFormatTemplate.html', kode_laporan=kode_laporan
-            ,detailTemplate = loadDetail, detailFormatTemplate = loadDetail)
+            ,detailTemplate = loadDetail)
 
 
     return render_template('ms2formatTemplate1.html', listKodeReport = loadKodeAll)
