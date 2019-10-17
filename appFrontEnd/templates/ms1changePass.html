@@ -22,6 +22,7 @@
         <div class="dropdown-content">
           <a href="list">LIST REQUEST</a>
           <a href="listFinished">LIST FINISHED REQUEST</a>
+          <a href="readReport">LIST REPORT</a>
         </div>
       </div>
 
@@ -32,7 +33,7 @@
 
      <br>
 
-{% else %}
+{% elif session.get('position') == 'Admin' %}
   <div class="topnav"><ul>
         <li><a href="admin">HOME</a></li>
         <li class="active"><a href="changePass">ACCOUNT</a></li>
@@ -88,6 +89,66 @@
         <li><a href="">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
     </ul></div>
+
+{% else %}
+  <div class="topnav"><ul>
+        <li><a href="spv">HOME</a></li>
+        <li class="active"><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+
 {% endif %}
 
 <br><br>
@@ -121,13 +182,13 @@
             </div>
         </div>
 
-            <div class="row">
+        <div class="row">
             <div class="col-25">
                 <label for="newPass">Confirm New Password</label>
             </div>
 
             <div class="col-75">
-                <input type="password" placeholder="Confirm password" id="confPass" name="confPass">
+                <input type="password" placeholder="Confirm password" id="confPass" name="confPass" onblur="cekPassword()">
             </div>
         </div>
 
@@ -135,7 +196,7 @@
 
         <center>
           <div class="colBut">
-            <button class="submit" id="save" onsubmit="cekPassword()">Save</button><br></div></form>
+            <button class="submit" id="save" onclick="success()">Save</button><br></div></form>
               
           <div class="colBut">
             <button class="submitRed">Cancel</button>
@@ -153,9 +214,6 @@
         if (newPass != confPass){
             alert("konfirmasi password harus sesuai dengan password baru")
             return false;
-        }else(){
-          alert("password berhasil diganti")
-          return false;
         }
         return true;
     }
@@ -163,6 +221,11 @@
     function success(){
       var success = document.getElementById("save").value;
 
+      if(newPass = confPass){
+        alert("Password successfully changed!")
+        return false;
+      }
+      return true;
 
     }
 </script>

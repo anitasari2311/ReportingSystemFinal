@@ -68,7 +68,9 @@ def sendDataPassword():
         elif session.get('position') == 'Admin' :
             requests.post('http://127.0.0.1:5001/updateDataPassword/'+dataRequest)
             return redirect(url_for('admin'))
-
+        else:
+            requests.post('http://127.0.0.1:5001/updateDataPassword/'+dataRequest)
+            return redirect(url_for('spv'))
 
 
 #=========================================================================================
@@ -118,18 +120,12 @@ def listFinished():
 
         return render_template('ms1listFinished.html', listKelar = loadFinished)
 
-#============[Read Report]========================
+#============[Read Report] CODINGAN BARU========================
 @app.route('/readReport', methods=['POST','GET'])
 def readReport():
-    # if session.get('user_id') is None:
-    #     return render_template('ms1login.html')
-    # else:
-
-    kode = requests.get('http://127.0.0.1:5001/getReportId')
-    kodeRep = json.dumps(kode.json())
-    loadKode = json.loads(kodeRep)
-
-    if request.method == 'POST':
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
         uId = session['user_id']
 
         eml = requests.get('http://127.0.0.1:5001/getEmail/'+uId)
@@ -146,17 +142,6 @@ def readReport():
 
         print(loadListReport)
         return render_template('ms4viewReport.html', readReport = loadListReport)
-
-    return render_template('ms4SelectReport.html', listKodeReport = loadKode)
-
-@app.route('/test', methods=['POST', 'GET'])
-def test():
-
-    kode = requests.get('http://127.0.0.1:5001/getReportId')
-    kodeRep = json.dumps(kode.json())
-    loadKode = json.loads(kodeRep)
-
-    return render_template('ms4selectreport.html', listKodeReport = loadKode)
 
 #================[Saat user memberi rating]=================
 @app.route('/sendRating', methods=['POST','GET'])
@@ -498,24 +483,36 @@ def sendEditRequest():
 #=========================================================================================
 #=========================================================================================
 
-@app.route('/listRequestSPV')
+
+@app.route('/availableTaskSPV')
 def listRequestSPV():
-    sessionId = session['user_id']
+    # sessionId = session['user_id']
 
     listAvailableTask = requests.get('http://127.0.0.1:5001/availableTask')
     avTask = json.dumps(listAvailableTask.json())
     loadAvailTask = json.loads(avTask)
 
+    # listTask = requests.get('http://127.0.0.1:5001/listTask/'+sessionId)
+    # Task = json.dumps(listTask.json())
+    # loadTask = json.loads(Task)
+
+    return render_template('ms1availableTaskSPV.html', listAvailTaskSPV = loadAvailTask)
+                            # listTask = loadTask)
+
+
+
+@app.route('/onProgressTask')
+def onProgressTask():
+
     onProgTask = requests.get('http://127.0.0.1:5001/onProgressTask')
     onTask = json.dumps(onProgTask.json())
     loadOnProgTask = json.loads(onTask)
 
-    listTask = requests.get('http://127.0.0.1:5001/listTask/'+sessionId)
-    Task = json.dumps(listTask.json())
-    loadTask = json.loads(Task)
+    return render_template('ms1onProgressTaskSPV.html', onProgTask = loadOnProgTask)
 
-    return render_template('ms1taskSPV.html', listAvailTaskSPV = loadAvailTask,
-                            onProgTask = loadOnProgTask, listTask = loadTask)
+@app.route('/spv')
+def spv():
+    return render_template('ms2homeSPV.html')
 
 @app.route('/rejectRequest', methods=['POST','GET'])
 def rejectRequest():
@@ -534,62 +531,37 @@ def rejectRequest():
 
         return redirect(url_for('listRequestSPV'))
 
+# CODINGANBARU
+@app.route('/prioritasRequest', methods = ['POST', 'GET'])
+def prioritasReq():
+    if request.method == 'POST':
+
+        data = {
+        'request_id' : request.form['btnYesP'],
+        }
+
+        dataPrioritas = json.dumps(data)
+
+        requests.post('http://127.0.0.1:5001/prioritas/'+dataPrioritas)
 
 
+        return redirect(url_for('listRequestSPV'))
+
+# CODINGANBARU
+@app.route('/undoPrioritasRequest', methods = ['POST', 'GET'])
+def undoPrioritasRequest():
+    if request.method == 'POST':
+
+        data = {
+        'request_id' : request.form['btnUndo'],
+        }
+
+        dataUndoPrioritas = json.dumps(data)
+
+        requests.post('http://127.0.0.1:5001/undoPrioritas/'+dataUndoPrioritas)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return redirect(url_for('listRequestSPV'))
 
 #=========================================================================================
 #=========================================================================================
@@ -606,7 +578,7 @@ def admin():
 
         return render_template('ms2home.html')
 
-#============[Menampilkan list task yang bisa dikerjakan]============
+#============[Menampilkan list task yang bisa dikerjakan] CODINGAN BARU============
 @app.route('/availableTask')
 def availableTask():
     if session.get('user_id') is None:
@@ -625,9 +597,18 @@ def availableTask():
         listReportIdResp = json.dumps(listReportId.json())
         loadListRep = json.loads(listReportIdResp)
 
+        detailNormal = requests.get('http://127.0.0.1:5001/countRequestNormal/'+sessionName)
+        detNormal = json.dumps(detailNormal.json())
+        loadDetailNormal = json.loads(detNormal)
+
+        detailImportant = requests.get('http://127.0.0.1:5001/countRequestImportant/'+sessionName)
+        detImportant = json.dumps(detailImportant.json())
+        loadDetailImportant = json.loads(detImportant)
+
 
         return render_template('ms1availableTask.html', listAvailTask = loadAvailTask,
-                                listKodeLap = loadListRep)
+                                listKodeLap = loadListRep, normal = loadDetailNormal,
+                                important = loadDetailImportant)
 
 #============[Menampilkan list task yang harus dikerjakan]============
 @app.route('/listTask')
@@ -679,31 +660,19 @@ def detailRequest():
     detailTask = requests.get('http://127.0.0.1:5001/getDetailTask/'+request_id)
     detTask = json.dumps(detailTask.json())
     loadDetailTask = json.loads(detTask)
-
-    detailNormal = requests.get('http://127.0.0.1:5001/countRequestNormal/'+sessionName)
-    detNormal = json.dumps(detailNormal.json())
-    loadDetailNormal = json.loads(detNormal)
-
-    detailImportant = requests.get('http://127.0.0.1:5001/countRequestImportant/'+sessionName)
-    detImportant = json.dumps(detailImportant.json())
-    loadDetailImportant = json.loads(detImportant)
-
-    if '2' in loadDetailNormal:
-        return render_template('ms1login.html')
-    else:
+        
         # UNTUK MENGAMBIL VALUE DALAM JSON
-        for x in loadDetailTask:
-            aaa = x['requestId']
-            bbb = x['requestTujuan']
+    for x in loadDetailTask:
+        aaa = x['requestId']
+        bbb = x['requestTujuan']
 
-        # cba = detTask["requestId"]
-        # print(cba)
-        return render_template('ms1detailTask.html', detail_task = loadDetailTask)
+    # cba = detTask["requestId"]
+    # print(cba)
+    return render_template('ms1detailTask.html', detail_task = loadDetailTask)
 
 #============[Mengirim data accept request ke MS1/accRequest]============
 @app.route('/acceptRequest', methods=['POST','GET'])
 def acceptRequest():
-
     if request.method == 'POST':
         request_id = request.form['btnConfirmReq']
         uId = session['user_id']

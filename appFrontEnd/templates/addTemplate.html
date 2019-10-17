@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
 <head>
 	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
@@ -6,6 +6,59 @@
 </head>
 <body bgcolor="#F0FFF0">
 	
+<div class="topnav"><ul>
+        <li><a href="menu">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+        <li><a href="task">TASK</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a class="active" href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+<br><br>
+
+<div class="judul">
+	<center>FORMAT TEMPLATE</center>
+</div>
+
+<div class="containInsert">
+<form action="/prosesFormatTemplate" method="POST">
+
 	{% if detailFormatTemplate %}
 		<div class ="row">
 		  <div class ="col-35">
@@ -138,16 +191,25 @@
 		</div>
 
 		{% endfor %}
+
+		<center>
+  <div class="colBut">
+<button class="submit"> SAVE </button></div>
+
+</form>
+
+<div class="colBut">
+<form action="/admin"><button class="submitred"> CANCEL </button></form></div>
+</center>
+
+</div>
 </body>
 
 <script>
-
       var namaKolom = {'asdsa'}
-
       function generateForm()
       {
         
-
         var FormKolom = "";
         var FormPosisi = "";
         var FormTipe = "";
@@ -161,19 +223,15 @@
           FormKolom += "<div><b>Kolom " + i + ":</b><br><input type='text' id='kolom" + i + "' name='kolom" + i + "' style='width:200px;'/></div>\n";
        
           FormPosisi += "<div><b>Posisi " + i + ":</b><br><select name='posisi" + i + "' '><option value='B6'>B6</option><option value='B7'>B7</option><option value='C6'>C6</option><option value='C7'>C7</option><option value='D6'>D6</option><option value='D7'>D7</option><option value='E6'>E6</option><option value='E7'>E7</option><option value='F6'>F6</option><option value='F7'>F7</option><option value='G6'>G6</option><option value='G7'>G7</option><option value='H6'>H6</option><option value='H7'>H7</option><option value='I6'>I6</option><option value='I7'>I7</option><option value='J6'>J6</option><option value='J7'>J7</option><option value='K6'>K6</option><option value='K7'>K7</option><option value='L6'>L6</option><option value='L7'>L7</option><option value='M6'>M6</option><option value='M7'>M7</option><option value='N6'>N6</option><option value='N7'>N7</option></select></div>\n";
-
           FormTipe += "<div><b>Tipe " + i + ":</b><br><select name='tipe" + i + "' '><option value='String'>String</option><option value='Integer'>Integer</option><option value='Decimal'>Decimal</option><option value='Percentage'>Percentage</option><option value='Date'>Date</option><option value='Time'>Time</option><option value='Datetime'>Datetime</option></select></div>\n";
-
           FormLetak += "<div><b>Letak " + i + ":</b><br><input type='text' id='letak" + i + "' name='letak" + i + "' style='width:200px;'/></div>\n";
           
-
         }
         document.getElementById("fieldKolom").innerHTML = FormKolom;
         document.getElementById("fieldPosisi").innerHTML = FormPosisi;
         document.getElementById("fieldTipe").innerHTML = FormTipe;
         document.getElementById("fieldTipe").innerHTML = FormLetak;
       }
-
       function addFields(){
             // Number of inputs to create
             var number = document.getElementById("member").value;

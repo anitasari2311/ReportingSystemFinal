@@ -7,7 +7,7 @@
 
 <body bgcolor="#F0FFF0">
   <div class="topnav"><ul>
-      <li class="active"><a href="user">HOME</a></li>
+      <li><a href="user">HOME</a></li>
       <li><a href="changePass">ACCOUNT</a></li>
       <li><a href="newRequest">NEW REQUEST</a></li>
       <li><a href="editReport">EDIT REPORT</a></li>
@@ -20,7 +20,7 @@
         <div class="dropdown-content">
           <a href="list">LIST REQUEST</a>
           <a href="listFinished">LIST FINISHED REQUEST</a>
-          <a href="readReport">LIST REPORT</a>
+          <a class="active" href="readReport">LIST REPORT</a>
         </div>
       </div>
 
@@ -34,7 +34,8 @@
   <center>LIST REPORT</center>
 </div>
   
-</div>
+<!-- </div> -->
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report code" title="Type in a name">
 
     <table id="list">
       <tr>
@@ -103,4 +104,24 @@
     show_modal('modal2'+processId);
     //alert('modal'+processId);
   }
+
+  //           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 </script>

@@ -740,7 +740,7 @@ class RequestLaporan:
             db.commit()
            
             
-            print('REQUEST CANCELEEEED')
+            print('REQUEST CANCELLEEEED')
 
             
           
@@ -778,6 +778,52 @@ class RequestLaporan:
                         cursor.close()
                         db.close()
                     print("MySQL connection is closed")
+
+    # CODINGANBARU
+    @app.route('/prioritas/<data>', methods = ['POST', 'GET'])
+    def prioritas(data):
+        loadData = json.loads(data)
+
+        request_id = loadData['request_id']
+
+        try:
+            db = databaseCMS.db_request()
+            cursor = db.cursor()
+            cursor.execute('UPDATE t_request SET req_prioritas = "1" WHERE req_id = "'+request_id+'" ')
+
+            db.commit()
+            
+        except Error as e : 
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
+    @app.route('/undoPrioritas/<data>', methods = ['POST', 'GET'])
+    def undoPrioritas(data):
+        loadData = json.loads(data)
+
+        request_id = loadData['request_id']
+
+        try:
+            db = databaseCMS.db_request()
+            cursor = db.cursor()
+            cursor.execute('UPDATE t_request SET req_prioritas = "2" WHERE req_id = "'+request_id+'" ')
+
+            db.commit()
+            
+        except Error as e : 
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
     ##################################################################################################
     
 
@@ -971,7 +1017,7 @@ class RequestLaporan:
             db = databaseCMS.db_request()
 
             cursor = db.cursor()
-            cursor.execute(''.join(['SELECT COUNT(req_id) as req_id FROM t_request WHERE req_prioritas = "2" AND req_PIC = "'+uName+'"']))            
+            cursor.execute(''.join(['SELECT COUNT(req_id) as req_id FROM t_request WHERE req_prioritas = "2" AND req_status = "On Process" AND req_PIC = "'+uName+'"']))            
            
             resultNormal = cursor.fetchall()
 
@@ -1005,7 +1051,7 @@ class RequestLaporan:
             db = databaseCMS.db_request()
 
             cursor = db.cursor()
-            cursor.execute(''.join(['SELECT COUNT(req_id) as req_id FROM t_request WHERE req_prioritas = "1" AND req_PIC = "'+uName+'"']))            
+            cursor.execute(''.join(['SELECT COUNT(req_id) as req_id FROM t_request WHERE req_prioritas = "1" AND req_status = "On Process" AND req_PIC = "'+uName+'"']))            
            
             resultImportant = cursor.fetchall()
 

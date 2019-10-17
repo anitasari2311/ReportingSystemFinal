@@ -159,7 +159,7 @@ def auth_login():
                     print(session['user_id'])
                     print(session['username'])
                     print(session['position'])
-                    return redirect(url_for('listRequestSPV'))
+                    return redirect(url_for('spv'))
 
             flash(error)
             # except Error as e :

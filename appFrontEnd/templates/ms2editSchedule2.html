@@ -11,6 +11,8 @@
 </head>
 
 <body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
 <div class="topnav"><ul>
         <li><a href="changePass">ACCOUNT</a></li>
         <li><a href="task">TASK</a></li>
@@ -54,7 +56,65 @@
         <li><a href="">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
     </ul></div>
+{% else %}
 
+<div class="topnav"><ul>
+        <li><a href="menu">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a class="active" href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+{% endif %}
     <br>
 <div class ="judul">
   <center>EDIT SCHEDULE</center>
@@ -283,11 +343,16 @@
                   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
                   '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'] %}
                   <!-- <li> -->
-                  {% if date in row.sch_tanggal %}
-                  <input type="checkbox" name="{{date[:3]}}" value="{{date}}" checked="checked">{{date}}
-                  {% else %}
-                  <input type="checkbox" name="{{date[:3]}}" value="{{date}}">{{date}}
-                  {% endif %}
+                  
+                  {%set ListTgl = row.sch_tanggal.split(', ') %}
+                   {% for check in range (0, ListTgl|length) %}
+                      {% if date == ListTgl[check] %}
+                      <input type="checkbox" name="{{date[:3]}}" value="{{date}}" checked="checked">{{date}}
+                      {% else %}
+                      <input type="checkbox" name="{{date[:3]}}" value="{{date}}">{{date}}
+                      {% endif %}
+                    {%endfor%}
+                   
                   </li>
                   {% endfor %}
           </div>
@@ -382,6 +447,13 @@ function myFunction3(){
   if(check2.selected == false){ Dates.style.display = "none"}
           else{ Dates.style.display = "inline-block"; Months.style.display ="inline-block";
                 Days.style.display ="none";}
+}
+
+function myFunction4(){
+  var check3 = document.getElementById("myCheck4");
+  var Months = document.getElementById("Month");
+   if(check3.checked == false){ Months.style.display = "none"}
+          else{ Months.style.display = "block";}
 }
 
 // function myFunction4(check){

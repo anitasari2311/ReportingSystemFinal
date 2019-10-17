@@ -74,6 +74,7 @@
 
 
 <br>
+
 <div class="judul">
   <center>AVAILABLE TASK</center>
 </div>
@@ -111,9 +112,27 @@
                     {% else %}
                     <td> <a class ="pri1"> </a></td>
                     {% endif %}
+
+<!-- CODINGAN BARU -->
+                    {% for normal in normal %}
+                    {% for important in important %}
+
+                    {% if normal['requestId'] == 2 and row['requestPrioritas'] == '2' %}
+                      <td> <button class="submit2" name = 'buttonDetail' value="{{row['requestId']}}" disabled="">Select
+                      </button></td>
+
+                    {% elif important['requestId'] == 3 and row['requestPrioritas'] == '1' %}
+                      <td> <button class="submit2" name = 'buttonDetail' value="{{row['requestId']}}" disabled="">Select
+                      </button></td>
+
+                    {% else %}
+                      <td> <button class="submit" name = 'buttonDetail' value="{{row['requestId']}}">Select
+                      </button></td>
+                      
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
                     
-                    <td> <button class="submit" name = 'buttonDetail' value="{{row['requestId']}}" >Select
-                    </button></td>
                   </tr>{% endfor %}
                  
                 </table>

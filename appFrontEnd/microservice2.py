@@ -280,7 +280,6 @@ class Template:
                     db.close()
             print("MySQL connection is closed")
 
-    # CODINGANBARU
     @app.route('/formatTemplate/<kode_laporan>', methods=['POST','GET']) 
     def formatTemplate(kode_laporan):
         try: 
