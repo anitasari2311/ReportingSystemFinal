@@ -306,7 +306,7 @@
 
 <center>
   <div class="colBut">
-    <button class="submit">Save</button>
+    <button class="submit" id="save" onclick="sukses()">Save</button>
   </div></form>
 
   <div class="colBut">
@@ -320,3 +320,32 @@
 
 </body>
 </html>
+
+<script type="text/javascript">
+
+  function sukses(){
+      var query1 = document.getElementById("qi1");
+      var query2 = document.getElementById("qi2");
+      var query3 = document.getElementById("qi3");
+      var query4 = document.getElementById("qi4");
+      var query5 = document.getElementById("qi5");
+      var query6 = document.getElementById("qi6");
+      var query7 = document.getElementById("qi7");
+      var query8 = document.getElementById("qi8");
+      var query9 = document.getElementById("qi9");
+      var query10 = document.getElementById("qi10")
+      var query11 = document.getElementById("qi11");
+      var query12 = document.getElementById("qi12");
+      var query13 = document.getElementById("qi13");
+      var query14 = document.getElementById("qi14");
+      var test = document.getElementById("save")
+
+      if(query1 != None){
+        alert("Query berhasil di input")
+        return false;
+      }
+      return true;
+
+  }
+
+</script>

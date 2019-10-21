@@ -8,6 +8,8 @@ import mysql.connector
 from mysql.connector import Error
 import requests
 import datetime
+# import os
+# import urllib.request
 #from PIL import Image
 
 app = Flask(__name__, static_folder='app/static')
@@ -96,7 +98,7 @@ def user():
 @app.route('/list', methods = ['POST','GET'])
 def list():
     if session.get('user_id') is None:
-        return render_template('ms1login.html')
+        return render_template('ms1Login.html')
     else:
         a = session['user_id']
 
@@ -224,7 +226,7 @@ def sendDataRequest():
                     reqSch_hari +=  ", "+request.form.get(checkHari)
         print(reqSch_hari)
 
-        for checkBulan in ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agus', 'Sept', 'Okt', 'Nov', 'Des']:
+        for checkBulan in ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']:
             if request.form.get(checkBulan) is not None:
                 if reqSch_bulan == '':
                     reqSch_bulan += request.form.get(checkBulan)
@@ -397,7 +399,7 @@ def sendEditRequest():
         
 
 
-        for checkHari in ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']:
+        for checkHari in ['mon','tue','wed','thu','fri','sat','sun']:
             if request.form.get(checkHari) is not None:
                 if reqSch_hari == '':
                     reqSch_hari += request.form.get(checkHari)
@@ -405,7 +407,7 @@ def sendEditRequest():
                     reqSch_hari +=  ", "+request.form.get(checkHari)
         print(reqSch_hari)
 
-        for checkBulan in ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agus', 'Sept', 'Okt', 'Nov', 'Des']:
+        for checkBulan in ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']:
             if request.form.get(checkBulan) is not None:
                 if reqSch_bulan == '':
                     reqSch_bulan += request.form.get(checkBulan)
@@ -816,7 +818,7 @@ def sendAddNewSchedule():
         
 
 
-        for checkHari in ['senin','selasa','rabu','kamis','jumat','sabtu','minggu']:
+        for checkHari in ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']:
             if request.form.get(checkHari) is not None:
                 if jadwalHari == '':
                     jadwalHari += request.form.get(checkHari)
@@ -824,7 +826,7 @@ def sendAddNewSchedule():
                     jadwalHari +=  ", "+request.form.get(checkHari)
         print("Hari ",jadwalHari)
 
-        for checkBulan in ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']:
+        for checkBulan in ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']:
             if request.form.get(checkBulan) is not None:
                 if jadwalBln == '':
                     jadwalBln += request.form.get(checkBulan)
@@ -1193,6 +1195,19 @@ def formatTemplate():
 #=========================================================================================
 #=========================================================================================
 
+@app.route('/runSchedule', methods=['POST','GET'])
+def runSchedule():
+    getKodeToday = requests.get('http://127.0.0.1:5002/getKodeReportRunToday')
+    kodeTodayResp = json.dumps(getKodeToday.json())
+    loadKodeToday = json.loads(kodeTodayResp)
+
+    getStatus = requests.get('http://127.0.0.1:5003/getStatusRunSchedule')
+    statusResp = json.dumps(getStatus.json())
+    loadStatus = json.loads(statusResp)
+
+    return render_template('ms3runSchedule.html', kodeToday = loadKodeToday,
+        statusSchedule = loadStatus)
+
 
 #============[Menampilkan seluruh list report yang ada]============
 @app.route('/listReport', methods=['POST','GET'])
@@ -1210,6 +1225,27 @@ def listReport():
 
 #============[Memilih kode laporan yang akan dipreview]============
 #============[Mengirim kode laporan ke MS3/previewLaporan]============
+# @app.route('/preview', methods=['POST','GET'])
+# def preview():
+#     if session.get('user_id') is None:
+#         return render_template('ms1login.html')
+#     else:
+
+#         kEQuery = requests.get('http://127.0.0.1:5002/getKodeEditQuery')
+#         kEDump = json.dumps(kEQuery.json())
+#         kELoad = json.loads(kEDump)
+
+
+#         if request.method == 'POST':
+#             kode_laporan = request.form['kodLap']
+
+#             requests.post('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+
+
+#             return redirect(url_for('admin'))
+
+#         return render_template('ms2preview.html', kodeReportAdaQuery = kELoad)
+
 @app.route('/preview', methods=['POST','GET'])
 def preview():
     if session.get('user_id') is None:
@@ -1222,14 +1258,91 @@ def preview():
 
 
         if request.method == 'POST':
+            
             kode_laporan = request.form['kodLap']
+            
+            # VALIDASI ERROR / TIDAK
+            a = requests.get('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+            if a:
+                b = json.dumps(a.json())
+                c = json.loads(b)
+                
+                return str(c)
+            else:
+                return redirect(url_for('admin'))
 
-            requests.post('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
-
-
-            return redirect(url_for('admin'))
-
+            return requests.get('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+                    
         return render_template('ms2preview.html', kodeReportAdaQuery = kELoad)
+
+@app.route('/downloadReport', methods=['POST','GET'])
+def downloadReport():
+    if request.method == 'POST':
+        kode_laporan = request.form['kodLap']
+
+        tgl = datetime.datetime.now().strftime('%d')
+        bln = datetime.datetime.now().strftime('%b')
+
+        resp = requests.get('http://127.0.0.1:5004/downloadReport/'+kode_laporan)
+        
+        directory = 'C:/'+tgl+bln
+
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        output = open(directory+'/'+kode_laporan+'.xls', 'wb')
+        output.write(resp.content)
+        output.close()
+
+        return 'Downloaded'
+
+
+@app.route('/testURL/<kode_laporan>', methods=['POST','GET'])
+def testURL(kode_laporan):
+    tgl = datetime.datetime.now().strftime('%d')
+    bln = datetime.datetime.now().strftime('%b')
+
+    directory = 'C:/'+tgl+bln
+
+    resp = requests.get('http://127.0.0.1:5004/downloadReport/'+kode_laporan)
+    print(resp)
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    output = open(directory+'/test.xls','wb')
+    output.write(resp.content)
+    output.close()
+
+@app.route('/readReport2',methods=['POST','GET'])
+def readReport2():
+    kode_laporan = request.form['kodLap2']
+    resp = requests.get('http://127.0.0.1:5004/downloadReport/'+kode_laporan)
+
+    os.startfile(resp)
+
+
+@app.route('/testLayar')
+def testLayar():
+
+    kodeReport = requests.get('http://127.0.0.1:5002/getKodeReportAll')
+    kodeAll = json.dumps(kodeReport.json())
+    loadKodeAll = json.loads(kodeAll)
+
+    if request.method == 'POST':
+        kode_laporan = request.form['kodLap']
+
+        detTem = requests.get('http://127.0.0.1:5002/detailFormatTemplate/'+kode_laporan)
+        detDump = json.dumps(detTem.json())
+        loadDetail = json.loads(detDump)
+
+
+        return render_template('testFormatTemplate.html', kode_laporan=kode_laporan
+            ,detailTemplate = loadDetail, detailFormatTemplate = loadDetail)
+
+
+    return render_template('ms2formatTemplate1.html', listKodeReport = loadKodeAll)
+
 
 
 if __name__ == "__main__":

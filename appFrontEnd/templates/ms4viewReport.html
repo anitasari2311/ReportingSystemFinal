@@ -6,7 +6,7 @@
 </head>
 
 <body bgcolor="#F0FFF0">
-  <div class="topnav"><ul>
+<!--   <div class="topnav"><ul>
       <li><a href="user">HOME</a></li>
       <li><a href="changePass">ACCOUNT</a></li>
       <li><a href="newRequest">NEW REQUEST</a></li>
@@ -27,7 +27,7 @@
       <li><a href="login">LOGOUT</a></li>
 
   </ul>
- </div>
+ </div> -->
  <br><br>
 
 <div class ="judul">
@@ -55,7 +55,7 @@
         <td>NULL</td>
         <td>
       <center>
-          <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Preview</button>
+          <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Download</button>
       </center>
       
    <!-- Modal content -->
@@ -64,9 +64,9 @@
             <div class="modal-content">
               <span class="close" onclick="closeModal2()">&times;</span>
               <center>
-              <strong>Preview {{row.reportId}} - {{row.reportJudul}} </strong>
+              <strong>Download {{row.reportId}} - {{row.reportJudul}} </strong>
               <br><br><br>
-              <p>Confirm preview ?</p>
+              <p>Confirm download ?</p>
             </center>
                <button name="kodLap" value ="{{row.reportId}}"> OK </button>
             </div>

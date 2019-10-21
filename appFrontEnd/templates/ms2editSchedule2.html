@@ -314,13 +314,15 @@
    <div class ="myBox">
           <div id="Month">
             {% for month in ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-            <!-- <li> -->
+            <ol style="list-style: none;">
+            <li>
               {% if month in row.sch_bulan %}
                 <input type="checkbox" name="{{month[:3]}}" value="{{month}}" checked="checked">{{month}}
               {% else %}
                 <input type="checkbox" name="{{month[:3]}}" value="{{month}}">{{month}}
               {% endif %}
-            <!-- </li> -->
+            </li>
+          </ol>
             {% endfor %}
           </div>
     </div>
@@ -328,32 +330,35 @@
     <div class ="myBox">
           <div id="Day">
             {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
-            <!-- <li> -->
+            <ol style="list-style: none;">
+            <li>
               {% if day in row.sch_hari %}
                 <input type="checkbox" name="{{day[:3]}}" value="{{day}}" checked="checked">{{day}}
               {% else %}
                 <input type="checkbox" name="{{day[:3]}}" value="{{day}}">{{day}}
               {% endif %}
-            <!-- </li> -->
+            </li>
+          </ol>
             {% endfor %}
           </div>
     
           <div id="Date">
-                  {% for date in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+                  {% for date in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
                   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
                   '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'] %}
-                  <!-- <li> -->
+                  <ol style="list-style: none;">
+                  <li>
                   
-                  {%set ListTgl = row.sch_tanggal.split(', ') %}
-                   {% for check in range (0, ListTgl|length) %}
-                      {% if date == ListTgl[check] %}
+                  
+                      {% if date in row.sch_tanggal %}
                       <input type="checkbox" name="{{date[:3]}}" value="{{date}}" checked="checked">{{date}}
                       {% else %}
                       <input type="checkbox" name="{{date[:3]}}" value="{{date}}">{{date}}
                       {% endif %}
-                    {%endfor%}
+                    
                    
                   </li>
+                </ol>
                   {% endfor %}
           </div>
       </div>

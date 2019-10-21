@@ -188,11 +188,12 @@
             </div>
 
             <div class="col-75">
-                <input type="password" placeholder="Confirm password" id="confPass" name="confPass" onblur="cekPassword()">
+                <input type="password" placeholder="Confirm password" onblur="cekPassword()" id="confPass" name="confPass">
             </div>
         </div>
 
             <br><br><br><br><br><br>
+
 
         <center>
           <div class="colBut">
@@ -220,6 +221,8 @@
 
     function success(){
       var success = document.getElementById("save").value;
+      var newPass = document.getElementById("newPass").value;
+      var confPass = document.getElementById("confPass").value;
 
       if(newPass = confPass){
         alert("Password successfully changed!")
@@ -227,7 +230,22 @@
       }
       return true;
 
+    } 
+
+
+   /* window.onload = function() {
+      document.getElementById("newPass").onchange = validatePassword;
+      document.getElementById("confPass").onchange = validatePassword;
     }
+
+    function validatePassword() {
+      var newPass = document.getElementById("newPas").value;
+      var confPass = document.getElementById("newPass").value;
+
+      if (newPass != confPass){
+        document.getElementById("confPass").setCustomValidity("Password tidak sama")
+      }
+    }*/
 </script>
 
 </html>
