@@ -818,7 +818,7 @@ def sendAddNewSchedule():
         
 
 
-        for checkHari in ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']:
+        for checkHari in ['mon','tue','wed','thu','fri','sat','sun']:
             if request.form.get(checkHari) is not None:
                 if jadwalHari == '':
                     jadwalHari += request.form.get(checkHari)

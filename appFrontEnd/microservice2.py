@@ -101,6 +101,41 @@ class Template:
                     db.close()
             print("MySQL connection is closed")
 
+    @app.route('/formatTemplate/<kode_laporan>', methods=['POST','GET']) 
+    def formatTemplate(kode_laporan):
+        try: 
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+
+            cursor.execute(' SELECT report_id, report_periode, report_printAllYN, report_judul, report_header, report_footer, report_jumlahTampilan FROM m_report WHERE report_id = "'+kode_laporan+'" ')
+
+            detailFormatTemplate = cursor.fetchall()
+
+            detList = []
+            for row in detailFormatTemplate:
+                detDict={
+                'reportId' : row[0],
+                'reportPeriode' : row[1],
+                'reportPrintAll' : row[2],
+                'reportJudul' : row[3],
+                'reportHeader' : row[4],
+                'reportFooter' : row[5],
+                'reportJmlTampilan' : row[6],
+                }
+                detList.append(detDict)
+
+            detTemplate = json.dumps(detList)
+
+            return detTemplate
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+        #Closing DB Connection.
+            if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+            print("MySQL connection is closed")
 
     #Pre -programmer melakukan format template
     #Menampilkan detail template yang dipilih
@@ -688,7 +723,37 @@ class Schedule:
             print("MySQL connection is closed")
 
 
+    #Hanya menampilkan kode report dimana scheduleYN = "Y" dan "D"
+    @app.route('/listKodeReportEditSchedule', methods = ['POST','GET'])
+    def listKodeReportEditSchedule():
+        try: 
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
 
+            listKodeEditSchedule = cursor.execute(' select distinct report_id from t_schedule where sch_aktifYN IN ("D", "Y") ')
+            listKodeEditSchedule = cursor.fetchall()
+
+            listKodeEdit = []
+
+            for x in listKodeEditSchedule:
+                listDict = {
+                'reportId' : x[0]
+                }
+                listKodeEdit.append(listDict)
+
+            kodeReportEdit = json.dumps(listKodeEdit)
+
+            
+            return kodeReportEdit
+        
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+            #Closing DB Connection.
+            if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+            print("MySQL connection is closed")
 
 
     #Hanya menampilkan kode report dimana scheduleYN = N

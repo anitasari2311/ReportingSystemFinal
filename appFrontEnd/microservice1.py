@@ -268,6 +268,39 @@ class RequestLaporan:
                         db.close()
                     print("MySQL connection is closed")
 
+    #BUAT GET REPORT ID SESUAI USER YANG REQUEST
+    @app.route('/getReportIdEdit/<uId>', methods=['POST','GET'])
+    def getReportIdEdit(uId):
+        try: 
+
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+            
+            cursor.execute(' select distinct report_id from cms_template.m_report a left join cms_request.t_request b on a.report_id = b.req_kodelaporan where user_id = "'+uId+'" ')
+            # cursor.execute('select report_id from m_report')
+            
+            listKodeEditReport = cursor.fetchall()
+
+            listKodeEdit = []
+
+            for row in listKodeEditReport:
+                listDict = {
+                'ReportId' : row[0]
+                }
+                listKodeEdit.append(listDict)
+
+            resultListKode = json.dumps(listKodeEdit)
+            
+            return resultListKode
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")   
 
     #==[User]==
     #Menginput edit request dari user
@@ -1111,8 +1144,8 @@ class RequestLaporan:
                 'requestJudul' : row[1],
                 'userName' : row[2],
                 'requestKategori' : row[3],
-                'requestTanggal' : row[4],
-                'requestEndDate' : row[5],
+                'requestTanggal' : str(row[4]),
+                'requestEndDate' : str(row[5]),
                 'requestKodeLaporan' : row[6]
                 }
 
