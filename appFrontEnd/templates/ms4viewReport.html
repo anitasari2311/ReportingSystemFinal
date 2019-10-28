@@ -44,6 +44,7 @@
         <th>Report Title</th>
         <th>Description</th>
         <th>Last Update</th>
+        <th>Download Report</th>
         <th>Read Report</th>
       </tr>
     {% for row in readReport %}
@@ -73,6 +74,12 @@
     </form>
           </div>
 
+        </td>
+
+        <td>
+          <form action="/readReport2" methods="POST">
+          <button class="submit" name="kodLap2" value="{{row.reportId}}">Read</button>
+        </form>
         </td>
     {% endfor %}
 </tr>

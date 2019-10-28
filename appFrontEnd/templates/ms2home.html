@@ -8,7 +8,7 @@
 <body bgcolor="#F0FFF0"> 
   <!-- Session belom ada karena butuh disambungin ke  -->
   <!-- <h2><p align="Right"> Welcome, {{session['username']}}</p></h2> -->
-
+<h2><p align="Right"> Welcome, {{session['username']}}</p></h2>
     <div class="topnav"><ul>
         <li class="active"><a href="admin">HOME</a></li>
         <li><a href="changePass">ACCOUNT</a></li>
@@ -57,14 +57,15 @@
         <div class="dropdown-content">
           <a href="addNewSchedule">NEW SCHEDULE</a>
           <a href="editSchedule">EDIT SCHEDULE</a>
-          <a href="">RUN SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
         </div>
       </div>
 
-        <li><a href="readReport">LIST REPORT</a></li>
+        <li><a href="listReport">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
     </ul></div>
-
+<h3><p align="Right">{{day}}, {{clock}}</p></h3>
+<h2><p align="Right"> Welcome, {{session['username']}}</p></h2>
 <br>
 
 <div style="text-align:center">

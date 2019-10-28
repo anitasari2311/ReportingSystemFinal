@@ -7,6 +7,9 @@
 
 <body bgcolor="#F0FFF0">
 
+
+{% if editQ %}
+
 {% if session.get('position') == 'Admin' %}
         <div class="topnav"><ul>
         <li><a href="admin">HOME</a></li>
@@ -40,6 +43,190 @@
           <i class="fa fa-caret-down"></i>
         </button>
 
+        
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a class="active" href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="listReport">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+{% else %}
+
+ <div class="topnav"><ul>
+        <li><a href="spv">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a class="active" href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="listReport">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+{% endif %}
+
+<!-- BATAS MENUBAR -->
+<br>
+    <div class ="judul">
+      <center>EDIT QUERY</center>
+    </div>
+
+<center>
+<div class="containInsert">
+    <form action="/sendNewQuery" method = "POST">
+    <div class ="rowF">
+        <label for="kodeReport">Report Code : </label>
+        <div class="column">
+          <input type="text" name="kodLap" value="{{kode_laporan}}">
+        </div>
+    </div>
+          
+        
+      <br><br>
+      {% for i in range (0, 7) %}
+      <div class="rowF">
+        {%if editQ[i] != '' and editQ[i] != none %}
+          <label for="kodeReport">Query {{i+1}} : </label>
+          <div class ="column">
+            <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}">{{editQ[i][0]}}</textarea>
+          </div>
+      
+        {%else%}
+  
+          <label for="kodeReport">Query {{i+1}} : </label>
+          <div class ="column">
+            <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}"></textarea>
+          </div>
+
+        {%endif%}
+        
+        {%if editQ[i+7] != '' and editQ[i+7] != none %}
+          <label for="kodeReport">Query {{i+8}} : </label>
+          <div class ="column">
+            <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}">{{editQ[i+7][0]}}</textarea>
+          </div>
+        {%else%}
+
+          <label for="kodeReport">Query {{i+8}} : </label>
+          <div class ="column">
+            <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}"></textarea>
+          </div>
+        {%endif%}
+        <br>
+      </div>
+      {%endfor%}
+</center>
+</div>
+
+<center>
+      <div class="colBut">
+      <button class="submit">Save</button></div>
+      </form>
+
+      <div class="colBut">
+        <form action="/admin">
+          <button class="submitRed">Cancel</button></div>
+</center>      
+
+
+  {% else %}
+
+{% if session.get('position') == 'Admin' %}
+        <div class="topnav"><ul>
+        <li><a href="admin">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        
         <div class="dropdown-content">
           <a class="active" href="insertQuery">NEW QUERY</a>
           <a href="editQuery">EDIT QUERY</a>
@@ -56,11 +243,11 @@
         <div class="dropdown-content">
           <a href="addNewSchedule">NEW SCHEDULE</a>
           <a href="editSchedule">EDIT SCHEDULE</a>
-          <a href="">RUN SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
         </div>
       </div>
 
-        <li><a href="">LIST REPORT</a></li>
+        <li><a href="listReport">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
     </ul></div>
 {% else %}
@@ -114,79 +301,14 @@
         <div class="dropdown-content">
           <a href="addNewSchedule">NEW SCHEDULE</a>
           <a href="editSchedule">EDIT SCHEDULE</a>
-          <a href="">RUN SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
         </div>
       </div>
 
-        <li><a href="">LIST REPORT</a></li>
+        <li><a href="listReport">LIST REPORT</a></li>
         <li><a href="login">LOGOUT</a></li> 
     </ul></div>
 {% endif %}
-    
-<br>
-{% if editQ %}
-
-
-    <div class ="judul">
-      <center>EDIT QUERY</center>
-    </div>
-
-<center>
-<div class="containInsert">
-    <form action="/sendNewQuery" method = "POST">
-    <div class ="rowF">
-        <label for="kodeReport">Report Code : </label>
-        <div class="column">
-          <input type="text" name="kodLap" value="{{kode_laporan}}">
-        </div>
-    </div>
-          
-        
-      <br><br>
-      {% for i in range (0, 7) %}
-      <div class="rowF">
-        {%if editQ[i] != '' and editQ[i] != none %}
-          <label for="kodeReport">Query {{i+1}} : </label>
-          <div class ="column">
-            <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}">{{editQ[i][0]}}</textarea>
-          </div>
-        {%else%}
-          <label for="kodeReport">Query {{i+1}} : </label>
-          <div class ="column">
-            <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}"></textarea>
-          </div>
-        {%endif%}
-        
-        {%if editQ[i+7] != '' and editQ[i+7] != none %}
-          <label for="kodeReport">Query {{i+8}} : </label>
-          <div class ="column">
-            <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}">{{editQ[i+7][0]}}</textarea>
-          </div>
-          
-        {%else%}
-          <label for="kodeReport">Query {{i+8}} : </label>
-          <div class ="column">
-            <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}"></textarea>
-          </div>
-        {%endif%}
-        <br>
-      </div>
-      {%endfor%}
-</center>
-</div>
-
-<center>
-      <div class="colBut">
-      <button class="submit">Save</button></div>
-      </form>
-
-      <div class="colBut">
-        <form action="/admin">
-          <button class="submitRed">Cancel</button></div>
-</center>      
-
-
-  {% else %}
 
     <form action="/sendNewQuery" method = "POST">
     <div class ="judul">

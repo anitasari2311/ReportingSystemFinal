@@ -8,15 +8,16 @@ import mysql.connector
 from mysql.connector import Error
 import requests
 import datetime
-# import os
+import os
 # import urllib.request
 #from PIL import Image
+
+
 
 app = Flask(__name__, static_folder='app/static')
 app.static_folder = 'static'
 app.secret_key = 'frontEnd'
 url1 = "http://127.0.0.1:5001/"
-
 
 
 
@@ -90,9 +91,9 @@ def user():
         now = datetime.datetime.now()
 
         day = now.strftime("%A")
-        date = now.strftime("%H:%M:%S")
+        clock = now.strftime("%H:%M:%S")
 
-        return render_template('ms1home1.html', day=day, date=date)
+        return render_template('ms1home1.html', day=day, clock=clock)
 
 #================[List request user]=================
 @app.route('/list', methods = ['POST','GET'])
@@ -122,7 +123,7 @@ def listFinished():
 
         return render_template('ms1listFinished.html', listKelar = loadFinished)
 
-#============[Read Report] CODINGAN BARU========================
+#============[Read Report]========================
 @app.route('/readReport', methods=['POST','GET'])
 def readReport():
     if session.get('user_id') is None:
@@ -533,7 +534,6 @@ def rejectRequest():
 
         return redirect(url_for('listRequestSPV'))
 
-# CODINGANBARU
 @app.route('/prioritasRequest', methods = ['POST', 'GET'])
 def prioritasReq():
     if request.method == 'POST':
@@ -549,7 +549,6 @@ def prioritasReq():
 
         return redirect(url_for('listRequestSPV'))
 
-# CODINGANBARU
 @app.route('/undoPrioritasRequest', methods = ['POST', 'GET'])
 def undoPrioritasRequest():
     if request.method == 'POST':
@@ -577,10 +576,14 @@ def admin():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
+        now = datetime.datetime.now()
 
-        return render_template('ms2home.html')
+        day = now.strftime("%A")
+        clock = now.strftime("%H:%M:%S")
 
-#============[Menampilkan list task yang bisa dikerjakan] CODINGAN BARU============
+        return render_template('ms2home.html', day=day, clock=clock)
+
+#============[Menampilkan list task yang bisa dikerjakan]============
 @app.route('/availableTask')
 def availableTask():
     if session.get('user_id') is None:
@@ -1111,6 +1114,7 @@ def addTemplate():
 def sendNewTemplate():
 
     if request.method == 'POST':
+
         userName = session['username']
 
         kode_laporan        = request.form['kodeLaporan2']+'-'+request.form['kategori']+request.form['noLap']
@@ -1162,7 +1166,6 @@ def sendNewTemplate():
         detDump = json.dumps(detTem.json())
         loadDetail = json.loads(detDump)
         
-        # return redirect(url_for('admin'))
 
         return render_template('addTemplate.html', detailFormatTemplate = loadDetail)
 
@@ -1181,9 +1184,13 @@ def formatTemplate():
         detDump = json.dumps(detTem.json())
         loadDetail = json.loads(detDump)
 
+        detH = requests.get('http://127.0.0.1:5002/detailKolom/'+kode_laporan)
+        detHDump = json.dumps(detH.json())
+        loadDetailH = json.loads(detHDump)
+
 
         return render_template('testFormatTemplate.html', kode_laporan=kode_laporan
-            ,detailTemplate = loadDetail)
+            ,detailTemplate = loadDetail, detailFormatTemplate = loadDetailH)
 
 
     return render_template('ms2formatTemplate1.html', listKodeReport = loadKodeAll)

@@ -189,22 +189,22 @@
   </div>
         
   <div class="col-55">
-    <input type="text" class = "col-10" id="kol" name="{{i+1}}" value="{{detailFormatTemplate[i].namaKolomH}}">
+    <input type="text" class = "col-10" id="kol" name="{{i+1}}" value="{{detailFormatTemplate[i].kolom}}">
   </div>
 </div>
     
 <div class="row">
   <div class="col-35">
     <select id="lok" class = "col-10" name="lokasi{{i+1}}">
-      <option value="{{detailFormatTemplate[i].lokasiH}}">{{detailFormatTemplate[i].lokasiH}}</option>
+      <option value="{{detailFormatTemplate[i].lokasi}}">{{detailFormatTemplate[i].lokasi}}</option>
       {% for row3 in detailFormatTemplate %}
-      <option value="{{detailFormatTemplate[i][1]}}">{{row3.lokasiH}}</option>
+      <option value="{{detailFormatTemplate[i][1]}}">{{row3.lokasi}}</option>
       {% endfor %}
     </select>
   </div>
 
 
-    <select id="format" class = "col-10" name="formatKolom{{i+1}}" value="{{detailFormatTemplate[i].formatKolomH}}">
+    <select id="format" class = "col-10" name="formatKolom{{i+1}}" value="{{detailFormatTemplate[i].tipeData}}">
       <option value="String">String</option>
       <option value="Integer">Integer</option>
       <option value="Decimal">Decimal</option>
@@ -216,7 +216,7 @@
 
 
 
-    <input type="text" class = "col-10" id="lebar" name="lebar{{i+1}}" value="{{detailFormatTemplate[i].lebarKolomH}}">
+    <input type="text" class = "col-10" id="lebar" name="lebar{{i+1}}" value="{{detailFormatTemplate[i].lebar}}">
 </div>
 
 

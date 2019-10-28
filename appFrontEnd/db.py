@@ -36,6 +36,33 @@ class databaseCMS:
 		return connection
 
 
+	def db_scheduling():
+
+		connection = mysql.connector.connect(
+		host='localhost',
+		database='cms_scheduling',
+		user='root',
+		password='qwerty')
+		if connection.is_connected():
+		    db_Info= connection.get_server_info()
+		print("=======================================")
+		print("Connected to MySQL database...",db_Info)
+		print("=======================================")
+		return connection
+
+	def db_readReport():
+
+		connection = mysql.connector.connect(
+		host="localhost",
+		database="cms_readreport",
+		user="root",
+		password="qwerty")
+		if connection.is_connected():
+			db_Info = connection.get_server_info()
+		print("=======================================")
+		print("Connected to MySQL database...",db_Info)
+		print("=======================================")
+		return connection
 
 	def db_server(serverId):
 
