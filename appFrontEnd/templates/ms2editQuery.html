@@ -135,11 +135,12 @@
     <div class="tulisan" style="width: 350px; text-align: left;">
       <label for="kodLap"> Template:  </label>
       <form action="/editQuery" method = "POST">
-        <select id= "report" name= "kodLap">
+        <input name="kodLap" list="report">
+        <datalist id= "report" name= "kodLap">
           {% for report in listKodeReportQuery %}
             <option name = "kodLap" value="{{report.reportId}}">{{report.reportId}}</option>
           {% endfor %}
-        </select>
+        </datalist>
     </div>
 <br><br><br><br>
     <div class="colBut">

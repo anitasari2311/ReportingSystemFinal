@@ -5,6 +5,7 @@
 .rowF{
   display: flex;
 }
+
 form {
   /*border: 3px solid #f1f1f1;*/
   border : none;
@@ -43,7 +44,7 @@ input[type=text2], input[type=password2] {
 .myBoxPIC{
   border-style: inset;
   padding: 5px;
-  width: 550px;
+  width: 700px;
   height: 200px;
   overflow: scroll;
   display: inline-block;
@@ -813,6 +814,16 @@ li.Soccer {
   color: white;
 }
 */
+
+.footer {
+   /*position: fixed;*/
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #333;
+   color: white;
+   text-align: center;
+  }
 
 /*IMAGE*/
 .mySlides {display: none;}

@@ -84,15 +84,25 @@ def viewReport(email):
 		listReport = cursor.fetchall()
 
 		LR = []
+
+
 		for row in listReport:
-		    listDict={
-		    'reportId' : row[0],
-		    'orgId' : row[1],
-		    'reportJudul' : row[2],
-		    'namaFile' : row[3],
-		    'reportLastProc': row[4]
-		    }
-		    LR.append(listDict)
+			a = requests.get('http://127.0.0.1:5001/getNamaOrg/'+str(row[1]))
+			b = json.dumps(a.json())
+			c = json.loads(b)
+			for x in c:
+				orgName = x['org_name']
+
+
+			listDict={
+			'reportId' : row[0],
+			'orgName' : orgName,
+			'orgId' : row[1],
+			'reportJudul' : row[2],
+			'namaFile' : row[3],
+			'reportLastProc': row[4]
+			}
+			LR.append(listDict)
 
 		result = json.dumps(LR)
 

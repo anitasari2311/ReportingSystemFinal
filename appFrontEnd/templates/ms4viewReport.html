@@ -42,7 +42,6 @@
         <th>Report Code</th>
         <th>Organization</th>
         <th>Report Title</th>
-        <th>Description</th>
         <th>Last Update</th>
         <th>Download Report</th>
         <th>Read Report</th>
@@ -50,10 +49,9 @@
     {% for row in readReport %}
       <tr>
         <td>{{row.reportId}}</td>
-        <td>{{row.orgId}}</td>
+        <td>{{row.orgId}} - {{row.orgName}}</td>
         <td>{{row.reportJudul}}</td>
-        <td>{{row.reportDeskripsi}}</td>
-        <td>NULL</td>
+        <td>{{row.reportLastProc}}</td>
         <td>
       <center>
           <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Download</button>

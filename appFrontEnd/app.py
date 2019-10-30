@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash, json, jsonify
-from base64 import b64encode
+# from base64 import b64encode
+import base64
 import auth
 # from microservice1 import RequestLaporan
 # from templatelaporan import TemplateLaporan
@@ -139,7 +140,7 @@ def readReport():
 
         print('Read Report: ',emailUser)
 
-        listRep = requests.get('http://127.0.0.1:5002/viewReport/'+emailUser)
+        listRep = requests.get('http://127.0.0.1:5004/viewReport/'+emailUser)
         listResp = json.dumps(listRep.json())
         loadListReport = json.loads(listResp)
 
@@ -217,7 +218,15 @@ def sendDataRequest():
         Display = request.form['inputDisplay']
         Period = request.form['inputPeriode']
         deadline = request.form['deadline']
-        file = ''
+        file = request.files['inputFile']
+
+        fileFix = base64.encodestring(file.read())
+
+        print(fileFix)
+
+        print('OKEEEEEEEEEEEEEEEEEEEEEEE')
+        
+
 
         for checkHari in ['mon','tue','wed','thu','fri','sat','sun']:
             if request.form.get(checkHari) is not None:
@@ -279,7 +288,7 @@ def sendDataRequest():
         'Tampilan' : Display,
         'Periode' : Period,
         'Deadline' : deadline,
-        'File' : None,
+        'File' : str(fileFix),
         'PIC' : None,
         'Hari' : reqSch_hari,
         'Bulan' : reqSch_bulan,
@@ -291,6 +300,7 @@ def sendDataRequest():
         'schPenerima' : reqSch_penerima
         }
 
+        
         dataRequest = json.dumps(request_data)
 
         requests.post('http://127.0.0.1:5001/addNewRequest/'+dataRequest)
@@ -1278,7 +1288,7 @@ def preview():
             else:
                 return redirect(url_for('admin'))
 
-            return requests.get('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+            # return requests.get('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
                     
         return render_template('ms2preview.html', kodeReportAdaQuery = kELoad)
 
@@ -1321,12 +1331,7 @@ def testURL(kode_laporan):
     output.write(resp.content)
     output.close()
 
-@app.route('/readReport2',methods=['POST','GET'])
-def readReport2():
-    kode_laporan = request.form['kodLap2']
-    resp = requests.get('http://127.0.0.1:5004/downloadReport/'+kode_laporan)
 
-    os.startfile(resp)
 
 
 @app.route('/testLayar')

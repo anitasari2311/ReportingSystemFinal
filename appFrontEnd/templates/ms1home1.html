@@ -5,8 +5,9 @@
 </head>
 <body bgcolor="#F0FFF0"> 
   <h2><p align="Right"> Welcome, {{session['username']}}, {{day}}</p></h2>
-
+<img src="/static/images/logoPharos.png" style="width: 100px">
 <div class="topnav"><ul>
+<!--       <li><img src="/static/images/logoPharos.png" style="width: 100px"></li> -->
       <li class="active"><a href="user">HOME</a></li>
       <li><a href="changePass">ACCOUNT</a></li>
       <li><a href="newRequest">NEW REQUEST</a></li>
@@ -28,25 +29,24 @@
 
   </ul>
  </div>
-
+ 
+<br>
 <h3><p align="Right"> {{day}}, {{clock}} </p></h3>
  <h2><p align="Right"> Welcome, {{session['username']}}</p></h2>
 
     
 
 <div class="slideshow-container">
-<div class="mySlides fade">
-  <!-- <img src="C:\reportingSystem\frontEnd\appFrontEnd\static\images\rep1.png" style="width:100%"> -->
-<!-- <img src=" {{user_image}} " alt="User Image"> -->
-<!-- <img src="{{ url_for('static', filename = 'rep.jpg') }}"> -->
-</div>
+  <div class="mySlides fade">
+    <img src="/static/images/rep1.png" style="width:100%">
+  </div>
 
-<!-- <div class="mySlides fade">
-  <img src="img_snow_wide.jpg" style="width:100%">
-</div>
-<div class="mySlides fade">
-  <img src="img_mountains_wide.jpg" style="width:100%">
-</div> -->
+  <div class="mySlides fade">
+    <img src="/static/images/Koala.jpg" style="width:100%">
+  </div>
+  <div class="mySlides fade">
+    <img src="/static/images/sky.jpg" style="width:100%">
+  </div>
 
 </div>
 <br>
@@ -55,6 +55,11 @@
   <span class="dot"></span> 
   <span class="dot"></span> 
   <span class="dot"></span> 
+</div>
+
+
+<div class="footer">
+  <p>Copyright by MIS Department</p>
 </div>
 
 <script>

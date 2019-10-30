@@ -81,7 +81,7 @@
   </div>
 
   <div class="col-55">
-    <input type="text" class = "col-10" id="periode" name="periode" value="{{detailTemplate[0].reportPeriode}}">
+    <input type="text" class = "col-10" id="periode" name="periode" value="{{detailTemplate[0].reportPeriode}}" style="width: 120px">
   </div>
 </div>
 
@@ -138,7 +138,7 @@
   </div>
 
   <div class="col-55">
-    <input type="text" class = "col-10" id="jmlKolom" name="jmlKolom" value="{{detailTemplate[0].reportJmlTampilan}}" oninput="generateForm()">
+    <input type="text" class = "col-10" id="jmlKolom" name="jmlKolom" value="{{detailTemplate[0].reportJmlTampilan}}" oninput="generateForm()" style="width: 120px">
   </div>
 </div>
 
@@ -181,30 +181,32 @@
 
 
 
-
+{% if detailFormatTemplate %}
 {% for i in range (0, detailFormatTemplate|length) %}
+
 <div class ="row">
-  <div class =" col-35">
-    <label for="kolom">Kolom {{i+1}} : </label>
-  </div>
+  <div id="abc" style="display: inline-block;">
+    <div class="col-35" style="display: inline-block;">
+      <label for="kolom">Kolom {{i+1}} : </label>
+    </div>
         
-  <div class="col-55">
-    <input type="text" class = "col-10" id="kol" name="{{i+1}}" value="{{detailFormatTemplate[i].kolom}}">
+  <div style="display: inline-block;">
+    <input type="text" class = "col-10" id="kol" name="{{i+1}}" value="{{detailFormatTemplate[i].namaKolomH}}" placeholder="{{detailFormatTemplate['namaKolomH']}}">
   </div>
-</div>
+
     
-<div class="row">
-  <div class="col-35">
+
+  <div style="display: inline-block;">
     <select id="lok" class = "col-10" name="lokasi{{i+1}}">
-      <option value="{{detailFormatTemplate[i].lokasi}}">{{detailFormatTemplate[i].lokasi}}</option>
+      <option value="{{detailFormatTemplate[i].lokasiH}}">{{detailFormatTemplate[i].lokasiH}}</option>
       {% for row3 in detailFormatTemplate %}
-      <option value="{{detailFormatTemplate[i][1]}}">{{row3.lokasi}}</option>
+      <option value="{{detailFormatTemplate[i].lokasiH}}">{{row3.lokasiH}}</option>
       {% endfor %}
     </select>
   </div>
 
-
-    <select id="format" class = "col-10" name="formatKolom{{i+1}}" value="{{detailFormatTemplate[i].tipeData}}">
+  <div style="display: inline-block;">
+    <select id="format" class = "col-10" name="formatKolom{{i+1}}" value="{{detailFormatTemplate[i].formatKolomH}}">
       <option value="String">String</option>
       <option value="Integer">Integer</option>
       <option value="Decimal">Decimal</option>
@@ -213,10 +215,12 @@
       <option value="Time">Time</option>
       <option value="Datetime">Datetime</option>
     </select>
+  </div>
 
-
-
-    <input type="text" class = "col-10" id="lebar" name="lebar{{i+1}}" value="{{detailFormatTemplate[i].lebar}}">
+  <div style="display: inline-block;">
+    <input type="text" class = "col-10" id="lebar" name="lebar{{i+1}}" value="{{detailFormatTemplate[i].lebarKolomH}}">
+  </div>
+</div>
 </div>
 
 
@@ -226,7 +230,7 @@
 
 
 {% endfor %} 
-
+{% endif %}
 
  
 
@@ -234,32 +238,35 @@
       
 {% for i in range(2) %}
 <div class ="row">
-  <div class ="col-35">
-    <label for="footer">Footer {{i+1}} : </label>
-  </div>
+  <!-- <div style="display: inline-block;"> -->
+    <div class="col-35" style="display: inline-block;">
+      <label for="footer">Footer {{i+1}} : </label>
+    </div>
 
-  <div class="col-55">
-    <input type="text" class = "col-10" id="kolF" name="kolomFooter" >
-  </div>
-</div>
+<div class="col-55" style="display: inline-block;">
+      <input type="text" id="kolF" name="kolomFooter">
+    
 
 <!-- CHECKBOX UNTUK LETAK FOOTER -->
-<div class ="myBox">
-  <input type="checkbox" name="B{{i+1}}" value="B">B
-  <input type="checkbox" name="C{{i+1}}" value="C">C
-  <input type="checkbox" name="D{{i+1}}" value="D">D
-  <input type="checkbox" name="E{{i+1}}" value="E">E
-  <input type="checkbox" name="F{{i+1}}" value="F">F
-  <input type="checkbox" name="G{{i+1}}" value="G">G
-  <input type="checkbox" name="H{{i+1}}" value="H">H
-  <input type="checkbox" name="I{{i+1}}" value="I">I
-  <input type="checkbox" name="J{{i+1}}" value="J">J
-  <input type="checkbox" name="K{{i+1}}" value="K">K
-  <input type="checkbox" name="L{{i+1}}" value="L">L
-  <input type="checkbox" name="M{{i+1}}" value="M">M
-  <input type="checkbox" name="N{{i+1}}" value="N">N
-</div>
+    <div class ="myBox">
+      <input type="checkbox" name="B{{i+1}}" value="B">B
+      <input type="checkbox" name="C{{i+1}}" value="C">C
+      <input type="checkbox" name="D{{i+1}}" value="D">D
+      <input type="checkbox" name="E{{i+1}}" value="E">E
+      <input type="checkbox" name="F{{i+1}}" value="F">F
+      <input type="checkbox" name="G{{i+1}}" value="G">G
+      <input type="checkbox" name="H{{i+1}}" value="H">H
+      <input type="checkbox" name="I{{i+1}}" value="I">I
+      <input type="checkbox" name="J{{i+1}}" value="J">J
+      <input type="checkbox" name="K{{i+1}}" value="K">K
+      <input type="checkbox" name="L{{i+1}}" value="L">L
+      <input type="checkbox" name="M{{i+1}}" value="M">M
+      <input type="checkbox" name="N{{i+1}}" value="N">N
+    </div>
+  </div>
 
+<!-- </div> -->
+</div>
 {% endfor %}
 
 

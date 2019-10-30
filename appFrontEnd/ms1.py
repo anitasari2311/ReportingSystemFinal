@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, json, session, flash, jsonify
 import datetime
+import base64
 import pymysql
 import random
 import mysql.connector
@@ -180,7 +181,7 @@ class RequestLaporan:
                 reqSch_bulan = requestData['Bulan']
                 req_deadline = requestData['Deadline']
                 req_deskripsi = requestData['Deskripsi']
-                req_file = requestData['File']
+                req_file2 = requestData['File']
                 reqSch_hari = requestData['Hari']
                 req_judul = requestData['Judul']
                 ktgri_id = requestData['KtgriId']
@@ -198,11 +199,14 @@ class RequestLaporan:
                 reqSch_org = requestData['schOrg']
                 reqSch_reportPIC = requestData['schPIC']
                 reqSch_penerima = requestData['schPenerima']
+            # req_file=base64.decodestring(req_file2)
+            req_file=req_file2
                 
 
-            print(requestData)
-            print(req_deskripsi)
+            # print(requestData)
+            # print(req_deskripsi)
             print(req_id)
+            print('SMALDLAKMDLKAMDLKAJLKAHFAHDAHDKJAHDKJAHD')
             
 
 
@@ -222,10 +226,6 @@ class RequestLaporan:
                             (req_id, reqSch_hari, reqSch_bulan, reqSch_tanggal, reqSch_groupBy, reqSch_reportPIC, reqSch_org, reqSch_ktgri, reqSch_lastUpdate, reqSch_aktifYN,
                                 reqSch_penerima))
                 db.commit()
-
-            
-            #     
-
             except Error as e :
                 print("Error while connecting file MySQL", e)
                 flash('Error,', e)
@@ -520,6 +520,7 @@ class RequestLaporan:
                 reqUserList.append(reqUserDict)
             reqUserResult = json.dumps(reqUserList)
 
+            print('====[ /listRequestUser ]======')
             print(reqUserResult)
             return reqUserResult
         
@@ -1205,14 +1206,15 @@ class RequestLaporan:
             db = databaseCMS.db_request()
             cursor = db.cursor()
 
-            cursor.execute('SELECT org_nama from m_organisasi WHERE org_id ="'+idOrg+'"')
+            cursor.execute('SELECT org_nama, org_id from m_organisasi WHERE org_id ="'+idOrg+'"')
 
             org = cursor.fetchall()
             # clear = str(org).replace("('",'').replace("',)","")
             orgList = []
             for i in org:
                 orgDict = {
-                'org_name' : i[0]
+                'org_name' : i[0],
+                'org_id' : i[1]
                 }
                 orgList.append(orgDict)
 

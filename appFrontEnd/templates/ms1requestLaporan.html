@@ -282,32 +282,34 @@
                       </div>
                     </div>
 
-              <div class ="myBoxPIC">
-                <input type="text" id="myInput" 
-                onkeyup="myFunction5()" placeholder="Search by name" title="Type in a name">
-                <table id="list">
-                        <tr>
-                          <th></th>
-                          <th>User ID</th>
-                          <th>Username</th>
-                          <th>Email</th>
-                        </tr>
-                    
-                        {% for liPIC in listPIC %}
-                        <tr>
-                          <td><input type ="checkbox" 
-                          name="{{liPIC['Id']}}"  value =""></td>
-                          <td>{{liPIC['Id']}}</td>
-                          <td>{{liPIC['Name']}}</td>
-                          <td>{{liPIC['Email']}}</td>
-                        </tr>
-                        {% endfor %}
-                </table>
-            </div>
+                        <div class ="myBoxPIC">
+                          <input type="text" id="myInput" 
+                          onkeyup="myFunction5()" placeholder="Search by name" title="Type in a name">
+                          <table id="list">
+                                  <tr>
+                                    <th></th>
+                                    <th>User ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                  </tr>
+                              
+                                  {% for liPIC in listPIC %}
+                                  <tr>
+                                    <td><input type ="checkbox" 
+                                    name="{{liPIC['Id']}}"  value =""></td>
+                                    <td>{{liPIC['Id']}}</td>
+                                    <td>{{liPIC['Name']}}</td>
+                                    <td>{{liPIC['Email']}}</td>
+                                  </tr>
+                                  {% endfor %}
+                          </table>
+                        </div>
+                      <br>
+                  </div>
+                </div>
 
-      <br>
-            </div>
-            </div>
+
+
             </div>
                 <div class="row">
                 <div class="col-25">
@@ -343,9 +345,7 @@
                   <td>{{liPen['Email']}}</td>
                 </tr>
                 {% endfor %}
-              </table>
-              
-          
+              </table>     
       </div>
                               
               
@@ -480,6 +480,8 @@ function valDeadline(formfield){
     alert("Deadline minimal 2 hari setelah request")
   }
 }
+
+
 
 
 </script>
