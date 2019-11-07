@@ -1,0 +1,83 @@
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% endblock %}
+  </head>
+	<body bgcolor="#F0FFF0"> 
+
+		<div id="navbar">
+
+				<div class="topnav"><ul>
+			      <li class="active"><a href="user">HOME</a></li>
+			      <li><a href="changePass">ACCOUNT</a></li>
+			      <li><a href="newRequest">NEW REQUEST</a></li>
+			      <li><a href="editReport">EDIT REPORT</a></li>
+
+			      <div class="dropdown">
+			          <button class="dropbtn">LIST     
+			            <i class="fa fa-caret-down"></i>
+			          </button>
+
+			        <div class="dropdown-content">
+			          <a href="list">LIST REQUEST</a>
+			          <a href="listFinished">LIST FINISHED REQUEST</a>
+			          <a href="readReport">LIST REPORT</a>
+			        </div>
+			      </div>
+
+			      <li><a href="login">LOGOUT</a></li>
+			      <a style="float:right">Welcome, {{session['username']}}</a>
+
+			  	</ul>
+			 </div>
+
+
+
+
+			 <div id="content">{% block content %}{% endblock %}
+			</div>
+
+    	</div>
+
+	    <div id="footer">
+	      {% block footer %}
+	      &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>.
+	      {% endblock %}
+	    </div>
+
+
+
+	   <script>
+	    window.onscroll = function() {myFunction()};
+
+	    var navbar = document.getElementById("navbar");
+	    var sticky = navbar.offsetTop;
+
+	    function myFunction() {
+	      if (window.pageYOffset >= sticky) {
+	        navbar.classList.add("sticky")
+	      } else {
+	        navbar.classList.remove("sticky");
+	      }
+	    }
+
+
+
+	    var span = document.getElementById('time');
+
+		function time() {
+		  var d = new Date();
+		  var s = d.getSeconds();
+		  var m = d.getMinutes();
+		  var h = d.getHours();
+		  span.textContent = h + ":" + m + ":" + s;
+		}
+
+		setInterval(time, 1000);
+	  </script>
+
+
+
+	</body>
+</html>
