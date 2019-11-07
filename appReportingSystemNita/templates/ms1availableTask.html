@@ -1,0 +1,222 @@
+<html>
+        <head>
+        	<title>Available Task</title>
+        	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        </head>
+    <body bgcolor="#F0FFF0">
+
+        <!-- <div class="container2">
+                <h2> Welcome, {{session['username']}}</h2>
+                <form action ='/logout'>
+                  <button class="submitRed" value="Log Out">Log Out</button> <br>
+                </form>
+                <h1>AVAILABLE TASK</h1> -->
+
+            <!-- <div>
+                <input type="text2" placeholder="Search Report ..">
+            </div> -->
+
+          <div class="topnav"><ul>
+        <li><a href="menu">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a class="active" href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+
+<br>
+
+<div class="judul">
+  <center>AVAILABLE TASK</center>
+</div>
+
+
+{% if listAvailTask %}
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report name.." title="Type in a name">
+                            <br><br>
+
+
+<center>
+<form action="/detailRequest" method="post">
+
+                <table id="list">
+                  <tr>
+                    <th>Request Code</th>
+                    <th>Report Title</th>
+                    <th>Request Name</th>
+                    <th>Department</th>
+                    <th>Request Date</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th></th>
+                  </tr>
+                  {% for row in listAvailTask %}
+                  <tr >
+                    <td>{{row['requestId']}}</td>
+                    <td>{{row['requestJudul']}}</td>
+                    <td>{{row['userNama']}}</td>
+                    <td>{{row['requestKategori']}}</td>
+                    <td>{{row['requestTanggal']}}</td>
+                    <td>{{row['requestDeadline']}}</td>    
+                    {% if row['requestPrioritas'] == '2' %}
+                    <td> <a class ="pri3"> </a></td>
+                    {% else %}
+                    <td> <a class ="pri1"> </a></td>
+                    {% endif %}
+
+<!-- CODINGAN BARU -->
+                    {% for normal in normal %}
+                    {% for important in important %}
+
+                    {% if normal['requestId'] == 2 and row['requestPrioritas'] == '2' %}
+                      <td> <button class="submit2" name = 'buttonDetail' value="{{row['requestId']}}" disabled="">Select
+                      </button></td>
+
+                    {% elif important['requestId'] == 3 and row['requestPrioritas'] == '1' %}
+                      <td> <button class="submit2" name = 'buttonDetail' value="{{row['requestId']}}" disabled="">Select
+                      </button></td>
+
+                    {% else %}
+                      <td> <button class="submit" name = 'buttonDetail' value="{{row['requestId']}}">Select
+                      </button></td>
+                      
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    
+                  </tr>{% endfor %}
+                 
+                </table>
+</form>
+
+                               <!--  <br><br><br>
+                <h2>__________________________________________________________________________</h2>
+                                <br><br><br> -->
+        </center>
+
+{% else %}
+<p>Tidak ada task yang tersedia untuk saat ini </p>
+
+{% endif %}
+
+<br><br><br>
+
+    
+        <!-- DIV / -->
+      
+
+
+
+
+
+
+
+</div>  <!-- DIV / -->
+
+    </body>
+
+<script type="text/javascript">
+// Get the modal
+
+var btnProcess;
+var modalItem;
+
+// // When the user clicks on <span> (x), close the modal
+function  closeModal() {
+  modalItem.style.display = "none";
+}
+
+// // When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modalItem) {
+    modalItem.style.display = "none";
+  }
+}
+
+function show_modal(modalId){
+
+  modalItem = document.getElementById(modalId);
+  modalItem.style.display = 'block';
+}
+function click_process(processId){
+  show_modal('modal'+processId);
+  //alert('modal'+processId);
+
+}
+
+
+
+
+
+//           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+</script>
+
+</html>

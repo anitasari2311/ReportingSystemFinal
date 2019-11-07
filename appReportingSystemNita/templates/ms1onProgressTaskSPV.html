@@ -1,0 +1,135 @@
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>On Progress Task</title>
+</head>
+<body bgcolor="#F0FFF0">
+
+<!--  <div class="topnav"><ul>
+        <li><a href="spv">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a class="active" href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+<br><br> -->
+<center>
+    <div class="judul">ON PROGRESS TASK</div>
+ </center>
+{% if onProgTask %}
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report code and employee name" title="Type in a name" style="width: 250px">
+            
+            <br>
+
+<center>
+            <table id="list">
+              <tr>
+                <th>Employee Name</th>
+                <th>Request Code</th>
+                <th>Title</th>
+                <th>Department</th>
+                <th>Organization</th>
+                <th>Request Date</th>
+                <th>Date Accept Task</th>
+                <th>PIC</th>
+                <th>Deadline</th>
+              </tr>
+            
+              {% for onProg in onProgTask %}
+              <tr>
+                <td>{{onProg['onNama']}}</td>
+                <td>{{onProg['onId']}}</td>
+                <td>{{onProg['onJud']}}</td>
+                <td>{{onProg['onKat']}}</td>
+                <td>{{onProg['onOrg']}}</td>
+                <td>{{onProg['onDate']}}</td>
+                <td>{{onProg['onDateAccept']}}</td>
+                <td>{{onProg['onPIC']}}</td>
+                <td>{{onProg['onDeadline']}}</td>
+              </tr>
+              
+              {% endfor %}
+             
+{% else %}
+<p> Tidak ada task yang sedang dikerjakan </p>
+{% endif %}
+</table> 
+            
+  
+</center>
+</body>
+</html>
+
+<script>
+//           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    td2 = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      txtValue2 = td2.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1 ) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
