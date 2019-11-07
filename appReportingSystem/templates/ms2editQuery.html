@@ -1,0 +1,159 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+	<title>Change Query</title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}  
+	<div class="topnav"><ul>
+        <li><a href="admin">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a class="active" href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="listReport">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+{% else %}
+
+ <div class="topnav"><ul>
+        <li><a href="spv">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a class="active" href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+{% endif %}    
+
+<br>
+	<div class ="judul">
+	  <center>EDIT QUERY</center>
+	</div>
+
+<br><br>
+<center>
+
+  <div class="containEdit">
+    <div class="tulisan" style="width: 350px; text-align: left;">
+      <label for="kodLap"> Template:  </label>
+      <form action="/editQuery" method = "POST">
+        <input name="kodLap" list="report">
+        <datalist id= "report" name= "kodLap">
+          {% for report in listKodeReportQuery %}
+            <option name = "kodLap" value="{{report.reportId}}">{{report.reportId}}</option>
+          {% endfor %}
+        </datalist>
+    </div>
+<br><br><br><br>
+    <div class="colBut">
+		  <button class="submit"> Go </button> </div>
+	</form>
+
+  <div class="colBut">
+	<form action="/menu">
+		<button class="submitRed"> Cancel </button>
+	</form>
+  </div>
+	
+	
+</center>
+</body>
+</html>

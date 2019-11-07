@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Edit Profile</title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'User' %}
+    <div class="topnav"><ul>
+      <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+      <div class="topnav-right">
+        <li><a href="user">HOME</a></li>
+        <li class="active"><a href="changePass">ACCOUNT</a></li>
+        <li><a href="newRequest">NEW REQUEST</a></li>
+        <li><a href="editReport">EDIT REPORT</a></li>
+
+        <div class="dropdown">
+            <button class="dropbtn">LIST     
+              <i class="fa fa-caret-down"></i>
+            </button>
+
+          <div class="dropdown-content">
+            <a href="list">LIST REQUEST</a>
+            <a href="listFinished">LIST FINISHED REQUEST</a>
+            <a href="readReport">LIST REPORT</a>
+          </div>
+        </div>
+
+        <li><a href="login">LOGOUT</a></li>
+      </div>
+      </ul>
+     </div>
+
+     <br>
+
+{% elif session.get('position') == 'Admin' %}
+  <div class="topnav"><ul>
+        <li><a href="admin">HOME</a></li>
+        <li class="active"><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+{% else %}
+  <div class="topnav"><ul>
+        <li><a href="spv">HOME</a></li>
+        <li class="active"><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+
+{% endif %}
+
+<br><br>
+
+<div class ="judul">
+        <center> EDIT PROFILE </center>
+    </div> 
+
+<center>
+    <form action="/sendDataPassword", method="POST">
+    <div class="containModify">
+        <br><br><br>
+        <div class ="row">
+            <div class ="col-25">
+                <label for="oldPass">Old Password</label>
+            </div>
+            
+            <div class="col-75">
+                <input type="password" placeholder="Input old password" id="oldPass" name="oldPass">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-25">
+                <label for="newPass">New Password </label>
+            </div>
+
+            <div class="col-75">
+                <input type="password" placeholder="Input new password" id="newPass" name="newPass">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="newPass">Confirm New Password</label>
+            </div>
+
+            <div class="col-75">
+                <input type="password" placeholder="Confirm password" onblur="cekPassword()" id="confPass" name="confPass">
+            </div>
+        </div>
+
+            <br><br><br><br><br><br>
+
+
+        <center>
+          <div class="colBut">
+            <button class="submit" id="save" onclick="success()">Save</button><br></div></form>
+              
+          <div class="colBut">
+            <button class="submitRed">Cancel</button>
+          </div>
+        </center>
+       </center>
+    </div>
+</body>
+
+<script type="text/javascript">
+    function cekPassword(){
+        var newPass = document.getElementById("newPass").value;
+        var confPass = document.getElementById("confPass").value;
+
+        if (newPass != confPass){
+            alert("konfirmasi password harus sesuai dengan password baru")
+            return false;
+        }
+        return true;
+    }
+
+    function success(){
+      var success = document.getElementById("save").value;
+      var newPass = document.getElementById("newPass").value;
+      var confPass = document.getElementById("confPass").value;
+
+      if(newPass = confPass){
+        alert("Password successfully changed!")
+        return false;
+      }
+      return true;
+
+    } 
+
+
+   /* window.onload = function() {
+      document.getElementById("newPass").onchange = validatePassword;
+      document.getElementById("confPass").onchange = validatePassword;
+    }
+
+    function validatePassword() {
+      var newPass = document.getElementById("newPas").value;
+      var confPass = document.getElementById("newPass").value;
+
+      if (newPass != confPass){
+        document.getElementById("confPass").setCustomValidity("Password tidak sama")
+      }
+    }*/
+</script>
+
+</html>
