@@ -1,0 +1,351 @@
+<html>
+  <head>
+    <title>Available Task</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+
+        <div class="container2">
+                
+               
+                </div>
+            
+           
+                            <br><br>
+
+        
+<h1>AVAILABLE TASK</h1>
+<input type="text2" placeholder="Search Report ..">
+          {% if listAvailTaskSPV %}
+          <center>
+          <div class="myBoxTask">
+            
+                          <table id="list">
+                            <tr>
+                              <th>Request Name</th>
+                              <th>Position</th>
+                              <th>Request Code</th>
+                              <th>Title</th>
+                              <th>Department</th>
+                              <th>Organization</th>
+                              <th>Request Date</th>
+                              <th>Deadline</th>                
+                              <!-- <th>Priority</th> -->
+                              <th></th>
+                            </tr>
+
+                            {% for taskSPV in listAvailTaskSPV %}
+                            <tr >
+                            <td>{{taskSPV['userNama']}}</td>
+                            <td>{{taskSPV['userPosisi']}}</td>
+                            <td>{{taskSPV['requestId']}}</td>
+                            <td>{{taskSPV['requestJudul']}}</td>
+                            <td>{{taskSPV['requestKategori']}}</td>
+                            <td>{{taskSPV['requestOrganisasi']}}</td>
+                            <td>{{taskSPV['requestTanggal']}}</td>
+                            <td>{{taskSPV['requestDeadline']}}</td>
+            
+          <td><form action="/detailRequest" method="POST">
+          <button class="submit" name = "buttonDetail" value="{{taskSPV['requestId']}}">Select</button>
+              </form>
+
+
+
+
+    <!-- <button class="submitRed" name="btnReject" value="{{taskSPV['requestId']}}">Reject</button> -->
+    <button id="{{taskSPV['requestId']}}" class="submit" name="buttonReject" value="{{taskSPV['requestId']}}" onclick="alertReject(this.id)">Reject</button>
+
+                        <div id="modal3{{taskSPV['requestId']}}" class="modal">
+
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                          <span class="close" onclick="closeModal3()">&times;</span>
+                        <center>
+                          <p><strong>Reject Confirmation</strong></p>
+                          <p>User : {{taskSPV.userNama}}</p>
+                          <p>Request Code : {{taskSPV.requestId}} </p>
+                          <p>Title : {{taskSPV.requestJudul}}</p>
+                        </center>
+
+                        <p> Keterangan: <p>
+                        <textarea name="keteranganReject" style="height:200px"></textarea>    
+                                
+                                  <center>
+                                    <form action ='/rejectRequest' method = 'POST'>
+                                     <button  class = "submit" value ="{{taskSPV['requestId']}}" name="btnYes"> YES </button>
+                                    </form>
+                                
+                                  <br>
+
+                                     <button  class = "submitRed" value ="{{taskSPV['requestId']}}" onclick="closeModal3()"> NO </button>
+                                  </center>
+                                    
+                                  </div>
+
+                              </div> 
+
+
+    <br>
+
+
+
+        
+            {% if taskSPV['requestPrioritas'] == '1' %}
+            <button id="{{taskSPV['requestId']}}" class="submit" name="buttonPriority" value="{{taskSPV['requestId']}}" onclick="alertPrioritas(this.id)">Priority</button>
+
+                                  <div id="modal2{{taskSPV['requestId']}}" class="modal">
+
+                                  <!-- Modal content -->
+                                  <div class="modal-content">
+                                    <span class="close" onclick="closeModal2()">&times;</span>
+                                    <p> Are you sure? </p>
+                                         
+                                <form action ="/prioritasReq" method = 'POST'>
+                                  <center>
+                                     <button  class = "submit" value ="{{taskSPV['requestId']}}" name="btnYes"> YES </button>
+                                </form>
+                                  <br>
+
+                                     <button  class = "submitRed" value ="{{taskSPV['requestId']}}" onclick="closeModal2()"> NO </button>
+                                  </center>
+                                    
+                                  </div>
+
+                              </div> 
+                              {% else %}   
+                              <!-- <p> Request prioritas </p> -->
+                              <form action="/undoPrioritas" method='POST'>
+                              <button class="submit" value="{{taskSPV['requestId']}}" name="btnUndo">Undo Prioritas</button>
+                              </form>
+                              </td>
+                              {% endif %}                                
+                            </tr>
+                            {% endfor %}
+                              
+                            
+                          </table> 
+            {% else %}
+              
+            {% endif %}
+                
+          </div>
+                                <br><br><br>
+                 <h2>__________________________________________________________________________</h2>
+                                <br><br><br>
+        </center>
+
+
+
+
+
+
+
+
+
+                <h1>ON PROGRESS TASK</h1>
+
+                <div class="col-75">
+                  <input type="text2" placeholder="Search Report ..">
+                </div>
+                <br><br>
+      <div class="myBoxTask">
+                <table id="list">
+                  <tr>
+                    <th>Employee Name</th>
+                    <th>Request Code</th>
+                    <th>Title</th>
+                    <th>Department</th>
+                    <th>Organization</th>
+                    <th>Request Date</th>
+                    <th>Date Accept Task</th>
+                    <th>PIC</th>
+                    <th>Deadline</th>
+                  </tr>
+                {% if onProgTask %}
+                  {% for onProg in onProgTask %}
+                  <tr>
+                    <td>{{onProg['onNama']}}</td>
+                    <td>{{onProg['onId']}}</td>
+                    <td>{{onProg['onJud']}}</td>
+                    <td>{{onProg['onKat']}}</td>
+                    <td>{{onProg['onOrg']}}</td>
+                    <td>{{onProg['onDate']}}</td>
+                    <td>{{onProg['onDateAccept']}}</td>
+                    <td>{{onProg['onPIC']}}</td>
+                    <td>{{onProg['onDeadline']}}</td>
+
+         
+                  </tr>
+                  {% endfor %}
+                 
+                 {% else %}
+                <p> Tidak ada task yang sedang diambil </p>
+                 {% endif %}
+                </table> 
+      <!-- </div> -->
+</div>
+
+          <h1>LIST TASK</h1>
+<div class="myBoxTask">
+            <table id="list">
+                
+              <tr>
+                <th>Request Name</th>
+                <th>Request Code</th>
+                <th>Title</th>
+                <th>Department</th>
+                <th>Request Date</th>
+                <th>Deadline</th>
+                <th>Priority</th>
+                <th></th>
+              </tr>
+             {% for row in  listTask %}
+             
+              <tr>
+                <td>{{row.userName}}</td>
+                <td>{{row.requestId}}</td>
+                <td>{{row.requestJudul}}</td>
+                <td>{{row.requestKategori}}</td>
+                <td>{{row.requestTanggal}}</td>
+                <td>{{row.requestDeadline}}</td>
+                <td>{{row.requestPrioritas}}</a></td>
+
+
+                {% if row['requestStatus'] == 'Finished' %}
+                <td>Waiting to be Confirmed</td>
+                {% elif row['requestStatus'] == 'On Process'%}
+                <td> 
+                    
+                    <button id ="{{row['requestId']}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row['requestId']}}">Finish</button>
+
+
+                    <div id="modal{{row['requestId']}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <strong>{{row['requestId']}}</strong>
+                        <p> Input Report Code : </p>
+                    <form action ="/finishRequest" method = 'POST'>
+                        <input name="kodLap" list="reqFin">
+
+                        <datalist id="reqFin">
+                          {% for row in listKodeLap %}
+                            <option value="{{row['ReportId']}}">{{row['ReportId']}}</option>
+                          {% endfor %}                    
+                        </datalist>
+
+
+                        
+                        
+                         <button name="finishReq" value ="{{row['requestId']}}"> OK </button>
+                        </form>
+                      </div>
+
+                    </div>
+                    
+                </td>
+                
+                {% endif %}
+              </tr>
+           {% endfor %}
+
+            </table>
+</div>
+
+         <br><br><br>
+
+  
+        
+
+
+    </body>
+</html>
+
+
+<script>
+    var x = document.getElementById("slide"+"slide2"+"slide3");
+ checker.onchange = function(){
+if(x.checked){
+    x.disabled = true;
+} 
+else {
+    x.disabled = false;
+}
+}
+///////////////////////////////////////////// MODAL BOX
+var btnProcess;
+var modalItem;
+
+// // When the user clicks on <span> (x), close the modal
+function  closeModal() {
+  modalItem.style.display = "none";
+}
+
+// // When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modalItem) {
+    modalItem.style.display = "none";
+  }
+}
+
+function show_modal(modalId){
+
+  modalItem = document.getElementById(modalId);
+  modalItem.style.display = 'block';
+}
+function click_process(processId){
+  show_modal('modal'+processId);
+  //alert('modal'+processId);
+}
+
+
+
+
+
+//buat button prioritas
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function alertPrioritas(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+
+
+  var btnProcess3;
+  var modalItem3;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal3() {
+    modalItem3.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem3) {
+      modalItem3.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem3 = document.getElementById(modalId);
+    modalItem3.style.display = 'block';
+  }
+  function alertReject(processId){
+    show_modal('modal3'+processId);
+    //alert('modal'+processId);
+  }
+
+</script>

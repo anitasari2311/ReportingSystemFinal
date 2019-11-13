@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+		 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+ 		 <title> List Report </title>
+</head>
+
+<body bgcolor="F0FFF0">
+	<div class="topnav"><ul>
+      <li class="active"><a href="user">HOME</a></li>
+      <li><a href="changePass">ACCOUNT</a></li>
+      <li><a href="newRequest">NEW REQUEST</a></li>
+      <li><a href="editReport">EDIT REPORT</a></li>
+
+      <div class="dropdown">
+          <button class="dropbtn">LIST     
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+        <div class="dropdown-content">
+          <a href="list">LIST REQUEST</a>
+          <a href="listFinished">LIST FINISHED REQUEST</a>
+          <a href="homeListReport">LIST REPORT</a>
+        </div>
+      </div>
+
+      <li><a href="login">LOGOUT</a></li>
+
+  </ul>
+ 	</div>
+ <br><br>
+
+<div class ="judul">
+  <center>LIST REPORT</center>
+</div>
+</div>
+
+<center>
+<div class="containEdit">
+	<br>
+	 <div class="row" style="display: block;">
+            <div class="tulisan" style="width: 350px; text-align: left">
+            <label for="reportCode">Report Code :</label>
+
+            <form action= "/readReport" method = 'POST'>
+                  <input name="kodeLaporan" list="kodeReport" required>
+                  <br><br><br>
+
+                  <datalist id="kodeReport">
+                    {% for row in listKodeReport %}
+                    <option value="{{row['ReportId']}}">
+                    {% endfor %}
+                  </datalist>
+         
+           </div>
+         </option>
+         <br><br><br>
+              <div class="colBut">
+                <button class="submit" value="edit" type="submit">Submit</button></div>
+                  </form>
+
+              <div class="colBut">
+                  <form action="/user">
+                    <button class="submitRed" >Cancel</button></div></form>
+	
+</div>
+</center>
+
+
+
+
+
+
+</body>
+</html>

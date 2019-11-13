@@ -1,0 +1,164 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+	<title>Format Template</title>
+
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+    <div class="topnav"><ul>
+        <li><a href="admin">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTask">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a class="active" href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="listReport">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+
+{% else %}
+
+ <div class="topnav"><ul>
+        <li><a href="spv">HOME</a></li>
+        <li><a href="changePass">ACCOUNT</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a class="active" href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="">LIST REPORT</a></li>
+        <li><a href="login">LOGOUT</a></li> 
+    </ul></div>
+{% endif %}    
+
+<br><br>
+
+	<div class ="judul">
+	  <center>EDIT TEMPLATE</center>
+	</div>
+
+<br><br>
+
+<form action="/formatTemplate" method = "POST">
+<center>
+  <div class="containEdit">
+      <div class="tulisan" style="width: 350px; text-align: left;">
+          <label for="kodLap"> Template:  </label>
+          <input name="kodLap" list="report">
+          <datalist id= "report" name= "kodLap">
+        			{% for report in listKodeReport %}
+        				<option name = "kodLap" value="{{report.report_id}}">{{report.report_id}}</option>
+        			{% endfor %}
+        	</datalist>
+      </div>
+
+<br><br><br><br>
+      <div class="colBut">
+    		<button class="submit"> Go </button></div>
+    	</form>
+
+    <div class="colBut">
+    	<form action="/admin">
+    		<button class="submitRed"> Cancel </button>
+    	</form>
+    </div>
+	
+  </div> <!-- punya contain edit -->
+	
+</center>
+</body>
+</html>
