@@ -1,0 +1,340 @@
+<html>
+<head>
+  <title> Add New Template </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+    <div class="topnav"><ul>
+      <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+      <div class="topnav-right">
+          <li><a href="admin">HOME</a></li>
+        
+        <div class="dropdown">
+          <button class="dropbtn">TASK
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="availableTask">AVAILABLE TASK</a>
+            <a href="listTask">LIST TASK</a>
+            <a href="historyTask">HISTORY TASK</a>
+          </div>
+        </div>
+        
+        <div class="dropdown">
+          <button class="dropbtn">TEMPLATE
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a class="active" href="addTemplate">NEW TEMPLATE</a>
+            <a href="formatTemplate">EDIT TEMPLATE</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropbtn">QUERY
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="insertQuery">NEW QUERY</a>
+            <a href="editQuery">EDIT QUERY</a>
+          </div>
+        </div>
+
+          <li><a href="preview">PREVIEW</a></li>
+
+        <div class="dropdown">
+          <button class="dropbtn">SCHEDULING
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="addNewSchedule">NEW SCHEDULE</a>
+            <a href="editSchedule">EDIT SCHEDULE</a>
+            <a href="runSchedule">RUN SCHEDULE</a>
+          </div>
+        </div>
+
+          <li><a href="listReport">LIST REPORT</a></li>
+        
+        <div class="dropdown">
+          <button class="dropbtn">ACCOUNT
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="changePass">EDIT PROFILE</a>
+            <a href="login">LOGOUT</a>
+          </div>
+        </div>
+      </div>
+    </ul></div>
+
+{% else %}
+
+<div class="topnav"><ul>
+  <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+  <div class="topnav-right">
+      <li><a href="spv">HOME</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a class="active" href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="runSchedule">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li><a href="listReport">LIST REPORT</a></li>
+              
+      <div class="dropdown">
+          <button class="dropbtn">ACCOUNT
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="changePass">EDIT PROFILE</a>
+            <a href="login">LOGOUT</a>
+          </div>
+      </div>
+
+      </div>
+    </ul></div>
+{% endif %}
+
+  
+<br><br>
+
+    <div class="judul">
+      <center>INSERT TEMPLATE</center>
+    </div>
+
+<div class ="containInsert">
+    <br><br><br>
+    <form id="myForm" action="/sendNewTemplate" method="POST">
+      
+      <div class ="row">
+        <div class ="col-35">
+          <label for="kodeReport">Kode Report : </label>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="kodeLaporan2" name="kodeLaporan2" placeholder="Kode Laporan" style="width: 120px">
+          <select id="kategori" name="kategori" style="width: 235px">
+            {% for row in listKategori %}
+              <option value="{{row.Id}}">{{row.Id+" - "+ row.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="kodeLaporan2" name="noLap" placeholder="Nomor Laporan" style="width: 120px">
+        </div>
+      </div>
+
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="organisasi">Organisasi : </label>
+        </div>
+      
+        <div class="col-45">
+          <select id="organisasi" name="organisasi">
+            {% for row in listOrg %}
+              <option value="{{row.Id}}">{{row.Id+" - "+ row.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="server">Server : </label>
+        </div>
+        
+        <div class="col-45">
+          <select id="server" name="server">
+            {% for row in listServer %}
+              <option value="{{row.serverId}}">{{row.serverId+" - "+ row.serverName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="namaReport">Nama Report : </label>
+        </div>
+
+        <div class="col-85">
+          <input type="text" id="kodeReport" name="namaLaporan" >
+        </div>
+      </div>
+      <br>
+
+      <div class="row">
+        <div class="col-35">
+          <label for="tujuan">Tujuan : </label>
+        </div>
+
+        <div class="col-85">
+          <textarea rows="4" cols="50" id="tujuan" 
+          name="tujuan" ></textarea>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="filter">Filter : </label>
+        </div>
+
+        <div class="col-85">
+          <textarea rows="4" cols="50" id="filter" name="filter"></textarea>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="jmlKolom">Jumlah Kolom : </label>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="jmlKolom" name="jmlTampilan" 
+          style="width: 120px">
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="jmlHeader">Jumlah Header : </label>
+        </div>
+
+        <div class="col-55">
+          <select id="jmlHeader" name="jmlHeader" style="width: 120px">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="jmlFooter">Jumlah Footer : </label>
+        </div>
+
+        <div class="col-55">
+          <select id="jmlFooter" name="jmlFooter" style="width: 120px">
+            <option value="0">0</option>
+            <option value="1">1</option> 
+            <option value="2">2</option>
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="periode">Periode : </label>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="periode" name="periode" style="width: 120px">
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="printAll">Print All : </label>
+        </div>
+
+        <div class="col-55">
+          <select id="printAll" name="printAll" style="width: 120px">
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+        </select>
+        </div>
+      </div>
+    <br><br><br><br>
+
+    <center>
+      <div class="colBut">
+        <button class="submit" type="Submit">Next</button>
+      </div>
+     </form>
+
+      <div class="colBut">
+        <input type="button" class="submitRed" onclick="myFunction()" value="Reset">
+      </div>
+
+      <div class="colBut">
+        <form action="/admin">
+          <button class="submitRed">Exit</button>
+        </form>
+      </div>
+      
+    </center>
+</body>
+</html>
+
+
+<script>
+  /*                      RESET INPUTAN                     */
+function myFunction() {
+  document.getElementById("myForm").reset();
+}
+</script>

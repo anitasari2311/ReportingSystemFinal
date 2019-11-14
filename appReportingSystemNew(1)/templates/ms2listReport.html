@@ -1,0 +1,299 @@
+<head>
+<html>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <title> List Report </title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+ <div class="topnav"><ul>
+      <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+      <div class="topnav-right">
+          <li><a href="admin">HOME</a></li>
+        
+        <div class="dropdown">
+          <button class="dropbtn">TASK
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="availableTask">AVAILABLE TASK</a>
+            <a href="listTask">LIST TASK</a>
+            <a href="historyTask">HISTORY TASK</a>
+          </div>
+        </div>
+        
+        <div class="dropdown">
+          <button class="dropbtn">TEMPLATE
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="addTemplate">NEW TEMPLATE</a>
+            <a href="formatTemplate">EDIT TEMPLATE</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropbtn">QUERY
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="insertQuery">NEW QUERY</a>
+            <a href="editQuery">EDIT QUERY</a>
+          </div>
+        </div>
+
+          <li><a href="preview">PREVIEW</a></li>
+
+        <div class="dropdown">
+          <button class="dropbtn">SCHEDULING
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="addNewSchedule">NEW SCHEDULE</a>
+            <a href="editSchedule">EDIT SCHEDULE</a>
+            <a href="runSchedule">RUN SCHEDULE</a>
+          </div>
+        </div>
+
+          <li class="active"><a href="listReport">LIST REPORT</a></li>
+        
+        <div class="dropdown">
+          <button class="dropbtn">ACCOUNT
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="changePass">EDIT PROFILE</a>
+            <a href="login">LOGOUT</a>
+          </div>
+        </div>
+      </div>
+    </ul></div>
+{% else %}
+
+<div class="topnav"><ul>
+  <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+  <div class="topnav-right">
+      <li><a href="spv">HOME</a></li>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TASK
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="availableTaskSPV">AVAILABLE TASK</a>
+          <a href="listTask">LIST TASK</a>
+          <a href="onProgressTask">ON PROGRESS TASK</a>
+          <a href="historyTask">HISTORY TASK</a>
+        </div>
+      </div>
+      
+      <div class="dropdown">
+        <button class="dropbtn">TEMPLATE
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addTemplate">NEW TEMPLATE</a>
+          <a href="formatTemplate">EDIT TEMPLATE</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">QUERY
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="insertQuery">NEW QUERY</a>
+          <a href="editQuery">EDIT QUERY</a>
+        </div>
+      </div>
+
+        <li><a href="preview">PREVIEW</a></li>
+
+      <div class="dropdown">
+        <button class="dropbtn">SCHEDULING
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <a href="addNewSchedule">NEW SCHEDULE</a>
+          <a href="editSchedule">EDIT SCHEDULE</a>
+          <a href="">RUN SCHEDULE</a>
+        </div>
+      </div>
+
+        <li class="active"><a href="listReport">LIST REPORT</a></li>
+              
+      <div class="dropdown">
+          <button class="dropbtn">ACCOUNT
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            <a href="changePass">EDIT PROFILE</a>
+            <a href="login">LOGOUT</a>
+          </div>
+      </div>
+
+      </div>
+    </ul></div>
+{% endif %}
+
+
+<br><br>
+<div class ="judul">
+  <center>LIST REPORT</center>
+</div>
+
+<br>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report code" title="Type in a name">
+
+                      <table id="list">
+                        <tr>
+                          <th>Report Code</th>
+                          <th>Organization</th>
+                          <th>Report Title</th>
+                          <th>Filter</th>
+                          <th>Active</th>
+                          <th>Day</th>
+                          <th>Month</th>
+                          <th>Date</th>
+                          <th>Generate Excel</th>
+                        </tr>
+                      {% for row in listReport %}
+                        <tr >
+                          <td>{{row.reportId}}</td>
+                          <td>{{row.orgId}}</td>
+                          <td>{{row.reportJudul}}</td>
+                          <td>{{row.reportDeskripsi}}</td>
+                          <td>{{row.reportAktifYN}}</td>
+                        {% if row.schHari %}
+                          <td>{{row.schHari}}</td>
+                          {% else %}
+                          <td></td>
+                        {% endif %}
+                          
+                        {% if row.schBulan %}
+                            <td>{{row.schBulan}}</td>
+                          {% else %}
+                            <td></td>
+                        {% endif %}
+
+                        {% if row.schTanggal %}
+                          <td>{{row.schTanggal}}</td>
+                          {% else %}
+                          <td></td>
+                        {% endif %}
+                          <td>
+                            <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Preview</button>
+
+                            <div id="modal2{{row.reportId}}" class="modal">
+
+                      <!-- Modal content -->
+
+              <form action='/preview' method='POST'>
+                  <div class="modal-content">
+                      <span class="close" onclick="closeModal2()">&times;</span>
+                        <center>
+                          <strong>Preview {{row.reportId}} - {{row.reportJudul}} </strong>
+                            <br><br><br>
+                              <p>Confirm preview ?</p>
+                        </center>
+                      <button name="kodLap" value ="{{row.reportId}}"> OK </button>
+                  </div>
+              </form>
+                    </div>
+
+                          </td>
+                      {% endfor %}
+
+                            
+                      </table>
+
+
+
+
+
+
+<br><br>
+
+
+</body>
+
+
+<script>
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+
+  //           BUAT FITUR SEARCH LAPORAN
+// function myFunction() {
+//   var input, filter, table, tr, td, i, txtValue;
+//   input = document.getElementById("myInput");
+//   filter = input.value.toUpperCase();
+//   table = document.getElementById("list");
+//   tr = table.getElementsByTagName("tr");
+//   for (i = 0; i < tr.length; i++) {
+//     td = tr[i].getElementsByTagName("td")[0];
+//     if (td) {
+//       txtValue = td.textContent || td.innerText;
+//       if (txtValue.toUpperCase().indexOf(filter) > -1) {
+//         tr[i].style.display = "";
+//       } else {
+//         tr[i].style.display = "none";
+//       }
+//     }       
+//   }
+// }
+
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    td2 = tr[i].getElementsByTagName("td")[2];
+    if(td){
+    txtValue = td.textContent || td.innerText;
+    txtValue2 = td2.textContent || td2.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
+      tr[i].style.display = "";
+     }else {
+      tr[i].style.display = "none";
+      }
+       }  
+  }
+}
+
+</script>
+
+</html>

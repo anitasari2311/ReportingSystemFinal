@@ -1,0 +1,269 @@
+<html>
+        <head>
+        	<title>Available Task</title>
+        	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        </head>
+    <body>
+
+        <div class="container2">
+                <h2> Welcome, {{session['username']}}</h2>
+                <form action ='/logout'>
+                  <button class="submitRed" value="Log Out">Log Out</button> <br>
+                </form>
+                <h1>AVAILABLE TASK</h1>
+
+            <!-- <div>
+                <input type="text2" placeholder="Search Report ..">
+            </div> -->
+{% if listAvailTask %}
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report name.." title="Type in a name">
+                            <br><br>
+
+
+<center>
+<form action="/detailRequest" method="post">
+
+                <table id="list">
+                  <tr>
+                    <th>Request Code</th>
+                    <th>Title</th>
+                    <th>Request Name</th>
+                    <th>Department</th>
+                    <th>Request Date</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th></th>
+                  </tr>
+                  {% for row in listAvailTask %}
+                  <tr >
+                    <td>{{row['requestId']}}</td>
+                    <td>{{row['requestJudul']}}</td>
+                    <td>{{row['userNama']}}</td>
+                    <td>{{row['requestKategori']}}</td>
+                    <td>{{row['requestTanggal']}}</td>
+                    <td>{{row['requestDeadline']}}</td>    
+                    {% if row['requestPrioritas'] == '1' %}
+                    <td> <a class ="pri3"> </a></td>
+                    {% else %}
+                    <td> <a class ="pri1"> </a></td>
+                    {% endif %}
+                    
+                    <td> <button class="submit" name = 'buttonDetail' value="{{row['requestId']}}" >Select
+                    </button></td>
+                  </tr>{% endfor %}
+                 
+                </table>
+</form>
+
+                                <br><br><br>
+                <h2>__________________________________________________________________________</h2>
+                                <br><br><br>
+        </center>
+
+{% else %}
+<p>Tidak ada task yang tersedia untuk saat ini </p>
+
+{% endif %}
+
+<br><br><br>
+
+            <h1>LIST TASK</h1>
+{% if listTask %}
+            <table id="list">
+                
+              <tr>
+                <th>Request Code</th>
+                <th>Title</th>
+                <th>Request Name</th>
+                <th>Department</th>
+                <th>Request Date</th>
+                <th>Deadline</th>
+                <th>Priority</th>
+                <th></th>
+              </tr>
+             {% for row in  listTask %}
+             
+              <tr>
+                <td>{{row['requestId']}}</td>
+                <td>{{row['requestJudul']}}</td>
+                <td>{{row['userName']}}</td>
+                <td>{{row['requestKategori']}}</td>
+                <td>{{row['requestTanggal']}}</td>
+                <td>{{row['requestDeadline']}}</td>
+
+                {% if row['requestPrioritas'] == '1' %}
+                    <td> <a class ="pri1"> </a></td>
+                    {% else %}
+                    <td> <a class ="pri3"> </a></td>
+                    {% endif %}
+                
+
+
+
+                {% if row['requestStatus'] == 'Finished' %}
+                <td>Waiting to be Confirmed</td>
+                {% elif row['requestStatus'] == 'On Process'%}
+                <td> 
+                    
+                    <button id ="{{row['requestId']}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row['requestId']}}">Finish</button>
+
+
+                    <div id="modal{{row['requestId']}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <strong>{{row['requestId']}}</strong>
+                        <p> Input Report Code : </p>
+                    <form action ="/finishRequest" method = 'POST'>
+                        <input name="kodLap" list="reqFin">
+
+                        <datalist id="reqFin">
+                          <!-- <select> -->
+                          {% for row in listKodeLap %}
+                            <option value="{{row['ReportId']}}">{{row['ReportId']}}</option>
+                          {% endfor %}
+                          <!-- </select> -->
+                        </datalist>
+                      
+                      <!-- <div class="col-75" id="list_org">
+                      <select name='kode'>
+                        {% for row in listKodeLap %}
+                        <option value="{{row[0]}}"></option>
+                         {% endfor %}
+                      </select>
+                    </div> -->
+
+                        
+                        
+                         <button name="finishReq" value ="{{row['requestId']}}"> OK </button>
+                        </form>
+                      </div>
+
+                    </div>
+                    
+                </td>
+                {% else %}
+                <td>
+                    <button class="submitOr" name="inputKode" value="{{row['requestId']}}">InputKode</button>
+                {% endif %}
+              </tr>
+           {% endfor %}
+
+            </table>
+
+{% else %}
+
+<p>Tidak ada task yg sedang dikerjakan </p>
+
+{% endif %}
+
+
+            <br><br><br>
+    
+        <!-- DIV / -->
+      
+
+<h1>HISTORY TASK</h1>
+
+{% if historyTask %}
+
+         <table id="list">
+                  <tr>
+                    <th>Request Code</th>
+                    <th>Title</th>
+                    <th>Request Name</th>
+                    <th>Department</th>
+                    <th>Request Date</th>
+                    <th>Finished Date</th>
+                    <th>Report Code </th>
+                    
+                  
+                  </tr>
+                  {% for row in historyTask %}
+                  
+                  <tr >
+                    <td>{{row['requestId']}}</td>
+                    <td>{{row['requestJudul']}}</td>
+                    <td>{{row['userName']}}</td>
+                    <td>{{row['requestKategori']}}</td>
+                    <td>{{row['requestTanggal']}}</td>
+                    <td>{{row['requestEndDate']}}</td>   
+                    <td>{{row['requestKodeLaporan']}}</td>
+                    
+                    
+                  </tr>
+                  
+                  {% endfor %}
+                 
+                </table>
+
+{% else %}
+
+<p> Tidak ada history task </p>
+{% endif %}
+
+
+
+
+
+</div>  <!-- DIV / -->
+
+    </body>
+
+<script type="text/javascript">
+// Get the modal
+
+var btnProcess;
+var modalItem;
+
+// // When the user clicks on <span> (x), close the modal
+function  closeModal() {
+  modalItem.style.display = "none";
+}
+
+// // When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modalItem) {
+    modalItem.style.display = "none";
+  }
+}
+
+function show_modal(modalId){
+
+  modalItem = document.getElementById(modalId);
+  modalItem.style.display = 'block';
+}
+function click_process(processId){
+  show_modal('modal'+processId);
+  //alert('modal'+processId);
+
+}
+
+
+
+
+
+//           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+</script>
+
+</html>
