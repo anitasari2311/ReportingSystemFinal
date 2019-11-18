@@ -1,0 +1,106 @@
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% endblock %}
+  </head>
+  <body bgcolor="#F0FFF0">
+
+    <div id="navbar">
+      	<div class="topnav"><ul>
+          <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+          <div class="topnav-right">
+            {% if active_page == 'home' %}
+              <li class="active"><a href="user">HOME</a></li>
+              {% else %}
+              <li><a href="user">HOME</a></li>
+            {% endif %}
+
+            {% if active_page == 'account' %}
+              <li class="active"><a href="changePass">ACCOUNT</a></li>
+              {% else %}
+              <li><a href="changePass">ACCOUNT</a></li>
+            {% endif %}
+            
+            {% if active_page == 'newReq' %}
+              <li class="active"><a href="newRequest">NEW REQUEST</a></li>
+              {% else %}
+              <li><a href="newRequest">NEW REQUEST</a></li>
+            {% endif %}
+
+            {% if active_page == 'editReport' %}
+              <li class="active"><a href="editReport">EDIT REPORT</a></li>
+              {% else %}
+              <li><a href="editReport">EDIT REPORT</a></li>
+            {% endif %}
+
+
+            {% if active_page == 'list' %}
+            <div class="dropdown">
+              <button class="active">LIST
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">LIST
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {%endif%}
+
+              <div class="dropdown-content">
+                <a href="list">LIST REQUEST</a>
+                <a href="listFinished">LIST FINISHED</a>
+                <a href="readReport">LIST REPORT</a>
+              </div>
+            </div>
+            
+            <li><a href="login">LOGOUT</a></li>
+          </div> <!-- DIV TOPNAV RIGHT -->
+        </ul>
+
+          </div> <!-- DIV TOPNAV -->
+        
+    </div> <!-- DIV NAVBAR -->
+
+    
+    <div id="content">{% block content %}
+
+    {% endblock %}</div>
+
+
+    <div id="script">
+    {% block script %}
+    {% endblock %}
+  </div>
+    <!-- </div> -->
+
+
+    
+
+
+    <div id="footer">
+      {% block footer %}
+      &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div>
+
+
+
+
+    <script>
+    window.onscroll = function() {scrollFunc()};
+
+    var navbar = document.getElementById("navbar");
+    var sticky = navbar.offsetTop;
+
+    function scrollFunc() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+
+  </script>
+  </body>
+</html>
