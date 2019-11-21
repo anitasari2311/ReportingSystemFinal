@@ -1,0 +1,142 @@
+------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------app.py--------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+@app.route('/sendFormatTemplate',  methods =  ['POST', 'GET'])
+def sendFormatTemplate():
+    
+    kode_laporan = request.form['kodLap']
+    kolom_merge = request.form['kolomMerge']
+    kolom_kanan = request.form['rataKanan']
+    kolom_tengah = request.form['rataTengah']
+
+    kolom_footer1 = request.form['kolomFooter1']
+    kolom_footer2 = request.form['kolomFooter2']
+    posisi_footer1 = ''
+    posisi_footer2 = ''
+
+    kolomTemp = []
+    posisiTemp = []
+    tipeTemp = []
+    lebarTemp = []
+
+    if request.method == 'POST':
+
+        for isiKolom in ['kolom1', 'kolom2', 'kolom3', 'kolom4', 'kolom5', 'kolom6', 'kolom7',
+        'kolom8', 'kolom9', 'kolom10', 'kolom11', 'kolom12', 'kolom13', 'kolom14']:
+            if(request.form[isiKolom] is not None) and (request.form[isiKolom] is not ''):
+                kolomTemp.append(request.form[isiKolom])
+                kolomTemp1 = json.dumps(kolomTemp)
+        print(kolomTemp1)
+
+        for isiPosisi in ['posisi1', 'posisi2', 'posisi3', 'posisi4', 'posisi5', 'posisi6', 'posisi7',
+        'posisi8', 'posisi9', 'posisi10', 'posisi11', 'posisi12', 'posisi13', 'posisi14']:
+            if(request.form[isiPosisi] is not None) and (request.form[isiPosisi] is not ''):
+                posisiTemp.append(request.form[isiPosisi])
+                posisiTemp1 = json.dumps(posisiTemp)
+        print(posisiTemp1)
+        
+        for isiTipe in ['tipe1', 'tipe2', 'tipe3', 'tipe4', 'tipe5', 'tipe6', 'tipe7',
+        'tipe8', 'tipe9', 'tipe10', 'tipe11', 'tipe12', 'tipe13', 'tipe14']:
+            if (request.form[isiTipe] is not None) and (request.form[isiTipe] is not ''):
+                tipeTemp.append(request.form[isiTipe])
+                tipeTemp1 = json.dumps(tipeTemp)
+        print(tipeTemp1)
+
+        for isiLebar in ['lebar1', 'lebar2', 'lebar3', 'lebar4', 'lebar5', 'lebar6', 'lebar7',
+        'lebar8', 'lebar9', 'lebar10', 'lebar11', 'lebar12', 'lebar13', 'lebar14']:
+            if (request.form[isiLebar] is not None) and (request.form[isiLebar] is not ''):
+                lebarTemp.append(request.form[isiLebar])
+                lebarTemp1 = json.dumps(lebarTemp)
+        print(lebarTemp1)
+
+        for posisiFooter in ['B1', 'B2', 'C1', 'C2', 'D1', 'D2', 'E1', 'E2', 'F1', 'F2', 
+        'G1', 'G2', 'H1', 'H2', 'J1', 'J2', 'K1', 'K2', 'L1', 'L2', 'M1', 'M2', 'N1', 'N2']:
+            if request.form.get(posisiFooter) is not None:
+                if posisi_footer1 == '':
+                    posisi_footer1 += request.form.get(posisiFooter)
+                else:
+                    posisi_footer1 += ", "+request.form.get(posisiFooter)
+        print(posisi_footer1)
+
+        for posisiFooter2 in ['B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'J2', 'K2', 'L2', 'M2', 'N2']:
+            if request.form.get(posisiFooter2) is not None:
+                if posisi_footer2 == '':
+                    posisi_footer2 += request.form.get(posisiFooter2)
+                else:
+                    posisi_footer2 += ", "+request.form.get(posisiFooter2)
+        print(posisi_footer2)
+
+        detailKolom = {
+            'reportId' : kode_laporan,
+            'mergeKolom': kolom_merge,
+            'rataKanan' : kolom_kanan,
+            'rataTengah' : kolom_tengah,
+            'namaFooter1' : kolom_footer1,
+            'namaFooter2' : kolom_footer2,
+            'posisiFooter1' : posisi_footer1,
+            'posisiFooter2' : posisi_footer2
+        }
+
+        detailKolom1 = json.dumps(detailKolom)
+
+        requests.post('http://127.0.0.1:5002/saveFormatTemplate/'+detailKolom1+'/'+kolomTemp1+
+            '/'+posisiTemp1+'/'+tipeTemp1+'/'+lebarTemp1)
+        
+
+        return redirect (url_for('admin'))
+    return redirect (url_for('admin'))
+
+---------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------ms2.py----------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+    @app.route('/saveFormatTemplate/<detailKolom>/<nama>/<posisi>/<tipe>/<lebar>',  methods = ['GET', 'POST'])
+    def saveFormatTemplate(detailKolom, nama, posisi, tipe, lebar):
+        
+        formatKolom = json.loads(detailKolom)
+        namaKolom = json.loads(nama)
+        posisiKolom = json.loads(posisi)
+        tipeKolom = json.loads(tipe)
+        lebarKolom = json.loads(lebar)
+
+
+        for i in formatKolom:
+            reportId = formatKolom['reportId']
+            mergeKolom = formatKolom['mergeKolom']
+            rataKanan = formatKolom['rataKanan']
+            rataTengah = formatKolom['rataTengah']
+            namaFooter1 = formatKolom['namaFooter1']
+            namaFooter2 = formatKolom['namaFooter2']
+            posisiFooter1 = formatKolom['posisiFooter1']
+            posisiFooter2 = formatKolom['posisiFooter2']
+
+        try:
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+
+            for i in range (len(namaKolom)):
+                try:
+
+                    cursor.execute('INSERT INTO m_detailh values (%s, %s, %s, %s, %s, %s, %s, %s)', (reportId, namaKolom[i], posisiKolom[i], tipeKolom[i], lebarKolom[i], mergeKolom, rataKanan, rataTengah))                    
+                    db.commit()
+
+                except Exception as e:
+                   print(e)
+
+            if (namaFooter2 != ''):
+                cursor.execute(' INSERT INTO m_detailf VALUES (%s, %s, %s, %s)', (reportId, namaFooter1, posisiFooter1, "1"))
+                db.commit()
+
+                cursor.execute(' INSERT INTO m_detailf VALUES (%s, %s, %s, %s)', (reportId, namaFooter2, posisiFooter2, "2"))
+                db.commit()
+            else:
+                cursor.execute(' INSERT INTO m_detailf VALUES (%s, %s, %s, %s)', (reportId, namaFooter1, posisiFooter1, "1"))
+                db.commit()
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        
+        finally:
+        #Closing DB Connection.
+            if(db.is_connected()):
+                cursor.close()
+                db.close()
+            print("MySQL connection is closed")
