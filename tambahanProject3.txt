@@ -1,0 +1,480 @@
+=========================================================MS2.py==========================================================
+
+@app.route('/detailFormatTemplate/<kode_laporan>', methods=['POST','GET'])
+    def detailFormatTemplate(kode_laporan):
+        try: 
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+
+            # cursor.execute(' SELECT c.report_id, c.report_periode, c.report_printAllYN, c.report_judul, c.report_header, c.report_footer, c.report_jumlahTampilan, c.report_deskripsi, a.nama_kolom, a.lokasi, a.format_kolom, a.lebar_kolom, b.nama_kolom as namaFooter, b.lokasi as lokasiFooter, a.format_merge, a.format_rataTengah, a.format_rataKanan,b.jenisFooter FROM m_report c LEFT JOIN m_detailF b ON c.report_id = b.report_id LEFT JOIN m_detailH a ON  c.report_id = a.report_id WHERE a.report_id = "'+kode_laporan+'"  ')
+            cursor.execute(' SELECT c.report_id, c.report_periode, c.report_printAllYN, c.report_judul, c.report_header, c.report_footer, c.report_jumlahTampilan, c.report_deskripsi, a.nama_kolom, a.lokasi, a.format_kolom, a.lebar_kolom, a.format_merge, a.format_rataTengah, a.format_rataKanan FROM m_report c LEFT JOIN m_detailH a ON  c.report_id = a.report_id WHERE a.report_id = "'+kode_laporan+'"  ')
+
+            detailFormatTemplate = cursor.fetchall()
+
+            detList = []
+            for row in detailFormatTemplate:
+                detDict={
+                'reportId'          : row[0],
+                'reportPeriode'     : row[1],
+                'reportPrintAll'    : row[2],
+                'reportJudul'       : row[3],
+                'reportHeader'      : row[4],
+                'reportFooter'      : row[5],
+                'reportJmlTampilan' : row[6],
+                'reportDeskripsi'   : row[7],
+                'namaKolomH'        : row[8],
+                'lokasiH'           : row[9],
+                'formatKolomH'      : row[10],
+                'lebarKolomH'       : row[11],
+                # 'namaKolomF'        : row[12],
+                # 'lokasiF'           : row[13],
+                'formatMerge'       : row[12],
+                'formatTengah'      : row[13],
+                'formatKanan'       : row[14]
+                # 'urutanFooter'      : row[15]
+                }
+                detList.append(detDict)
+
+            detTemplate = json.dumps(detList)
+
+            return detTemplate
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+        #Closing DB Connection.
+            if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+            print("MySQL connection is closed")
+
+    @app.route('/detailFooter/<kode_laporan>', methods=['GET', 'POST'])
+    def detailFooter(kode_laporan):
+        try: 
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+
+            cursor.execute(' SELECT nama_kolom, lokasi, jenisFooter FROM m_detailF WHERE report_id = "'+kode_laporan+'"  ')
+
+            detailFooterTemplate = cursor.fetchall()
+
+            detList = []
+            for row in detailFooterTemplate:
+                detDict={
+                'namaKolomF' : row[0],
+                'lokasiF' : row[1],
+                'jenisF' : row[2]
+                }
+                detList.append(detDict)
+
+            detFooter = json.dumps(detList)
+
+            return detFooter
+
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+        #Closing DB Connection.
+            if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+            print("MySQL connection is closed")
+
+======================================================app.py=============================================================
+
+@app.route('/sendFormatTemplate',  methods =  ['POST', 'GET'])
+def sendFormatTemplate():
+    
+    kode_laporan = request.form['kodLap']
+    jmlTamp      = request.form['jmlKolom']
+    kolom_merge = request.form['kolomMerge']
+    kolom_kanan = request.form['rataKanan']
+    kolom_tengah = request.form['rataTengah']
+
+    kolom_footer1 = request.form['kolomFooter1']
+    kolom_footer2 = request.form['kolomFooter2']
+    posisi_footer1 = ''
+    posisi_footer2 = ''
+
+    kolomTemp = []
+    posisiTemp = []
+    tipeTemp = []
+    lebarTemp = []
+
+    kolomFTemp = []
+    posisiFTemp = []
+
+    if request.method == 'POST':
+
+        for isiKolom in ['kolom1', 'kolom2', 'kolom3', 'kolom4', 'kolom5', 'kolom6', 'kolom7',
+        'kolom8', 'kolom9', 'kolom10', 'kolom11', 'kolom12', 'kolom13', 'kolom14']:
+            if(request.form[isiKolom] is not None) and (request.form[isiKolom] is not ''):
+                kolomTemp.append(request.form[isiKolom])
+                kolomTemp1 = json.dumps(kolomTemp)
+        print(kolomTemp1)
+
+        for isiPosisi in ['posisi1', 'posisi2', 'posisi3', 'posisi4', 'posisi5', 'posisi6', 'posisi7',
+        'posisi8', 'posisi9', 'posisi10', 'posisi11', 'posisi12', 'posisi13', 'posisi14']:
+            if(request.form[isiPosisi] is not None) and (request.form[isiPosisi] is not ''):
+                posisiTemp.append(request.form[isiPosisi])
+                posisiTemp1 = json.dumps(posisiTemp)
+        print(posisiTemp1)
+        
+        for isiTipe in ['tipe1', 'tipe2', 'tipe3', 'tipe4', 'tipe5', 'tipe6', 'tipe7',
+        'tipe8', 'tipe9', 'tipe10', 'tipe11', 'tipe12', 'tipe13', 'tipe14']:
+            if (request.form[isiTipe] is not None) and (request.form[isiTipe] is not ''):
+                tipeTemp.append(request.form[isiTipe])
+                tipeTemp1 = json.dumps(tipeTemp)
+        print(tipeTemp1)
+
+        for isiLebar in ['lebar1', 'lebar2', 'lebar3', 'lebar4', 'lebar5', 'lebar6', 'lebar7',
+        'lebar8', 'lebar9', 'lebar10', 'lebar11', 'lebar12', 'lebar13', 'lebar14']:
+            if (request.form[isiLebar] is not None) and (request.form[isiLebar] is not ''):
+                lebarTemp.append(request.form[isiLebar])
+                lebarTemp1 = json.dumps(lebarTemp)
+        print(lebarTemp1)
+
+        for posisiFooter in ['B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'J1', 'K1', 'L1', 'M1', 'N1']:
+            if request.form.get(posisiFooter) is not None:
+                if posisi_footer1 == '':
+                    posisi_footer1 += request.form.get(posisiFooter)
+                else:
+                    posisi_footer1 += ", "+request.form.get(posisiFooter)
+        print(posisi_footer1)
+
+        for posisiFooter2 in ['B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'J2', 'K2', 'L2', 'M2', 'N2']:
+            if request.form.get(posisiFooter2) is not None:
+                if posisi_footer2 == '':
+                    posisi_footer2 += request.form.get(posisiFooter2)
+                else:
+                    posisi_footer2 += ", "+request.form.get(posisiFooter2)
+        print(posisi_footer2)
+
+        detailKolom = {
+            'reportId'      : kode_laporan,
+            'mergeKolom'    : kolom_merge,
+            'rataKanan'     : kolom_kanan,
+            'rataTengah'    : kolom_tengah,
+            'jmlTampilan'   : jmlTamp,
+            'namaFooter1'   : kolom_footer1,
+            'namaFooter2'   : kolom_footer2,
+            'posisiFooter1' : posisi_footer1,
+            'posisiFooter2' : posisi_footer2
+        }
+
+        detailKolom1 = json.dumps(detailKolom)
+
+        requests.post('http://127.0.0.1:5002/saveFormatTemplate/'+detailKolom1+'/'+kolomTemp1+
+            '/'+posisiTemp1+'/'+tipeTemp1+'/'+lebarTemp1)
+        requests.post('http://127.0.0.1:5002/saveFooterTemplate/'+detailKolom1)
+
+        return redirect (url_for('admin'))
+    return redirect (url_for('admin'))
+
+================================================ms2formattemplate2.html==================================================
+
+
+<html>
+<head>
+	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+	<title>ADD DETAIL TEMPLATE</title>
+</head>
+
+<body bgcolor="#F0FFF0"onload="generateForm({{jumKol}})">
+
+{% if session.get('position') == 'Admin' %}
+
+	{% extends 'NAVBARPROG.html' %}
+	{% set active_page ='template' %}
+
+{% else %}
+
+	{% extends 'NAVBARSPV.html' %}
+	{% set active_page ='template' %}
+
+{% endif %}
+
+
+{% block content %}
+<br><br>
+<div class="judul">
+	<center>FORMAT TEMPLATE</center>
+</div>
+
+<div class="containInsert">
+<form action="/sendFormatTemplate" method="POST">
+
+	{% if detailTemplate %}
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="kodeReport">Report Code : </label>
+		  </div>
+
+		  <div class="col-55">
+		        <input type="text" class = "col-10" id="kodeLaporan" name="kodLap" value="{{detailTemplate[0].reportId}}" style="width: 120px">
+		  </div>
+		</div>
+
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="periode">Period : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="periode" name="periode" value="{{detailTemplate[0].reportPeriode}}">
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="print">Print All : </label>
+		  </div>
+
+		  <div class="row-55">
+		    <input type="text" class = "col-10" id="printAll" name="printAll" value="{{detailTemplate[0].reportPrintAll}}" style="width: 120px">
+		  </div>
+		</div>
+
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="namaReport">Report Name : </label>
+		  </div>
+
+		  <div class="col-85">
+		    <input type="text" id="namaReport" name="namaReport" value="{{detailTemplate[0].reportJudul}}">
+		  </div>
+		</div>
+
+
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="jmlHeader">Total Header: </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="jmlHeader" name="jmlHeader" value="{{detailTemplate[0].reportHeader}}" style="width: 120px">
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35" >
+		    <label for="jmlFooter">Total Footer : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="jmlFooter" name="jmlFooter" value="{{detailTemplate[0].reportFooter}}" style="width: 120px">
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="jmlKolom">Total Column  : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="number" class = "col-10" id="jmlKolom" name="jmlKolom" value="{{detailTemplate[0].reportJmlTampilan}}"
+		    onchange="generateForm(this.value)" onkeyup="generateForm(this.value)" style="width:120px; height: 35px;">
+		  </div>
+		</div>
+	
+
+	<div class="row">
+		
+		  	{% for i in range(1,15) %}
+		  		<div id="areaKolom{{i}}" style="display: inline-block;">
+		  			<div style="display: inline-block; width: 200px">
+			  			<b>Column {{i}}:</b>
+			  			<br>
+
+			  			<input type="text" id="kolom{{i}}" name="kolom{{i}}" value="{{namKol[i-1]}}" style='width:200px;'/>
+			  			
+			  			
+		  			</div>
+		  			<div style="display: inline-block; width: 200px">
+			  			<b>Position:</b>
+			  			<br>
+			  			<select name="posisi{{i}}">
+			  				<option value='{{lokasiKolom[i-1]}}'>{{lokasiKolom[i-1]}}</option>
+			  				<option value='B8'>B8</option>
+			  				<option value='B9'>B9</option>
+			  				<option value='C8'>C8</option>
+			  				<option value='C9'>C9</option>
+			  				<option value='D8'>D8</option>
+			  				<option value='D9'>D9</option>
+			  				<option value='E8'>E8</option>
+			  				<option value='E9'>E9</option>
+			  				<option value='F8'>F8</option>
+			  				<option value='F9'>F9</option>
+			  				<option value='G8'>G8</option>
+			  				<option value='G9'>G9</option>
+			  				<option value='H8'>H8</option>
+			  				<option value='H9'>H9</option>
+			  				<option value='I8'>I8</option>
+			  				<option value='I9'>I9</option>
+			  				<option value='J8'>J8</option>
+			  				<option value='J9'>J9</option>
+			  				<option value='K8'>K8</option>
+			  				<option value='K9'>K9</option>
+			  				<option value='L8'>L8</option>
+			  				<option value='L9'>L9</option>
+			  				<option value='M8'>M8</option>
+			  				<option value='M9'>M9</option>
+			  				<option value='N8'>N8</option>
+			  				<option value='N9'>N9</option>
+			  			</select>
+		  			</div>
+
+	          		<div  style="display: inline-block; width: 200px">
+	          			<b>Type:</b>
+	          			<br>
+	          			<select name="tipe{{i}}">
+	          				<option value='{{tipeData[i-1]}}'>{{tipeData[i-1]}}</option>
+	          				<option value='String'>String</option>
+	          				<option value='Integer'>Integer</option>
+	          				<option value='Decimal'>Decimal</option>
+	          				<option value='Percentage'>Percentage</option>
+	          				<option value='Date'>Date</option>
+	          				<option value='Time'>Time</option>
+	          				<option value='Datetime'>Datetime</option>
+	          			</select>
+          			</div>
+          			<div style="display: inline-block; width: 200px">
+			  			<b>Width:</b>
+			  			<br>
+			  			<input type='text' id="kolom{{i}}" name="lebar{{i}}" value="{{lebarKolom[i-1]}}" style='width:200px;'/>
+			  		</div>
+		  		</div>
+          	
+		  	{% endfor %}
+		  
+		</div>
+{% endif %}
+
+		<div class="row">
+			<div class="col-35">
+				<label for="kolomMerge">Merge Column :</label>
+			</div>
+			
+			<div class="col-55">
+				<input type="text" class="col-10" id="kolomMerge" name="kolomMerge" value="{{formatMerge}}">
+			</div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="rataKanan">Right Column  : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="rataKanan" name="rataKanan" value="{{formatKanan}}">
+		  </div>
+		</div>
+
+		<div class="row">
+			<div class="col-35">
+				<label for="rataKiri">Center Column : </label>
+			</div>
+			
+			<div class="col-55">
+				<input type="text" class="col-10" id="rataTengah" name="rataTengah" value="{{formatTengah}}">
+			</div>
+		</div>
+
+		{% for i in range(1,3) %}
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="footer">Footer {{i}} : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="kolF" name="kolomFooter{{i}}" value="{{namaKolomFooter[i-1]}}">
+		  </div>
+		</div>
+
+		<!-- CHECKBOX UNTUK LETAK FOOTER -->
+		<div class ="myBox">
+
+		  <input type = "checkbox" value='{{lokasiFooter[i-1]}}' checked="">{{lokasiFooter[i-1]}}
+		  <input type="checkbox" name="B{{i}}" value="B">B
+		  <input type="checkbox" name="C{{i}}" value="C">C
+		  <input type="checkbox" name="D{{i}}" value="D">D
+		  <input type="checkbox" name="E{{i}}" value="E">E
+		  <input type="checkbox" name="F{{i}}" value="F">F
+		  <input type="checkbox" name="G{{i}}" value="G">G
+		  <input type="checkbox" name="H{{i}}" value="H">H
+		  <input type="checkbox" name="I{{i}}" value="I">I
+		  <input type="checkbox" name="J{{i}}" value="J">J
+		  <input type="checkbox" name="K{{i}}" value="K">K
+		  <input type="checkbox" name="L{{i}}" value="L">L
+		  <input type="checkbox" name="M{{i}}" value="M">M
+		  <input type="checkbox" name="N{{i}}" value="N">N
+		
+		</div>
+
+		{% endfor %}
+		<center>
+  <div class="colBut">
+<button class="submit"> SAVE </button></div>
+
+</form>
+
+<div class="colBut">
+<form action="/admin"><button class="submitred"> CANCEL </button></form></div>
+</center>
+
+</div>
+
+{% endblock %}
+</body>
+
+{% block script %}
+<script>
+      function generateForm(loop)
+      {
+        var fieldCount = loop;
+        console.log(fieldCount);
+        for (i = 1; i < 15; i++)
+        {
+        	var value = "areaKolom"+i.toString();
+        	console.log(value);
+          	var kolom  = document.getElementById(value);
+          	kolom.style.display = "inline";
+
+          	// var value2 = "kolom"+i.toString();
+          	// var kolom2 = document.getElementById(value2)
+
+          	// var value3 = kolom2.val()
+
+          	// kolom2.value = value3;
+
+
+
+        
+        }
+        for (i = 14; i > fieldCount; i--)
+        {
+        	var value = "areaKolom"+i.toString();
+        	console.log(value);
+          	var kolom  = document.getElementById(value);
+          	kolom.style.display = "none";
+
+          	var value2 = "kolom"+i.toString();
+          	var kolom2 = document.getElementById(value2)
+          	kolom2.value = "";
+        }
+        
+      }
+
+
+    
+
+    function test(){
+    	alert('Berhasil!');
+    }
+
+    /*window.onload = test;*/
+
+    </script>
+    {% endblock %}
+</html>
