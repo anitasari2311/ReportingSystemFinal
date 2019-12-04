@@ -9,11 +9,11 @@
 
 {% if session.get('position') == 'Admin' %}
   {% extends "NAVBARPROG.html" %}
-  {% set active_page = 'list' %}
+  {% set active_page = 'report' %}
 {% else %}
 
   {% extends "NAVBARSPV.html" %}
-  {% set active_page = 'list' %}
+  {% set active_page = 'report' %}
 {% endif %}
 
 
@@ -56,7 +56,7 @@
 
                       <!-- Modal content -->
 
-              <form action='/preview' method='POST'>
+              <form action='/admin/preview' method='POST'>
                       <div class="modal-content">
                         <span class="close" onclick="closeModal2()">&times;</span>
                         <center>

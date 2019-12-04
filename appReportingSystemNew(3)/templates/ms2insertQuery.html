@@ -10,10 +10,12 @@
 
 
 {% if session.get('position') == 'Admin' %}
-        {% extends "NAVBARPROG.html" %}
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'query' %}
 {% else %}
 
  {% extends "NAVBARSPV.html" %}
+ {% set active_page = 'query' %}
 {% endif %}
   
 
@@ -143,7 +145,7 @@
 
 {% if session.get('position') == 'Admin' %}
   <div class="colBut">
-    <form action="/admin">
+    <form action="/admin/home">
     <button class="submitRed">Cancel</button></form></div>
 {% else %}
   <div class="colBut">

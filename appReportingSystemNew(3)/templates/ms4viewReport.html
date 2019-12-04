@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title> List Report </title>
 </head>
-<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
 <body bgcolor="#F0FFF0">
   {% extends "ms1NAVBAR.html" %}
   {% set active_page = 'list' %}
@@ -42,7 +42,7 @@
       
    <!-- Modal content -->
           <div id="modal2{{row.reportId}}" class="modal">
-    <form action='/downloadReport' method='POST'>
+    <form action="http://127.0.0.1:5004/downloadReport/{{session['username']}}/{{session['user_id']}}" method="POST">
             <div class="modal-content">
               <span class="close" onclick="closeModal2()">&times;</span>
               <center>
@@ -58,8 +58,8 @@
         </td>
 
         <td>
-          <form action="/readNow" method="POST">
-          <button class="submit" name="kodRead" value="{{row.reportId}}">Read</button>
+          <form action="http://127.0.0.1:5004/readNow/{{session['username']}}/{{session['user_id']}}" method="POST">
+          <button id="readR"class="submit" name="kodRead" value="{{row.reportId}}">Read</button>
         </form>
         </td>
     {% endfor %}
@@ -73,6 +73,7 @@
 {% endblock %}
 
 {% block script %}
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 <script>
   var btnProcess2;
   var modalItem2;
@@ -118,11 +119,11 @@ function myFunction() {
 
 
 // $(document).ready(function(){
-//     $('#downloadR').click(function(){
-//       var kode_laporan = $('[name="kodLap"]').val();
-//       // $.get('http:///127.0.0.1:5004/downloadReport/'+kode_laporan)
+//     $('#readR').click(function(){
+//       var kode_laporan = $('#readR').val();
+//       return $.post('http://10.0.111.171:5004/readNow/'+kode_laporan)
 
-//       alert(kode_laporan+' Downloaded');
+
 //     });   
 //   });
 

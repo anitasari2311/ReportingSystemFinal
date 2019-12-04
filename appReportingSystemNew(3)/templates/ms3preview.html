@@ -30,7 +30,7 @@
 <br><br><br>
 <center>
   <div class="containEdit">
-    <form action ="/preview" method = 'POST'>
+    <form action ="/admin/preview" method = 'POST'>
       <div class="row">
               <div class="col-35">
                 <label for="template">Template yang ingin di-preview  </label>
@@ -54,20 +54,8 @@
       <br><br>
 
       <center>
-        <div class="colBut">
-        <button id="preview" class="submit">Preview</button></div>
+        <button id="preview" class="submit">Preview</button>
     </form>
-    {% if session.get('position') == 'Admin' %}  
-      <div class="colBut">
-      <form action="/admin">
-          <button class="submitred">Cancel</button>
-      </form></div>
-    {% else %}
-      <div class="colBut">
-      <form action="/spv">
-          <button class="submitred">Cancel</button>
-      </form></div>
-    {% endif %}
 </center>
 
 
@@ -78,16 +66,16 @@
 {% endblock %}
 
 </body>
-
+{% block script %}
 <script type="text/javascript">
 $(document).ready(function(){
     $('#preview').click(function(){
-      var kode_laporan = $('[name="kodLap"]').val();
-      $.get('http:///10.0.112.239:5003/testPreviewLaporan/'+kode_laporan)
+      // var kode_laporan = $('[name="kodLap"]').val();
+      // $.get('http:///127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
 
-      alert(kode_laporan);
+      alert('Success, 'kode_laporan);
     });   
   });
   </script>
-
+{% endblock %}
 </html>

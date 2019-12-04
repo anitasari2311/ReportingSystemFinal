@@ -59,7 +59,7 @@
   </div>
 
   <div class="col-55">
-    <input type="text" name="header" value="{{row.report_judul}}">
+    <input type="text" name="header" value="{{row.report_judul}}" disabled>
   </div>
 </div>
 
@@ -69,7 +69,7 @@
   </div>
 
   <div class="col-55">
-    <textarea id="keterangan" name="keterangan">{{row.report_deskripsi}}</textarea>
+    <textarea id="keterangan" name="keterangan" disabled>{{row.report_deskripsi}}</textarea>
   </div>
 </div>
 
@@ -89,7 +89,6 @@
   </div>
     <textarea id="PIC" name="PIC">{{detailSchedule[3]}}</textarea>
 </div>
-
 <div class ="row">
   <div class ="col-15">
     <label for="penerima">Dikirim ke : </label>
@@ -313,7 +312,7 @@
   <button name="deactive" value="{{kode_laporan}}">Deactivate</button>
 </form> -->
       <div class="colBut">
-        <form action="/editSchedule">
+        <form action="/admin/schedule/edit">
           <button class="submitred">Cancel</button>
         </form></div>
 
@@ -349,12 +348,9 @@
   var Days = document.getElementById("Day");
   var Dates = document.getElementById("Date");
   var Months = document.getElementById("Month");
-
       if(check1.selected == false){ Days.style.display = "none"; Months.style.display ="none";}
           else{ Days.style.display = "inline-block"; Months.style.display ="inline-block";
                 Dates.style.display ="none";}
-
-
 }
 function myFunction3(){
   var check2 = document.getElementById("dm2");
@@ -365,14 +361,12 @@ function myFunction3(){
           else{ Dates.style.display = "inline-block"; Months.style.display ="inline-block";
                 Days.style.display ="none";}
 }
-
 function myFunction4(){
   var check3 = document.getElementById("myCheck4");
   var Months = document.getElementById("Month");
    if(check3.checked == false){ Months.style.display = "none"}
           else{ Months.style.display = "block";}
 }
-
 // function myFunction4(check){
 //   var Days = document.getElementById("Day");
 //   var Dates = document.getElementById("Date");
@@ -381,9 +375,7 @@ function myFunction4(){
 //   }else{
 //     Days.style.display = "none"; 
 //   }
-
 // }
-
 /*                     SEARCH BY NAME                   */
 function funcSearchPIC() {
   var input, filter, table, tr, td, i, txtValue;
@@ -403,7 +395,6 @@ function funcSearchPIC() {
     }       
   }
 }
-
 function funcSearchPen() {
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("myInput1");

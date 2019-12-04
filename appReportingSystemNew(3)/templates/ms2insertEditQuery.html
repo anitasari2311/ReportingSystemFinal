@@ -27,7 +27,7 @@
 
 <center>
 <div class="containInsert">
-    <form action="/sendNewQuery" method = "POST">
+    <form action="/admin/query/edit/{{kode_laporan}}" method = "POST">
     <div class ="rowF">
         <label for="kodeReport">Report Code : </label>
         <div class="column">
@@ -84,10 +84,15 @@
       <button class="" onclick="copyToClipboard('#q1')"> Copy Query </button> 
     </div>
 
-
+{% if session.get('position') == 'Admin' %}
       <div class="colBut">
-        <form action="/admin">
+        <form action="/admin/home">
           <button class="submitRed">Cancel</button></div>
+{% else %}
+        <div class="colBut">
+        <form action="/spv">
+          <button class="submitRed">Cancel</button></div>
+{% endif %}
 </center>      
 
 

@@ -1,11 +1,21 @@
 <html>
     <head>
         <title>Login</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
 
     <body bgcolor="#F0FFF0">
+
         <div>
+            
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert">
+                <img src="/static/images/rep1.png" style="width: 100%; border: 0">
+            </div>
+            
+        </div>
+
+
+        <div id="loginBox">
             <center>
                 <div class="judul">REPORTING SYSTEM</div>          
 
@@ -54,5 +64,26 @@
 
             </center>
         </div>
+
+
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+    <script>
+
+    $(document).ready(function(){
+
+        $("#successMessage").css({
+       width: $(document).width(),
+       height: $(document).height()
+        });
+
+
+
+        $("#successMessage").delay(200).slideUp(1500);
+
+    });
+
+  </script>
+
     </body>
 </html>

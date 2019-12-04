@@ -11,33 +11,33 @@
     {% set active_page = 'home' %}
 
     {% block content %}
-    <br><br><br><br>
+    <br><br><br>
     
-<h3><p align="Right">{{day}}, <span  id="time" align="Left"> </span></p></h3>
-<h2><p align="Right"> Welcome, {{session['username']}}</p></h2>
+<!-- <h3><p align="Right">{{day}}, <span  id="time" align="Left"> </span></p></h3>
+<h2><p align="Right"> Welcome, {{session['username']}}</p></h2> -->
 
 <br><br><br>
 
 <div class="slideshow-container">
   <div class="mySlides fade">
-    <img src="/static/images/rep1.png" style="width:100%; border: 0">
+    <img src="/static/images/rep1.png" style="width:100%; border: 0;opacity: 0.5;">
   </div>
 
-  <div class="mySlides fade">
+<!--   <div class="mySlides fade">
     <img src="/static/images/logoPharos.png" style="width:100%; border: 0">
   </div>
   <div class="mySlides fade">
     <img src="/static/images/sky.jpg" style="width:100%; border: 0">
-  </div>
+  </div> -->
 
 </div>
 <br>
 
-<div style="text-align:center">
+<!-- <div style="text-align:center">
   <span class="dot"></span> 
   <span class="dot"></span> 
   <span class="dot"></span> 
-</div>
+</div> -->
 {% endblock %}
 
 {% block script %}

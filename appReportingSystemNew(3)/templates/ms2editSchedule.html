@@ -28,8 +28,8 @@
   <center>EDIT SCHEDULE</center>
 </div>
 
-
-<form action="/editSchedule" autocomplete="off" method = 'POST'>
+{% if session.get('position') == 'Admin' %}
+<form action="/admin/schedule/edit" autocomplete="off" method = 'POST'>
 
 <center>
 <div class ="containEdit">
@@ -52,6 +52,33 @@
 </div>
 </form>
 </center>
+{% else %}
+
+<form action="/spv/schedule/edit" autocomplete="off" method = 'POST'>
+
+<center>
+<div class ="containEdit">
+  <center>
+  <div class="tulisan" style="width: 350px; text-align: left;">
+    <label for="kodeRep">Kode Report : </label>
+    <input name="valKode" list="listKodeR">
+    <datalist id="listKodeR">
+      {% for row in listKodeLap %}
+        <option value="{{row['reportId']}}"></option>
+      {% endfor %}
+    </datalist>
+  </div>
+  
+<br><br><br><br>
+ 
+    <button class="submit">OK</button>
+  </center>
+
+</div>
+</form>
+</center>
+
+{% endif %}
 
 <br>
 

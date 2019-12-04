@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Edit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body bgcolor="F0FFF0">
@@ -352,20 +353,19 @@
           <center>              
                 <div class="colBut">
                   <button class="submit" name="submit" 
-                  value="Submit" text-align="center">Submit</button>
+                  value="Submit">Submit</button>
                 </form></div>
     
                 
                 <div class="colBut">
-                  <form action="/editReport">
+                  <form action="/user/editReport">
                     <button class="submitRed" name="cancel" 
-                    value="Cancel" text-align="center">Cancel</button>
+                    value="Cancel">Cancel</button>
                   </form>         
                 </div>
           </div>  
 
             </center>
-
 
         </body>
         <br><br><br>
@@ -378,7 +378,7 @@
               <div class="tulisan" style="width: 350px; text-align: left">
                 <label for="reportCode">Report Code :</label>
 
-                <form action= "/editReport" method = 'POST'>
+                <form action= "/user/editReport" method = 'POST'>
                   <input name="kodeLaporan" list="kodeReport" required>
                   <br><br><br>
 
@@ -395,7 +395,7 @@
                   </form>
 
               <div class="colBut">
-                  <form action="/user">
+                  <form action="/user/home">
                     <button class="submitRed" >Cancel</button></div></form>
 
   {% endif %}

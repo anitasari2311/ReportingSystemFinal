@@ -15,6 +15,11 @@ app.secret_key = 'ms4'
 app.config['UPLOAD_FINISHED_REQUEST'] = 'finishedRequest'
 app.config['FOLDER_SCHEDULE'] = 'Schedule'
 
+micro1 = 'http://127.0.0.1:5001/'
+micro2 = 'http://127.0.0.1:5002/'
+micro3 = 'http://127.0.0.1:5003/'
+micro4 = 'http://127.0.0.1:5004/'
+
 
 @app.route('/getNamaFile/<kode_laporan>', methods=['GET'])
 def getNamaFile(kode_laporan):
@@ -36,59 +41,6 @@ def getNamaFile(kode_laporan):
 	                cursor.close()
 	                db.close()
 	            print("MySQL connection is closed")
-
-@app.route('/downloadReport/<kode_laporan>',methods=['POST','GET'])
-def downloadReport(kode_laporan):
-
-	if request.method=='GET':
-		
-		namaF 		= requests.get('http://127.0.0.1:5004/getNamaFile/'+kode_laporan)
-		namaResp 	= json.dumps(namaF.json())
-		namaFi 		= json.loads(namaResp)
-		namaFile 	= str(namaFi).replace("['","").replace("']","")
-		print(namaFile)
-		try:
-
-			return send_from_directory(app.config['FOLDER_SCHEDULE'],namaFile+'.xls',attachment_filename=namaFile+'.xls', as_attachment=True)
-			# return send_from_directory(app.config['FOLDER_SCHEDULE'],namaFile+'.xls')
-		except Exception  as e:
-			print('FAILED TO SEND FILE')
-			return str(e)
-
-
-@app.route('/readReport/<kode_laporan>', methods=['POST','GET'])
-def readReport(kode_laporan):
-	namaF 		= requests.get('http://127.0.0.1:5004/getNamaFile/'+kode_laporan)
-	namaResp 	= json.dumps(namaF.json())
-	namaFi 		= json.loads(namaResp)
-	namaFile 	= str(namaFi).replace("['","").replace("']","")
-
-	df = pd.read_excel('C:/appReportingSystem/Schedule/'+ namaFile+'.xls')
-
-	pickled 	= pickle.dumps(df)
-	pickled_b64 = b64encode(pickled)
-
-	hug_pickled_str= pickled_b64.decode('utf-8')
-
-
-	
-
-
-
-	# return df.to_html()	
-	return hug_pickled_str
-
-
-@app.route('/downloadRequest/<request_id>', methods=['POST','GET'])
-def downloadRequest(request_id):
-	try:
-		return send_from_directory(app.config['UPLOAD_FINISHED_REQUEST'],request_id+'.xls')
-	except Exception  as e:
-		print('FAILED TO SEND FILE')
-		return str(e)
-
-
-
 
 	
 @app.route('/updateReport/<dataMS4>', methods=['POST','GET'])
@@ -176,6 +128,78 @@ def viewReport(email):
 		        cursor.close()
 		        db.close()
 		print("MySQL connection is closed")
+
+
+@app.route('/readNow/<sessId>/<sessName>', methods=['POST','GET'])
+def readNow(sessId,sessName):
+    if request.method == 'POST':
+        kode_laporan = request.form['kodRead']
+        namaF       = requests.get(micro4+'getNamaFile/'+kode_laporan)
+        namaResp    = json.dumps(namaF.json())
+        namaFi      = json.loads(namaResp)
+        namaFile    = str(namaFi).replace("['","").replace("']","")
+        
+        df = pd.read_excel(app.config['FOLDER_SCHEDULE']+'/'+namaFile+'.xls')
+        # read = pickle.loads(base64.b64decode(excel.encode()))
+        print("=== [ readNow ] ===")
+        print('ID   : ',sessId),print('Name : ',sessName)
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("===================")
+        
+        return df.to_html()		
+
+
+@app.route('/downloadReport/<sessId>/<sessName>', methods=['POST','GET'])
+def downloadReport(sessId,sessName):
+    if request.method == 'POST':
+        kode_laporan = request.form['kodLap']
+        print(kode_laporan)
+
+        tgl = datetime.datetime.now().strftime('%d')
+        bln = datetime.datetime.now().strftime('%B')
+
+        # resp = requests.get(micro4+'downloadReport/'+kode_laporan)
+
+        namaF       = requests.get(micro4+'getNamaFile/'+kode_laporan)
+        namaResp    = json.dumps(namaF.json())
+        namaFi      = json.loads(namaResp)
+        namaFile    = str(namaFi).replace("['","").replace("']","")
+        
+        # directory = 'C:/Report/'+bln+'/'+tgl
+
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+
+        # output = open(directory+'/'+namaFile+'.xls', 'wb')
+        # output.write(resp.content)
+        # output.close()
+        print("=== [ downloadReport ] ===")
+        print('ID   : ',sessId),print('Name : ',sessName)
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("===================")
+
+        return send_from_directory(app.config['FOLDER_SCHEDULE'],namaFile+'.xls',attachment_filename=namaFile+'.xls', as_attachment=True)
+
+@app.route('/downloadRequest',methods=['POST','GET'])
+def downloadRequest():
+    if request.method == 'POST':
+        request_id=request.form['downloadButton']
+
+        print(request_id)
+
+
+        # resp=requests.get(micro4+'downloadRequest/'+request_id)
+
+
+        # directory = 'C:/Request/'
+
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+ 
+        # output = open(directory+request_id+'.xls', 'wb')
+        # output.write(resp.content)
+        # output.close()
+        return send_from_directory(app.config['UPLOAD_FINISHED_REQUEST'],request_id+'.xls', attachment_filename=request_id+'.xls', as_attachment=True)
 
 
 if __name__ == "__main__":

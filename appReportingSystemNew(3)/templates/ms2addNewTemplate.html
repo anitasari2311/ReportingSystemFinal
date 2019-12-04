@@ -13,7 +13,7 @@
 {% else %}
 
     {% extends "NAVBARSPV.html" %}
-    {% set active_page = 'task' %}
+    {% set active_page = 'template' %}
 
 {% endif %}
 
@@ -190,7 +190,7 @@
 
       {% if session.get('position') == 'Admin' %}
         <div class="colBut">
-          <form action="/admin">
+          <form action="/admin/home">
             <button class="submitRed">Exit</button>
           </form>
         </div>

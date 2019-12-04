@@ -189,7 +189,7 @@ class databaseCMS:
 		elif serverId == '10':
 			connection = mysql.connector.connect(
 			host='localhost',
-			database='cms_request',
+			database='cms_template',
 			user='root',
 			password='qwerty')
 			if connection.is_connected():

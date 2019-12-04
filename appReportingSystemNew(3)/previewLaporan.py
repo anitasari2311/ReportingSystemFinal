@@ -1,4 +1,4 @@
-from flask import Flask, json, session, flash,send_from_directory
+from flask import Flask, render_template, redirect, url_for, request, json, session, flash, jsonify,send_from_directory
 import datetime
 import mysql.connector
 from mysql.connector import Error
@@ -41,7 +41,6 @@ def previewLaporan(kode_laporan):
 		jmlHead = loadDetailReport[6]
 		servId = loadDetailReport[9]
 
-		print('=============[PREVIEW]===============')
 		print('Jumlah Header: ',jmlHead)
 
 
@@ -77,9 +76,9 @@ def previewLaporan(kode_laporan):
 		listKolom2      = len(listKolom)
 		countHeader2    = len(countHeader)
 
-		print('List Kolom : ',listKolom)
-		print('Format Kolom : ',formatKolom)
-		print('List Lebar : ',lebar)
+		print('list Kolom: ',listKolom)
+		print('format Kolom: ',formatKolom)
+		print('list Lebar: ',lebar)
 	    #_________________________________________________________________________________________#
 
 	    #==============================[ MENDAPATKAN DETAIL PIC ]==============================
@@ -97,8 +96,8 @@ def previewLaporan(kode_laporan):
 		PIC = str(PIC).replace("[[[['","").replace("']]]]","").replace("[['","").replace("']]","").replace("[[[]]]","-")
 		Penerima = str(Penerima).replace("[[[['","").replace("']]]]","").replace("[['","").replace("']]","").replace("[[[]]]","-")
 
-		print('List PIC : ',PIC)
-		print('List Penerima : ',Penerima)
+		print('PIC::::::::::::',PIC)
+		print('PEN::::::::::::',Penerima)
 		#_________________________________________________________________________________________#
 
 
@@ -120,7 +119,7 @@ def previewLaporan(kode_laporan):
 
 			listQuery.append(quer)
 
-		
+		print('list Query: ',listQuery)
 		lengthOfQuery = len(listQuery)
 
 
@@ -137,10 +136,10 @@ def previewLaporan(kode_laporan):
 
 		except Exception as e:
 			err = {
-			'Error execute Query :' : str(e)
+			'error' : str(e)
 			}
 
-			
+			print('ERROR QUERY : ',err['error'])
 
 			return  json.dumps(err),400
 
@@ -175,10 +174,13 @@ def previewLaporan(kode_laporan):
 			else:
 				lokasi2 = row['lokasi'].split(", ")
 				lokasiFooter2.append(lokasi2)
-
+		print('LOKASIFOOTER 1: ', lokasiFooter)
+		print('LOKASIFOOTER 2: ', lokasiFooter2)
 		lokasiFooter = str(lokasiFooter).replace("[[","").replace("]]","").replace("'","").split(", ")
 		lokasiFooter2 = str(lokasiFooter2).replace("[[","").replace("]]","").replace("'","").split(", ")
-
+		print('KOLOMFOOTER : ', kolomFooter)
+		print('LOKASIFOOTER 1: ', lokasiFooter)
+		print('LOKASIFOOTER 2: ', lokasiFooter2)
 
 
 		#=========== UNTUK FOOTER 1
@@ -338,12 +340,14 @@ def previewLaporan(kode_laporan):
 		lokasiCurr4Len = len(lokasiCurr4)
 
 		#_________________________________________________________________________________________#
-		print('COUNT OF FOOTER 1: ',countOfFooter)
-		print('COUNT OF FOOTER 2: ',countOfFooter2)
-		print('LOKASI FOOTER 1 : ', lokasiCurr2)
-		print('LOKASI FOOTER 2 : ', lokasiCurr4)
-		print('LOKASI FOOTER 1 LEN : ', lokasiCurr2Len)
-		print('LOKASI FOOTER 2 LEN : ', lokasiCurr4Len)
+		print('COUNT OF FOOTER : ',countOfFooter)
+		print('COUNT OF FOOTER2: ',countOfFooter2)
+		print('LOKASI CURR : ', lokasiCurr)
+		print('LOKASI CURR 2: ', lokasiCurr2)
+		print('LOKASI CURR 3: ', lokasiCurr3)
+		print('LOKASI CURR 4: ', lokasiCurr4)
+		print('LOKASI CURR 2LEN: ', lokasiCurr2Len)
+		print('LOKASI CURR 4LEN: ', lokasiCurr4Len)
 
 
 
@@ -382,7 +386,7 @@ def previewLaporan(kode_laporan):
 			print('HEAD 1')
 
 			listMaxCol  = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','N1','O1','P1']
-			maxCol      = (listMaxCol[countHeader2-1])
+			maxCol      = (listMaxCol[countHeader2])
 
 
 
@@ -454,16 +458,18 @@ def previewLaporan(kode_laporan):
 						num = num + 1
 
 				if str(lengthOfData2) == '0' or str(lengthOfData2) == '':
-
+					print(colWidth2)
 					worksheet.merge_range('A9:%s13'%(colWidth2),'Tidak ada detail untuk laporan %s, %s'%(loadDetailReport[0], loadDetailReport[1]), merge_formatEmpty)
 					row2 = 0
 					row2 = row2 + 4
-
+					print(lengthOfData2)
 				else:
 					
+					print('JML HEAD 1')
 					# UNTUK MENULIS DATA
 					m = 1
 					row2 = 0
+					print(lengthOfData2)
 				
 
 					for i in range(lengthOfData2): 
@@ -530,6 +536,7 @@ def previewLaporan(kode_laporan):
 
 
 				if str(lengthOfData2) == '0' or str(lengthOfData2) == '':
+					print(colWidth2)
 					worksheet.merge_range('A9:%s13'%(colWidth2),'Tidak ada detail untuk laporan %s, %s'%(loadDetailReport[0], loadDetailReport[1]), merge_formatEmpty)
 					dataSub = 13
 					
@@ -556,6 +563,7 @@ def previewLaporan(kode_laporan):
 					        	countAwal = dataSub+1
 
 					except IndexError as e:
+					    print('TOTALLLLLLLLLLL')
 					    for k in range(countHeader2+1):
 					        		worksheet.write(dataSub,k,'',format_header)
 					    for k in range(lokasiCurr4Len):
@@ -586,6 +594,7 @@ def previewLaporan(kode_laporan):
 
 					except IndexError as e:
 						worksheet.write(row + 7,kol,num,font_size)
+						print('TOTALLLLLLLLLLL')
 
 			    # Penulisan Process Time
 				worksheet.write(dataSub+1,1,'Process Time : s/d %s' % (datetime.datetime.now().replace(microsecond=0)),font_size)
@@ -758,12 +767,13 @@ def previewLaporan(kode_laporan):
 				        num = num + 1
 
 				if str(lengthOfData2) == '0' or str(lengthOfData2) == '':
-
+					print(colWidth2)
 
 					worksheet.merge_range('A10:%s13'%(colWidth2),'Tidak ada detail untuk laporan %s, %s'%(loadDetailReport[0], loadDetailReport[1]), merge_formatEmpty)
 					row2 = 0
 					row2 = row2 + 4
-
+					print('KSAOSKASLAKS')
+					print(lengthOfData2)
 				else:
 
 					m = 1
@@ -828,7 +838,7 @@ def previewLaporan(kode_laporan):
 				lengthOfData2 = len(lengthOfData)
 				
 				if str(lengthOfData2) == '0' or str(lengthOfData2) == '':
-
+					print(colWidth2)
 					worksheet.merge_range('A10:%s13'%(colWidth2),'Tidak ada detail untuk laporan %s, %s'%(loadDetailReport[0], loadDetailReport[1]), merge_formatEmpty)
 					dataSub = 14
 					
@@ -855,7 +865,7 @@ def previewLaporan(kode_laporan):
 					        	countAwal = dataSub+1
 
 					except IndexError as e:
-
+					    print('TOTALLLLLLLLLLL')
 					    for k in range(countHeaderH2+1):
 					        		worksheet.write(dataSub,k,'',format_header)
 					    for k in range(lokasiCurr4Len):
@@ -885,7 +895,7 @@ def previewLaporan(kode_laporan):
 
 					except IndexError as e:
 						worksheet.write(row + 8,kol,num,font_size)
-
+						print('TOTALLLLLLLLLLL')
 
 			    # Penulisan Process Time
 				worksheet.write(dataSub+1,1,'Process Time : s/d %s' % (datetime.datetime.now().replace(microsecond=0)),font_size)
@@ -931,4 +941,4 @@ def previewLaporan(kode_laporan):
 		return  json.dumps(err), 400
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True, port='5003')            
+    app.run(host='0.0.0.0',debug=True, port='5005')            

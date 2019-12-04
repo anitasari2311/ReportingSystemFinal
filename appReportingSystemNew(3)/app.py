@@ -1,22 +1,23 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash, json, jsonify, send_from_directory
 # from base64 import b64encode
-import base64
+# import base64
 import auth
 from werkzeug.utils import secure_filename 
-import pickle
-import pymysql
+# import pickle
 import mysql.connector
 from mysql.connector import Error
 import requests
 import datetime
 import os
-import pandas as pd
-# import urllib.request
-#from PIL import Image
+# import pandas as pd
+
+
 
 
 
 app = Flask(__name__, static_folder='app/static')
+
+
 app.static_folder = 'static'
 app.secret_key = 'frontEnd'
 
@@ -29,17 +30,19 @@ app.config['UPLOAD_FINISHED_REQUEST'] = 'finishedRequest'
 app.config['FOLDER_SCHEDULE'] = 'Schedule'
 
 
+micro1 = 'http://127.0.0.1:5001/'
+micro2 = 'http://127.0.0.1:5002/'
+micro3 = 'http://127.0.0.1:5003/'
+micro4 = 'http://127.0.0.1:5004/'
 
-@app.route('/test')
-def test():
-
-    return render_template('order.html')
-
-@app.route('/menubar')
-def menubar():
-    return render_template('tesMenuBar.html')
 
 ##########################                  LOGIN                          ############################
+@app.route('/testBar')
+def testBar():
+
+    return render_template('NAVBARPROG2.html')
+
+
 @app.route('/')
 def home():
     return redirect (url_for('login'))
@@ -60,8 +63,32 @@ def logout():
     # return redirect(url_for('login'))
     return auth.logout()
 
-@app.route('/changePass')
+@app.route('/admin/account')
 def changePass():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        a = session['user_id']
+        print("=== [ changePass ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("======================")
+        return render_template('ms1changePass.html')
+
+@app.route('/user/account')
+def changePassUser():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        a = session['user_id']
+        print("=== [ changePass ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("======================")
+        return render_template('ms1changePass.html')
+
+@app.route('/spv/account')
+def changePassSPV():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
@@ -95,13 +122,13 @@ def sendDataPassword():
         print("============================")
 
         if session.get('position') == 'User':
-            requests.post('http://127.0.0.1:5001/updateDataPassword/'+dataRequest)
+            requests.post(micro1+'updateDataPassword/'+dataRequest)
             return redirect(url_for('user'))
         elif session.get('position') == 'Admin' :
-            requests.post('http://127.0.0.1:5001/updateDataPassword/'+dataRequest)
+            requests.post(micro1+'updateDataPassword/'+dataRequest)
             return redirect(url_for('admin'))
         else:
-            requests.post('http://127.0.0.1:5001/updateDataPassword/'+dataRequest)
+            requests.post(micro1+'updateDataPassword/'+dataRequest)
             return redirect(url_for('spv'))
 
 
@@ -112,7 +139,7 @@ def sendDataPassword():
 #=========================================================================================
 
 
-@app.route('/user', methods=['POST','GET'])
+@app.route('/user/home', methods=['POST','GET'])
 def user():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
@@ -132,14 +159,14 @@ def user():
         return render_template('ms1home1.html', day=day, clock=clock)
 
 #================[List request user]=================
-@app.route('/list', methods = ['POST','GET'])
+@app.route('/user/list/request', methods = ['POST','GET'])
 def list():
     if session.get('user_id') is None:
         return render_template('ms1Login.html')
     else:
         a = session['user_id']
 
-        listReq     = requests.get(''.join(['http://127.0.0.1:5001/listRequestUser/'+a]))
+        listReq     = requests.get(''.join([micro1+'listRequestUser/'+a]))
         listResp    = json.dumps(listReq.json())
         loadListReq = json.loads(listResp)
 
@@ -151,14 +178,14 @@ def list():
         return render_template('ms1listReq.html', listReqUser = loadListReq)
 
 #==============[List request yang telah selesai ]===========
-@app.route('/listFinished', methods = ['POST','GET'])
+@app.route('/user/list/finished', methods = ['POST','GET'])
 def listFinished():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
         uId = session['user_id']
 
-        listFinished = requests.get(''.join(['http://127.0.0.1:5001/listFinished/'+uId]))
+        listFinished = requests.get(''.join([micro1+'listFinished/'+uId]))
         finishedResp = json.dumps(listFinished.json())
         loadFinished = json.loads(finishedResp)
 
@@ -176,7 +203,7 @@ def downloadRequest():
         print(request_id)
 
 
-        # resp=requests.get('http://127.0.0.1:5004/downloadRequest/'+request_id)
+        # resp=requests.get(micro4+'downloadRequest/'+request_id)
 
 
         # directory = 'C:/Request/'
@@ -191,14 +218,14 @@ def downloadRequest():
         # return  'OK'
 
 #============[Read Report]========================
-@app.route('/readReport', methods=['POST','GET'])
+@app.route('/user/list/readReport', methods=['POST','GET'])
 def readReport():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
         uId = session['user_id']
 
-        eml         = requests.get('http://127.0.0.1:5001/getEmail/'+uId)
+        eml         = requests.get(micro1+'getEmail/'+uId)
         emlResp     = json.dumps(eml.json())
         loadEmail   = json.loads(emlResp)
         for i in loadEmail:
@@ -206,7 +233,7 @@ def readReport():
 
         
 
-        listRep         = requests.get('http://127.0.0.1:5004/viewReport/'+emailUser)
+        listRep         = requests.get(micro4+'viewReport/'+emailUser)
         listResp        = json.dumps(listRep.json())
         loadListReport  = json.loads(listResp)
 
@@ -229,7 +256,7 @@ def sendRating():
 
         dataRating = json.dumps(data)
 
-        requests.post('http://127.0.0.1:5001/finishRating/'+dataRating)
+        requests.post(micro1+'finishRating/'+dataRating)
 
         print("=== [ sendRating ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -239,25 +266,25 @@ def sendRating():
         return redirect(url_for('listFinished'))
 
 #================[Menampilkan layar Request Laporan]=================
-@app.route('/newRequest', methods = ['GET','POST'])
+@app.route('/user/newRequest', methods = ['GET','POST'])
 def newRequest():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
 
-        org     = requests.get('http://127.0.0.1:5001/namaOrganisasi')
+        org     = requests.get(micro1+'namaOrganisasi')
         orgResp =json.dumps(org.json())
         loadOrg = json.loads(orgResp)
 
-        cat     = requests.get('http://127.0.0.1:5001/namaDept')
+        cat     = requests.get(micro1+'namaDept')
         catResp = json.dumps(cat.json())
         loadCat = json.loads(catResp)
 
-        PIC     = requests.get('http://127.0.0.1:5001/namaPIC')
+        PIC     = requests.get(micro1+'namaPIC')
         picResp = json.dumps(PIC.json())
         loadPIC = json.loads(picResp)
 
-        Pen     = requests.get('http://127.0.0.1:5001/namaPenerima')
+        Pen     = requests.get(micro1+'namaPenerima')
         penResp = json.dumps(Pen.json())
         loadPen = json.loads(penResp)
 
@@ -272,11 +299,11 @@ def newRequest():
 #================[Mengirim data request ke MS1/addNewRequest]================= 
 @app.route('/sendDataRequest', methods=['POST','GET'])
 def sendDataRequest():
-    PIC = requests.get('http://127.0.0.1:5001/namaPIC')
+    PIC = requests.get(micro1+'namaPIC')
     picResp = json.dumps(PIC.json())
     loadPIC = json.loads(picResp)
 
-    Pen = requests.get('http://127.0.0.1:5001/namaPenerima')
+    Pen = requests.get(micro1+'namaPenerima')
     penResp = json.dumps(Pen.json())
     loadPen = json.loads(penResp)
 
@@ -302,7 +329,7 @@ def sendDataRequest():
         else:
         
         
-            getFileName = requests.get('http://127.0.0.1:5001/generateRequestId')
+            getFileName = requests.get(micro1+'generateRequestId')
             fiName      = json.dumps(getFileName.json())
             resName     = json.loads(fiName)
             fileN       = [x['requestId'] for x in resName]
@@ -412,7 +439,7 @@ def sendDataRequest():
             
             dataRequest = json.dumps(request_data)
 
-            requests.post('http://127.0.0.1:5001/addNewRequest/'+dataRequest)
+            requests.post(micro1+'addNewRequest/'+dataRequest)
 
             print("=== [ sendDataRequest ] ===")
             print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -436,7 +463,7 @@ def cancelRequest():
         dataFix = json.dumps(data)
 
 
-        requests.post('http://127.0.0.1:5001/cancR/'+dataFix)
+        requests.post(micro1+'cancR/'+dataFix)
 
         print("=== [ cancelRequest ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -447,30 +474,30 @@ def cancelRequest():
 
 #================[Menampilkan kode laporan yang ingin di edit]=================
 #================[Menampilkan form edit laporan]=================
-@app.route('/editReport', methods=['POST','GET'])
+@app.route('/user/editReport', methods=['POST','GET'])
 def editReport():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
         uId = session['user_id']
-        listReportId    = requests.get('http://127.0.0.1:5001/getReportId')
-        listReportIdResp = json.dumps(listReportId.json())
-        loadListRep     = json.loads(listReportIdResp)
+        listReportId        = requests.get(micro1+'getReportId')
+        listReportIdResp    = json.dumps(listReportId.json())
+        loadListRep         = json.loads(listReportIdResp)
         
         if request.method == 'POST':
             kode_laporan = request.form['kodeLaporan']
 
-            sendKodeLaporan = requests.get(''.join(['http://127.0.0.1:5001/getCurrentDisplay/'+kode_laporan]))
+            sendKodeLaporan = requests.get(''.join([micro1+'getCurrentDisplay/'+kode_laporan]))
             KodeLaporanResp = json.dumps(sendKodeLaporan.json())
-            loadLap = json.loads(KodeLaporanResp)
+            loadLap         = json.loads(KodeLaporanResp)
 
-            PIC     = requests.get('http://127.0.0.1:5001/namaPIC')
+            PIC     = requests.get(micro1+'namaPIC')
             picResp = json.dumps(PIC.json())
             loadPICe = json.loads(picResp)
 
-            Pen     = requests.get('http://127.0.0.1:5001/namaPenerima')
-            penResp = json.dumps(Pen.json())
-            loadPene = json.loads(penResp)
+            Pen         = requests.get(micro1+'namaPenerima')
+            penResp     = json.dumps(Pen.json())
+            loadPene    = json.loads(penResp)
 
             print("=== [ editReport ] ===")
             print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -490,17 +517,17 @@ def editReport():
 @app.route('/sendEditRequest', methods = ['POST','GET'])
 def sendEditRequest():
     if request.method == 'POST':
-        PIC     = requests.get('http://127.0.0.1:5001/namaPIC')
-        picResp = json.dumps(PIC.json())
-        loadPICe = json.loads(picResp)
+        PIC         = requests.get(micro1+'namaPIC')
+        picResp     = json.dumps(PIC.json())
+        loadPICe    = json.loads(picResp)
 
-        Pen     = requests.get('http://127.0.0.1:5001/namaPenerima')
-        penResp = json.dumps(Pen.json())
-        loadPene = json.loads(penResp)
+        Pen         = requests.get(micro1+'namaPenerima')
+        penResp     = json.dumps(Pen.json())
+        loadPene    = json.loads(penResp)
 
         kode_laporan = request.form['labelKodLap']
 
-        getJudulTujuan = requests.get('http://127.0.0.1:5001/getDataReport/'+kode_laporan)
+        getJudulTujuan  = requests.get(micro1+'getDataReport/'+kode_laporan)
         result          = json.dumps(getJudulTujuan.json())
         loadJudulTujuan = json.loads(result)
 
@@ -611,7 +638,7 @@ def sendEditRequest():
 
         dataEdit = json.dumps(edit_data)
 
-        requests.post('http://127.0.0.1:5001/editRequest/'+dataEdit)
+        requests.post(micro1+'editRequest/'+dataEdit)
 
         print("=== [ sendEditRequest ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -629,15 +656,15 @@ def sendEditRequest():
 #=========================================================================================
 
 
-@app.route('/availableTaskSPV')
+@app.route('/spv/task/available')
 def listRequestSPV():
     # sessionId = session['user_id']
 
-    listAvailableTask = requests.get('http://127.0.0.1:5001/availableTask')
-    avTask          = json.dumps(listAvailableTask.json())
-    loadAvailTask   = json.loads(avTask)
+    listAvailableTask   = requests.get(micro1+'availableTask')
+    avTask              = json.dumps(listAvailableTask.json())
+    loadAvailTask       = json.loads(avTask)
 
-    # listTask = requests.get('http://127.0.0.1:5001/listTask/'+sessionId)
+    # listTask = requests.get(micro1+'listTask/'+sessionId)
     # Task = json.dumps(listTask.json())
     # loadTask = json.loads(Task)
     print("=== [ availableTaskSPV ] ===")
@@ -649,13 +676,12 @@ def listRequestSPV():
                             # listTask = loadTask)
 
 
-
-@app.route('/onProgressTask')
+@app.route('/spv/task/onProgress')
 def onProgressTask():
 
-    onProgTask = requests.get('http://127.0.0.1:5001/onProgressTask')
-    onTask  = json.dumps(onProgTask.json())
-    loadOnProgTask = json.loads(onTask)
+    onProgTask      = requests.get(micro1+'onProgressTask')
+    onTask          = json.dumps(onProgTask.json())
+    loadOnProgTask  = json.loads(onTask)
 
     print("=== [ onProgressTask ] ===")
     print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -663,13 +689,60 @@ def onProgressTask():
     print("==========================")
     return render_template('ms1onProgressTaskSPV.html', onProgTask = loadOnProgTask)
 
-@app.route('/spv')
+@app.route('/spv/home')
 def spv():
     print("=== [ homeSPV ] ===")
     print('ID   : ',session['user_id']),print('Name : ',session['username'])
     print('Time : ',datetime.datetime.now().strftime('%X'))
     print("==========================")
     return render_template('ms2homeSPV.html')
+
+@app.route('/spv/task/list')
+def listTaskSPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        sessionName = session['username']
+        sessionId   = session['user_id']
+
+        listReportId        = requests.get(micro1+'getReportId')
+        listReportIdResp    = json.dumps(listReportId.json())
+        loadListRep         = json.loads(listReportIdResp)
+
+        listTask    = requests.get(micro1+'listTask/'+sessionId)
+        Task        = json.dumps(listTask.json())
+        loadTask    = json.loads(Task)
+
+        print("=== [ listTask ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("====================")
+
+        return render_template('ms1listTask.html', listTask = loadTask, 
+                                listKodeLap = loadListRep)
+
+@app.route('/spv/task/history')
+def historyTaskSPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        sessionName = session['username']
+        sessionId   = session['user_id']
+
+        listReportId        = requests.get(micro1+'getReportId')
+        listReportIdResp    = json.dumps(listReportId.json())
+        loadListRep         = json.loads(listReportIdResp)
+
+        histTask    = requests.get(micro1+'historyTask/'+sessionName)
+        hist        = json.dumps(histTask.json())
+        loadHist    = json.loads(hist)
+
+        print("=== [ historyTask ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("=======================")
+        return render_template('ms1historyTask.html', historyTask = loadHist, 
+                                listKodeLap = loadListRep)
 
 @app.route('/rejectRequest', methods=['POST','GET'])
 def rejectRequest():
@@ -682,7 +755,7 @@ def rejectRequest():
 
         dataReject = json.dumps(data)
 
-        requests.post('http://127.0.0.1:5001/reject/'+dataReject)
+        requests.post(micro1+'reject/'+dataReject)
 
         print("=== [ rejectRequest ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -701,7 +774,7 @@ def prioritasReq():
 
         dataPrioritas = json.dumps(data)
 
-        requests.post('http://127.0.0.1:5001/prioritas/'+dataPrioritas)
+        requests.post(micro1+'prioritas/'+dataPrioritas)
 
         print("=== [ prioritasRequest ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -720,7 +793,7 @@ def undoPrioritasRequest():
 
         dataUndoPrioritas = json.dumps(data)
 
-        requests.post('http://127.0.0.1:5001/undoPrioritas/'+dataUndoPrioritas)
+        requests.post(micro1+'undoPrioritas/'+dataUndoPrioritas)
 
         print("=== [ undoPrioritasRequest ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -729,6 +802,9 @@ def undoPrioritasRequest():
 
         return redirect(url_for('listRequestSPV'))
 
+
+
+
 #=========================================================================================
 #=========================================================================================
 #=========================[         PROGRAMMER             ]==============================
@@ -736,7 +812,7 @@ def undoPrioritasRequest():
 #=========================================================================================
 
 #============[Menampilkan homepage programmer]============
-@app.route('/admin')
+@app.route('/admin/home')
 def admin():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
@@ -753,7 +829,7 @@ def admin():
         return render_template('ms2home.html', day=day, clock=clock)
 
 #============[Menampilkan list task yang bisa dikerjakan]============
-@app.route('/availableTask')
+@app.route('/admin/task/available')
 def availableTask():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
@@ -762,18 +838,18 @@ def availableTask():
         sessionName = session['username']
         sessionId   = session['user_id']
 
-        listAvailableTask = requests.get('http://127.0.0.1:5001/availableTask')
-        avTask          = json.dumps(listAvailableTask.json())
-        loadAvailTask   = json.loads(avTask)
+        listAvailableTask   = requests.get(micro1+'availableTask')
+        avTask              = json.dumps(listAvailableTask.json())
+        loadAvailTask       = json.loads(avTask)
 
 
-        listReportId    = requests.get('http://127.0.0.1:5001/getReportId')
-        listReportIdResp = json.dumps(listReportId.json())
-        loadListRep     = json.loads(listReportIdResp)
+        listReportId        = requests.get(micro1+'getReportId')
+        listReportIdResp    = json.dumps(listReportId.json())
+        loadListRep         = json.loads(listReportIdResp)
 
-        detailNormal = requests.get('http://127.0.0.1:5001/taskProgrammer/'+sessionId)
+        detailNormal    = requests.get(micro1+'taskProgrammer/'+sessionId)
         detNormal       = json.dumps(detailNormal.json())
-        loadTaskProg = json.loads(detNormal)
+        loadTaskProg    = json.loads(detNormal)
 
 
         print("=== [ availableTask ] ===")
@@ -784,65 +860,13 @@ def availableTask():
         return render_template('ms1availableTask.html', listAvailTask = loadAvailTask,
                                 listKodeLap = loadListRep, taskProg = loadTaskProg)
 
-#============[Menampilkan list task yang harus dikerjakan]============
-@app.route('/listTask')
-def listTask():
-    if session.get('user_id') is None:
-        return render_template('ms1login.html')
-    else:
-        sessionName = session['username']
-        sessionId = session['user_id']
 
-        listReportId    = requests.get('http://127.0.0.1:5001/getReportId')
-        listReportIdResp = json.dumps(listReportId.json())
-        loadListRep     = json.loads(listReportIdResp)
+@app.route('/admin/task/available/<request_id>',methods=['GET','POST'])
+def detailTask(request_id):
 
-        listTask = requests.get('http://127.0.0.1:5001/listTask/'+sessionId)
-        Task    = json.dumps(listTask.json())
-        loadTask = json.loads(Task)
-
-        print("=== [ listTask ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("====================")
-
-        return render_template('ms1listTask.html', listTask = loadTask, 
-                                listKodeLap = loadListRep)
-
-#============[Menampilkan list task yang sudah selesai dikerjakan]============
-@app.route('/historyTask')
-def historyTask():
-    if session.get('user_id') is None:
-        return render_template('ms1login.html')
-    else:
-        sessionName = session['username']
-        sessionId   = session['user_id']
-
-        listReportId    = requests.get('http://127.0.0.1:5001/getReportId')
-        listReportIdResp = json.dumps(listReportId.json())
-        loadListRep     = json.loads(listReportIdResp)
-
-        histTask = requests.get('http://127.0.0.1:5001/historyTask/'+sessionName)
-        hist    = json.dumps(histTask.json())
-        loadHist = json.loads(hist)
-
-        print("=== [ historyTask ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("=======================")
-        return render_template('ms1historyTask.html', historyTask = loadHist, 
-                                listKodeLap = loadListRep)
-
-#=====[Saat programmer mengklik request yang ada]===========
-@app.route('/detailRequest', methods=['POST','GET'])
-def detailRequest():
-    if request.method=='POST':
-        request_id = request.form['buttonDetail']
-        # sessionName = session['username']
-
-        detailTask      = requests.get('http://127.0.0.1:5001/getDetailTask/'+request_id)
+        detailTask      = requests.get(micro1+'getDetailTask/'+request_id)
         detTask         = json.dumps(detailTask.json())
-        loadDetailTask = json.loads(detTask)
+        loadDetailTask  = json.loads(detTask)
 
         #CEK REQUEST TSB ADA IMAGE/TIDAK
         try:
@@ -862,80 +886,159 @@ def detailRequest():
         print('Time : ',datetime.datetime.now().strftime('%X'))
         print("=========================")
 
+        #============[Mengirim data accept request ke MS1/accRequest]============
+        if request.method == 'POST':
+            uId         = session['user_id']
+            uName       = session['username']
+
+
+            detailAccept = {
+            'request_id': request_id,
+            'uId'       : uId,
+            'uName'     : uName
+            }
+
+            detAcc = json.dumps(detailAccept)
+
+            requests.post(micro1+'accRequest/'+detAcc)
+
+            print("=== [ acceptRequest ] ===")
+            print('ID   : ',session['user_id']),print('Name : ',session['username'])
+            print('Time : ',datetime.datetime.now().strftime('%X'))
+            print("=========================")
+            # return redirect(url_for("task"))
+            if session['position'] == 'Admin':
+                return redirect(url_for("listTask"))
+            else:
+                return redirect(url_for("listRequestSPV"))
+
+        return render_template('ms1detailTask.html', detail_task = loadDetailTask, imageR=namaImage, checkImage=checkImage)
+    
+
+
+#============[Menampilkan list task yang harus dikerjakan]============
+@app.route('/admin/task/list')
+def listTask():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        sessionName = session['username']
+        sessionId   = session['user_id']
+
+        listReportId        = requests.get(micro1+'getReportId')
+        listReportIdResp    = json.dumps(listReportId.json())
+        loadListRep         = json.loads(listReportIdResp)
+
+        listTask    = requests.get(micro1+'listTask/'+sessionId)
+        Task        = json.dumps(listTask.json())
+        loadTask    = json.loads(Task)
+
+        print("=== [ listTask ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("====================")
+
+        return render_template('ms1listTask.html', listTask = loadTask, 
+                                listKodeLap = loadListRep)
+
+@app.route('/admin/task/list/<request_id>', methods=['GET','POST'])
+def listTask2(request_id):
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        detailTask      = requests.get(micro1+'getDetailTask/'+request_id)
+        detTask         = json.dumps(detailTask.json())
+        loadDetailTask  = json.loads(detTask)
+
+        #CEK REQUEST TSB ADA IMAGE/TIDAK
+        try:
+            checkImage= open(os.path.join(app.config['UPLOAD_FOLDER'], request_id+'.jpg'))
+        except Exception as e:
+                    checkImage = 'NOIMAGE'
+
+        namaImage = request_id+'.jpg'
+
+        # UNTUK MENGAMBIL VALUE DALAM JSON
+        for x in loadDetailTask:
+            aaa = x['requestId']
+            bbb = x['requestTujuan']
+
+        print("=== [ detailRequest ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("=========================")
+
+        #============[Mengirim data finish request ke MS1/finReq]============
+        if request.method == 'POST':
+            kodeL       = request.form['kodLap']
+            file        = request.files['inputFile']
+
+
+            fileName = request_id
+            file.save(os.path.join(app.config['UPLOAD_FINISHED_REQUEST'], fileName+'.xls'))
+            
+            if 'file' not in request.files:
+                fileName = ''
+
+            if file.filename == '':
+                fileName = ''
+
+
+            a = {
+            'request_id'    : request_id,
+            'kode_laporan'  : kodeL
+            }
+
+            b = json.dumps(a)
+
+            requests.post(micro1+'finReq/'+b)
+
+
+            print("=== [ finishRequest ] ===")
+            print('ID   : ',session['user_id']),print('Name : ',session['username'])
+            print('Time : ',datetime.datetime.now().strftime('%X'))
+            print("=========================")
+
+            # return redirect(url_for('task'))
+            if session['position'] == 'Admin':
+
+                return redirect(url_for("listTask"))
+            else:
+                return redirect(url_for("listRequestSPV"))
+
         return render_template('ms1detailTask.html', detail_task = loadDetailTask, imageR=namaImage, checkImage=checkImage)
 
+#============[Menampilkan list task yang sudah selesai dikerjakan]============
+@app.route('/admin/task/history')
+def historyTask():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        sessionName = session['username']
+        sessionId   = session['user_id']
 
+        listReportId        = requests.get(micro1+'getReportId')
+        listReportIdResp    = json.dumps(listReportId.json())
+        loadListRep         = json.loads(listReportIdResp)
 
-#============[Mengirim data accept request ke MS1/accRequest]============
-@app.route('/acceptRequest', methods=['POST','GET'])
-def acceptRequest():
-    if request.method == 'POST':
-        request_id  = request.form['btnConfirmReq']
-        uId         = session['user_id']
-        uName       = session['username']
+        histTask    = requests.get(micro1+'historyTask/'+sessionName)
+        hist        = json.dumps(histTask.json())
+        loadHist    = json.loads(hist)
 
-
-        detailAccept = {
-        'request_id': request_id,
-        'uId'       : uId,
-        'uName'     : uName
-        }
-
-        detAcc = json.dumps(detailAccept)
-
-        requests.post('http://127.0.0.1:5001/accRequest/'+detAcc)
-
-        print("=== [ acceptRequest ] ===")
+        print("=== [ historyTask ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
         print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("=========================")
-        # return redirect(url_for("task"))
-        if session['position'] == 'Admin':
-            return redirect(url_for("listTask"))
-        else:
-            return redirect(url_for("listRequestSPV"))
+        print("=======================")
+        return render_template('ms1historyTask.html', historyTask = loadHist, 
+                                listKodeLap = loadListRep)
 
 
-#============[Mengirim data finish request ke MS1/finReq]============
-@app.route('/finishRequest', methods=['POST','GET'])
-def finishRequest():
-    if request.method == 'POST':
-        request_id = request.form['finishReq']
-        kodeL       = request.form['kodLap']
-        file        = request.files['inputFile']
 
 
-        fileName = request_id
-        file.save(os.path.join(app.config['UPLOAD_FINISHED_REQUEST'], fileName+'.xls'))
-        
-        if 'file' not in request.files:
-            fileName = ''
-
-        if file.filename == '':
-            fileName = ''
 
 
-        a = {
-        'request_id'    : request_id,
-        'kode_laporan'  : kodeL
-        }
-
-        b = json.dumps(a)
-
-        requests.post('http://127.0.0.1:5001/finReq/'+b)
 
 
-        print("=== [ finishRequest ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("=========================")
-
-        # return redirect(url_for('task'))
-        if session['position'] == 'Admin':
-
-            return redirect(url_for("listTask"))
-        else:
-            return redirect(url_for("listRequestSPV"))
 
 
 #=========================================================================================
@@ -952,21 +1055,21 @@ def finishRequest():
 #=========================================================================================
 
 #============[Menampilkan menu add new Schedule]============
-@app.route('/addNewSchedule', methods = ['POST','GET'])
+@app.route('/admin/schedule/new', methods = ['POST','GET'])
 def addNewSchedule():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
 
-        getKodeS = requests.get('http://127.0.0.1:5002/listKodeReportAddNewSchedule')
-        kodeNewS = json.dumps(getKodeS.json())
+        getKodeS            = requests.get(micro2+'listKodeReportAddNewSchedule')
+        kodeNewS            = json.dumps(getKodeS.json())
         loadKodeNewSchedule = json.loads(kodeNewS)
 
-        PIC = requests.get('http://127.0.0.1:5001/namaPIC')
+        PIC     = requests.get(micro1+'namaPIC')
         picResp = json.dumps(PIC.json())
         loadPIC = json.loads(picResp)
 
-        Pen = requests.get('http://127.0.0.1:5001/namaPenerima')
+        Pen     = requests.get(micro1+'namaPenerima')
         penResp = json.dumps(Pen.json())
         loadPen = json.loads(penResp)
 
@@ -978,37 +1081,62 @@ def addNewSchedule():
         return render_template('ms2addNewSchedule.html', listKodeReportS = loadKodeNewSchedule,
                                 listPIC = loadPIC,listPen = loadPen)
 
+@app.route('/spv/schedule/new', methods = ['POST','GET'])
+def addNewScheduleSPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+
+        getKodeS            = requests.get(micro2+'listKodeReportAddNewSchedule')
+        kodeNewS            = json.dumps(getKodeS.json())
+        loadKodeNewSchedule = json.loads(kodeNewS)
+
+        PIC     = requests.get(micro1+'namaPIC')
+        picResp = json.dumps(PIC.json())
+        loadPIC = json.loads(picResp)
+
+        Pen     = requests.get(micro1+'namaPenerima')
+        penResp = json.dumps(Pen.json())
+        loadPen = json.loads(penResp)
+
+        print("=== [ addNewSchedule ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("==========================")
+        
+        return render_template('ms2addNewSchedule.html', listKodeReportS = loadKodeNewSchedule,
+                                listPIC = loadPIC,listPen = loadPen)
 #============[Mengirim data add new schedule ke MS2/addSchedule]============
 @app.route('/sendAddNewSchedule', methods=['POST','GET'])
 def sendAddNewSchedule():
     if request.method == 'POST':
-        PIC = requests.get('http://127.0.0.1:5001/namaPIC')
-        picResp = json.dumps(PIC.json())
-        loadPICs = json.loads(picResp)
+        PIC         = requests.get(micro1+'namaPIC')
+        picResp     = json.dumps(PIC.json())
+        loadPICs    = json.loads(picResp)
 
-        Pen = requests.get('http://127.0.0.1:5001/namaPenerima')
-        penResp = json.dumps(Pen.json())
-        loadPens = json.loads(penResp)
+        Pen         = requests.get(micro1+'namaPenerima')
+        penResp     = json.dumps(Pen.json())
+        loadPens    = json.loads(penResp)
 
         kode_laporan = request.form['valKode']
 
         #Untuk mendapatkan ID Organisasi & Kategori untuk didapatkan namanya.
-        detailLap = requests.get('http://127.0.0.1:5002/getIdOrgKat/'+kode_laporan)
-        orgKat = json.dumps(detailLap.json())
-        loadOrgKat = json.loads(orgKat)
+        detailLap   = requests.get(micro2+'getIdOrgKat/'+kode_laporan)
+        orgKat      = json.dumps(detailLap.json())
+        loadOrgKat  = json.loads(orgKat)
         for i in loadOrgKat:
             idOrg = i['report_org']
             idKat = i['report_kat']
 
         #Mendapatkan nama Organisasi
-        gOrg = requests.get('http://127.0.0.1:5001/getNamaOrg/'+idOrg)
+        gOrg = requests.get(micro1+'getNamaOrg/'+idOrg)
         org2 = json.dumps(gOrg.json())
         namaOrg = json.loads(org2)
         for x in namaOrg:
             nmOrg = x['org_name']
 
         #Mendapatkan nama Kategori
-        gKat = requests.get('http://127.0.0.1:5001/getNamaKat/'+idKat)
+        gKat = requests.get(micro1+'getNamaKat/'+idKat)
         kat2 = json.dumps(gKat.json())
         namaKat = json.loads(kat2)
         for y in namaKat:
@@ -1103,7 +1231,7 @@ def sendAddNewSchedule():
 
         data_schedule = json.dumps(addS_data)
 
-        requests.post('http://127.0.0.1:5002/addSchedule/'+data_schedule)
+        requests.post(micro2+'addSchedule/'+data_schedule)
 
         print("=== [ sendAddNewSchedule ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -1114,29 +1242,63 @@ def sendAddNewSchedule():
 
 #============[Memilih kode laporan yang akan diubah schedulenya]============
 #============[Menampilkan form edit schedule]============
-@app.route('/editSchedule', methods=['POST','GET'])
+@app.route('/admin/schedule/edit', methods=['POST','GET'])
 def editSchedule():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        kodeReport = requests.get('http://127.0.0.1:5002/listKodeReportEditSchedule')
-        kodeAll = json.dumps(kodeReport.json())
+        kodeReport  = requests.get(micro2+'listKodeReportEditSchedule')
+        kodeAll     = json.dumps(kodeReport.json())
         loadKodeAll = json.loads(kodeAll)
 
         if request.method == 'POST':
             kode_laporan = request.form['valKode']
 
-            PIC = requests.get('http://127.0.0.1:5001/namaPIC')
-            picResp = json.dumps(PIC.json())
-            loadPICs = json.loads(picResp)
+            PIC         = requests.get(micro1+'namaPIC')
+            picResp     = json.dumps(PIC.json())
+            loadPICs    = json.loads(picResp)
 
-            Pen = requests.get('http://127.0.0.1:5001/namaPenerima')
-            penResp = json.dumps(Pen.json())
-            loadPens = json.loads(penResp)
+            Pen         = requests.get(micro1+'namaPenerima')
+            penResp     = json.dumps(Pen.json())
+            loadPens    = json.loads(penResp)
 
-            detSch = requests.get('http://127.0.0.1:5002/showDetailSchedule/'+kode_laporan)
-            detDumps = json.dumps(detSch.json())
-            loadDetSch = json.loads(detDumps)
+            detSch      = requests.get(micro2+'showDetailSchedule/'+kode_laporan)
+            detDumps    = json.dumps(detSch.json())
+            loadDetSch  = json.loads(detDumps)
+
+            print("=== [ editSchedule ] ===")
+            print('ID   : ',session['user_id']),print('Name : ',session['username'])
+            print('Time : ',datetime.datetime.now().strftime('%X'))
+            print("========================")
+
+            return render_template('ms2editSchedule2.html', detailSchedule = loadDetSch,
+                kode_laporan=kode_laporan, listPIC = loadPICs, listPen = loadPens)
+
+        return render_template('ms2editSchedule.html', listKodeLap = loadKodeAll)
+
+@app.route('/spv/schedule/edit', methods=['POST','GET'])
+def editScheduleSPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        kodeReport  = requests.get(micro2+'listKodeReportEditSchedule')
+        kodeAll     = json.dumps(kodeReport.json())
+        loadKodeAll = json.loads(kodeAll)
+
+        if request.method == 'POST':
+            kode_laporan = request.form['valKode']
+
+            PIC         = requests.get(micro1+'namaPIC')
+            picResp     = json.dumps(PIC.json())
+            loadPICs    = json.loads(picResp)
+
+            Pen         = requests.get(micro1+'namaPenerima')
+            penResp     = json.dumps(Pen.json())
+            loadPens    = json.loads(penResp)
+
+            detSch      = requests.get(micro2+'showDetailSchedule/'+kode_laporan)
+            detDumps    = json.dumps(detSch.json())
+            loadDetSch  = json.loads(detDumps)
 
             print("=== [ editSchedule ] ===")
             print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -1151,20 +1313,20 @@ def editSchedule():
 #============[Mengirim data edit schedule ke MS2/editSched]============
 @app.route('/sendEditSchedule', methods=['POST','GET'])
 def sendEditSchedule():
-    PIC = requests.get('http://127.0.0.1:5001/namaPIC')
-    picResp = json.dumps(PIC.json())
-    loadPICs = json.loads(picResp)
+    PIC         = requests.get(micro1+'namaPIC')
+    picResp     = json.dumps(PIC.json())
+    loadPICs    = json.loads(picResp)
 
-    Pen = requests.get('http://127.0.0.1:5001/namaPenerima')
-    penResp = json.dumps(Pen.json())
-    loadPens = json.loads(penResp)
+    Pen         = requests.get(micro1+'namaPenerima')
+    penResp     = json.dumps(Pen.json())
+    loadPens    = json.loads(penResp)
 
 
 
     if request.method == 'POST':
         kode_laporan    = request.form['kodLap2']
-        header          = request.form['header']
-        keterangan      = request.form['keterangan']
+        # header          = request.form['header']
+        # keterangan      = request.form['keterangan']
         note            = request.form['note']
         grouping        = request.form['grouping']
         reportPIC       = ''
@@ -1231,8 +1393,8 @@ def sendEditSchedule():
 
         dataEdit = {
         'reportId'      : kode_laporan,
-        'header'        : header,
-        'keterangan'    : keterangan,
+        # 'header'        : header,
+        # 'keterangan'    : keterangan,
         'note'          : note,
         'grouping'      : grouping,
         'PIC'           : reportPIC,
@@ -1246,14 +1408,18 @@ def sendEditSchedule():
 
         editData = json.dumps(dataEdit)
 
-        requests.post('http://127.0.0.1:5002/editSched/'+editData)
+        requests.post(micro2+'editSched/'+editData)
 
         print("=== [ sendEditSchedule ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
         print('Time : ',datetime.datetime.now().strftime('%X'))
         print("============================")
 
+        flash('Edit Schedule Success')
+    if session.get('position') == 'Admin' :
         return redirect(url_for('admin'))
+    else:
+        return redirect(url_for('spv'))
 
 
 
@@ -1264,14 +1430,14 @@ def sendEditSchedule():
 #=========================================================================================
 
 #============[Menampilkan layar insert query]============
-@app.route('/insertQuery', methods=['POST','GET'])
+@app.route('/admin/query/new', methods=['POST','GET'])
 def addQuery():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        kQuery = requests.get('http://127.0.0.1:5002/getKodeNewQuery')
-        kDump = json.dumps(kQuery.json())
-        kLoad = json.loads(kDump)
+        kQuery  = requests.get(micro2+'getKodeNewQuery')
+        kDump   = json.dumps(kQuery.json())
+        kLoad   = json.loads(kDump)
 
         print("=== [ insertQuery ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -1280,11 +1446,26 @@ def addQuery():
 
         return render_template('ms2insertQuery.html', kodeNewQuery = kLoad)
 
+@app.route('/spv/query/new', methods=['POST','GET'])
+def addQuerySPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        kQuery  = requests.get(micro2+'getKodeNewQuery')
+        kDump   = json.dumps(kQuery.json())
+        kLoad   = json.loads(kDump)
+
+        print("=== [ insertQuery ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("=======================")
+
+        return render_template('ms2insertQuery.html', kodeNewQuery = kLoad)
 #============[Mengirim data query ke MS2/addQuery]============
 @app.route('/sendNewQuery', methods=['POST','GET'])
 def sendNewQuery():
-    quer = []
-    kode_laporan = request.form['kodLap']
+    quer            = []
+    kode_laporan    = request.form['kodLap']
     kode_laporan.upper()
 
     if request.method == 'POST':
@@ -1296,30 +1477,31 @@ def sendNewQuery():
 
 
 
-        requests.post('http://127.0.0.1:5002/addQuery/'+kode_laporan+'/'+queryDump)
+        requests.post(micro2+'addQuery/'+kode_laporan+'/'+queryDump)
 
         print("=== [ sendNewQuery ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
         print('Time : ',datetime.datetime.now().strftime('%X'))
         print("========================")
 
+        flash('Insert Query : '+kode_laporan+' Success!')
         return redirect(url_for('admin'))
 
 #============[Memilih kode laporan yang akan diubah querynya]============
 #============[Menampilkan menu insert Query]============
-@app.route('/editQuery', methods=['POST','GET'])
+@app.route('/admin/query/edit', methods=['POST','GET'])
 def editQuery():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        kEQuery = requests.get('http://127.0.0.1:5002/getKodeEditQuery')
-        kEDump = json.dumps(kEQuery.json())
-        kELoad = json.loads(kEDump)
+        kEQuery = requests.get(micro2+'getKodeEditQuery')
+        kEDump  = json.dumps(kEQuery.json())
+        kELoad  = json.loads(kEDump)
 
         if request.method == 'POST':
             kode_laporan = request.form['kodLap']
 
-            Query = requests.get('http://127.0.0.1:5002/viewEditQuery/'+kode_laporan)
+            Query = requests.get(micro2+'viewEditQuery/'+kode_laporan)
             QDump = json.dumps(Query.json())
             QLoad = json.loads(QDump)
 
@@ -1332,6 +1514,55 @@ def editQuery():
 
         return render_template('ms2editQuery.html', listKodeReportQuery = kELoad)
 
+@app.route('/spv/query/edit', methods=['POST','GET'])
+def editQuerySPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        kEQuery = requests.get(micro2+'getKodeEditQuery')
+        kEDump  = json.dumps(kEQuery.json())
+        kELoad  = json.loads(kEDump)
+
+        if request.method == 'POST':
+            kode_laporan = request.form['kodLap']
+
+            Query = requests.get(micro2+'viewEditQuery/'+kode_laporan)
+            QDump = json.dumps(Query.json())
+            QLoad = json.loads(QDump)
+
+            print("=== [ editQuery ] ===")
+            print('ID   : ',session['user_id']),print('Name : ',session['username'])
+            print('Time : ',datetime.datetime.now().strftime('%X'))
+            print("=====================")
+
+            return render_template('ms2insertEditQuery.html', editQ = QLoad, kode_laporan=kode_laporan)
+
+        return render_template('ms2editQuery.html', listKodeReportQuery = kELoad)
+
+@app.route('/admin/query/edit/<report_id>', methods=['POST','GET'])
+def editQuery2(report_id):
+    quer            = []
+    report_id.upper()
+
+    if request.method == 'POST':
+        for query in ['query1', 'query2', 'query3', 'query4', 'query5', 'query6', 'query7', 'query8', 'query9', 'query10', 'query11', 'query12', 'query13', 'query14']:
+            
+            if (request.form[query] is not  None) and (request.form[query] is not ''):
+                quer.append(request.form[query])
+                queryDump = json.dumps(quer)
+
+
+
+        requests.post(micro2+'addQuery/'+report_id+'/'+queryDump)
+
+        print("=== [ sendNewQuery ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("========================")
+
+        flash('Insert Query : '+report_id+' Success!')
+        return redirect(url_for('admin'))        
+
 
 
 #=========================================================================================
@@ -1341,20 +1572,20 @@ def editQuery():
 #=========================================================================================
 
 #============[Menampilkan menu untuk membuat template baru]============
-@app.route('/addTemplate', methods=['POST','GET'])
+@app.route('/admin/template/new', methods=['POST','GET'])
 def addTemplate():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        org = requests.get('http://127.0.0.1:5001/namaOrganisasi')
-        orgResp=json.dumps(org.json())
+        org     = requests.get(micro1+'namaOrganisasi')
+        orgResp =json.dumps(org.json())
         loadOrg = json.loads(orgResp)
 
-        cat = requests.get('http://127.0.0.1:5001/namaDept')
+        cat     = requests.get(micro1+'namaDept')
         catResp = json.dumps(cat.json())
         loadCat = json.loads(catResp)
 
-        ser = requests.get('http://127.0.0.1:5002/getServer')
+        ser     = requests.get(micro2+'getServer')
         serResp = json.dumps(ser.json())
         loadSer = json.loads(serResp)
 
@@ -1366,6 +1597,30 @@ def addTemplate():
         return render_template('ms2addNewTemplate.html', listKategori = loadCat, listOrg = loadOrg,
                                 listServer = loadSer)
 
+@app.route('/spv/template/new', methods=['POST','GET'])
+def addTemplateSPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        org     = requests.get(micro1+'namaOrganisasi')
+        orgResp =json.dumps(org.json())
+        loadOrg = json.loads(orgResp)
+
+        cat     = requests.get(micro1+'namaDept')
+        catResp = json.dumps(cat.json())
+        loadCat = json.loads(catResp)
+
+        ser     = requests.get(micro2+'getServer')
+        serResp = json.dumps(ser.json())
+        loadSer = json.loads(serResp)
+
+        print("=== [ addTemplate ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("=======================")
+
+        return render_template('ms2addNewTemplate.html', listKategori = loadCat, listOrg = loadOrg,
+                                listServer = loadSer)
 #============[Mengirim data template baru ke MS2/addNewTemplate]============
 @app.route('/sendNewTemplate', methods=['POST','GET'])
 def sendNewTemplate():
@@ -1417,11 +1672,11 @@ def sendNewTemplate():
         
         dataTemplate = json.dumps(data)
 
-        requests.post('http://127.0.0.1:5002/addNewTemplate/'+dataTemplate)
+        requests.post(micro2+'addNewTemplate/'+dataTemplate)
 
-        detTem = requests.get('http://127.0.0.1:5002/formatTemplate/'+kode_laporan)
-        detDump = json.dumps(detTem.json())
-        loadDetail = json.loads(detDump)
+        detTem      = requests.get(micro2+'formatTemplate/'+kode_laporan)
+        detDump     = json.dumps(detTem.json())
+        loadDetail  = json.loads(detDump)
         
         jumKol = loadDetail[0]['reportJmlTampilan']
 
@@ -1520,12 +1775,19 @@ def sendFormatTemplate():
             '/'+posisiTemp1+'/'+tipeTemp1+'/'+lebarTemp1)
         requests.post('http://127.0.0.1:5002/saveFooterTemplate/'+detailKolom1)
 
+        if session.get('position') == 'Admin':
+            return redirect (url_for('admin'))
+        else:
+            return redirect(url_for('spv'))
+    
+    if session.get('position') == 'Admin' :
         return redirect (url_for('admin'))
-    return redirect (url_for('admin'))
+    else:
+        return redirect(url_for('spv'))
 
 #============[Memilih kode laporan]============
 #============[Menampilkan form format template]============
-@app.route('/formatTemplate', methods=['POST','GET'])
+@app.route('/admin/template/edit', methods=['POST','GET'])
 def formatTemplate():
     kodeReport = requests.get('http://127.0.0.1:5002/getKodeReportAll')
     kodeAll = json.dumps(kodeReport.json())
@@ -1597,7 +1859,79 @@ def formatTemplate():
 
 
     return render_template('ms2formatTemplate1.html', listKodeReport = loadKodeAll)
+
+@app.route('/spv/template/edit', methods=['POST','GET'])
+def formatTemplateSPV():
+    kodeReport = requests.get('http://127.0.0.1:5002/getKodeReportAll')
+    kodeAll = json.dumps(kodeReport.json())
+    loadKodeAll = json.loads(kodeAll)
+
+    if request.method == 'POST':
+        kode_laporan = request.form['kodLap']
+
+        detTem = requests.get('http://127.0.0.1:5002/detailFormatTemplate/'+kode_laporan)
+        detDump = json.dumps(detTem.json())
+        loadDetail = json.loads(detDump)
+
+        # try:
+        jumKol          = loadDetail[0]['reportJmlTampilan']
+        formatMerge     = loadDetail[0]['formatMerge']
+        formatTengah    = loadDetail[0]['formatTengah']
+        formatKanan    = loadDetail[0]['formatKanan']
+        # namaKolomF = loadDetail[0]['namaKolomF']
+        # urutanFooter = loadDetail[0]['urutanFooter']
+
+        namaKolom   = []
+        lokasiKolom = []
+        tipeData    = []
+        lebarKolom  = []
+
+        x=0
+        for i in loadDetail:
+            naKol   = loadDetail[x]['namaKolomH']
+            lok     = loadDetail[x]['lokasiH']
+            tipeD   = loadDetail[x]['formatKolomH']
+            leb     = loadDetail[x]['lebarKolomH']
+            namaKolom.append(naKol)
+            lokasiKolom.append(lok)
+            tipeData.append(tipeD)
+            lebarKolom.append(leb)
+            x=x+1
         
+        detFoot = requests.get('http://127.0.0.1:5002/detailFooter/'+kode_laporan)
+        detFootDump = json.dumps(detFoot.json())
+        loadDetailFooter = json.loads(detFootDump)
+                
+        namaKolomFooter = []
+        lokasiFooter = []
+
+        x=0
+        for a in loadDetailFooter:
+            naKolF = loadDetailFooter[x]['namaKolomF']
+            lokF = loadDetailFooter[x]['lokasiF']
+            namaKolomFooter.append(naKolF)
+            lokasiFooter.append(lokF)
+            x=x+1
+
+        print("=== [ formatTemplate ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("==========================")
+        # except Exception as e:
+            
+        #     err = 'Template "'+kode_laporan+'" not found'
+            
+
+        #     return  render_template('404notFound.html', error=err)
+
+        return render_template('ms2formatTemplate2.html', kode_laporan=kode_laporan
+            ,detailTemplate=loadDetail,
+            jumKol=jumKol, namKol=namaKolom, lokasiKolom=lokasiKolom, tipeData=tipeData,
+            lebarKolom=lebarKolom, formatMerge=formatMerge, formatTengah=formatTengah,
+            formatKanan=formatKanan, namaKolomFooter=namaKolomFooter, lokasiFooter=lokasiFooter)
+
+
+    return render_template('ms2formatTemplate1.html', listKodeReport = loadKodeAll)
 
 #=========================================================================================
 #=========================================================================================
@@ -1605,15 +1939,33 @@ def formatTemplate():
 #=========================================================================================
 #=========================================================================================
 
-@app.route('/runSchedule', methods=['POST','GET'])
+@app.route('/admin/schedule/run', methods=['POST','GET'])
 def runSchedule():
-    getKodeToday = requests.get('http://127.0.0.1:5002/getKodeReportRunToday')
-    kodeTodayResp = json.dumps(getKodeToday.json())
-    loadKodeToday = json.loads(kodeTodayResp)
+    getKodeToday    = requests.get(micro2+'getKodeReportRunToday')
+    kodeTodayResp   = json.dumps(getKodeToday.json())
+    loadKodeToday   = json.loads(kodeTodayResp)
 
-    getStatus = requests.get('http://127.0.0.1:5003/getStatusRunSchedule')
-    statusResp = json.dumps(getStatus.json())
-    loadStatus = json.loads(statusResp)
+    getStatus   = requests.get(micro3+'getStatusRunSchedule')
+    statusResp  = json.dumps(getStatus.json())
+    loadStatus  = json.loads(statusResp)
+
+    print("=== [ runSchedule ] ===")
+    print('ID   : ',session['user_id']),print('Name : ',session['username'])
+    print('Time : ',datetime.datetime.now().strftime('%X'))
+    print("=======================")
+
+    return render_template('ms3runSchedule.html', kodeToday = loadKodeToday,
+        statusSchedule = loadStatus)
+
+@app.route('/spv/schedule/run', methods=['POST','GET'])
+def runScheduleSPV():
+    getKodeToday    = requests.get(micro2+'getKodeReportRunToday')
+    kodeTodayResp   = json.dumps(getKodeToday.json())
+    loadKodeToday   = json.loads(kodeTodayResp)
+
+    getStatus   = requests.get(micro3+'getStatusRunSchedule')
+    statusResp  = json.dumps(getStatus.json())
+    loadStatus  = json.loads(statusResp)
 
     print("=== [ runSchedule ] ===")
     print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -1628,7 +1980,7 @@ def reRun():
     if request.method == 'POST':
         kode_laporan = request.form['kodLap']
 
-        requests.get('http://127.0.0.1:5003/runSchedule/'+kode_laporan)
+        requests.get(micro3+'runSchedule/'+kode_laporan)
 
         print("=== [ reRun ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -1639,13 +1991,13 @@ def reRun():
 
 
 #============[Menampilkan seluruh list report yang ada]============
-@app.route('/listReport', methods=['POST','GET'])
+@app.route('/admin/listReport', methods=['POST','GET'])
 def listReport():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
 
-        detR = requests.get('http://127.0.0.1:5002/getListReport')
+        detR = requests.get(micro2+'getListReport')
         detResp = json.dumps(detR.json())
         loadListReport = json.loads(detResp)
 
@@ -1655,14 +2007,13 @@ def listReport():
         print("======================")
         return render_template('ms2listReport.html', listReport = loadListReport)
 
-#============[Menampilkan seluruh list report yang ada berdasarkan schedule]============
-@app.route('/listReportSchedule', methods=['POST','GET'])
-def listReportSchedule():
+@app.route('/spv/listReport', methods=['POST','GET'])
+def listReportSPV():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
 
-        detR = requests.get('http://127.0.0.1:5002/getListReportSchedule')
+        detR = requests.get(micro2+'getListReport')
         detResp = json.dumps(detR.json())
         loadListReport = json.loads(detResp)
 
@@ -1670,21 +2021,21 @@ def listReportSchedule():
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
         print('Time : ',datetime.datetime.now().strftime('%X'))
         print("======================")
-        return render_template('ms2listReportSch.html', listReport = loadListReport)
+        return render_template('ms2listReport.html', listReport = loadListReport)
 
 #============[Memilih kode laporan yang akan dipreview]============
 #============[Mengirim kode laporan ke MS3/previewLaporan]============
 
 
-@app.route('/preview', methods=['POST','GET'])
+@app.route('/admin/preview', methods=['POST','GET'])
 def preview():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
 
-        kEQuery = requests.get('http://127.0.0.1:5002/getKodeEditQuery')
-        kEDump = json.dumps(kEQuery.json())
-        kELoad = json.loads(kEDump)
+        kEQuery = requests.get(micro2+'getKodeEditQuery')
+        kEDump  = json.dumps(kEQuery.json())
+        kELoad  = json.loads(kEDump)
 
 
         if request.method == 'POST':
@@ -1692,7 +2043,57 @@ def preview():
             kode_laporan = request.form['kodLap']
             
             # VALIDASI ERROR / TIDAK
-            a = requests.get('http://127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+            a = requests.get(micro3+'previewLaporan/'+kode_laporan)
+            
+            if a.status_code != 200:
+                b = json.dumps(a.json())
+                c = json.loads(b)
+                
+                return str(c)
+            else:
+                b=json.loads(a.json())
+
+                namaFileExcel =  kode_laporan+'_'+str(b)+datetime.datetime.now().strftime('%d%m%Y')
+
+                # tgl = datetime.datetime.now().strftime('%d')
+                # bln = datetime.datetime.now().strftime('%B')
+                # directory = 'C:/Report/'+bln+'/'+tgl
+
+                # if not os.path.exists(directory):
+                #     os.makedirs(directory)
+
+                # output = open(directory+'/'+kode_laporan+'.xls','wb')
+                # output.write(a.content)
+                # output.close()
+                print("=== [ preview ] ===")
+                print('ID   : ',session['user_id']),print('Name : ',session['username'])
+                print('Time : ',datetime.datetime.now().strftime('%X'))
+                print("===================")
+
+                return send_from_directory(app.config['FOLDER_PREVIEW'],namaFileExcel+'.xls',attachment_filename=namaFileExcel+'.xls', as_attachment=True)
+                # return redirect(url_for('admin'))
+
+            
+        
+        return render_template('ms3preview.html', kodeReportAdaQuery = kELoad)
+
+@app.route('/spv/preview', methods=['POST','GET'])
+def previewSPV():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+
+        kEQuery = requests.get(micro2+'getKodeEditQuery')
+        kEDump  = json.dumps(kEQuery.json())
+        kELoad  = json.loads(kEDump)
+
+
+        if request.method == 'POST':
+            
+            kode_laporan = request.form['kodLap']
+            
+            # VALIDASI ERROR / TIDAK
+            a = requests.get(micro3+'previewLaporan/'+kode_laporan)
             
             if a.status_code != 200:
                 b = json.dumps(a.json())
@@ -1735,12 +2136,12 @@ def downloadReport():
         tgl = datetime.datetime.now().strftime('%d')
         bln = datetime.datetime.now().strftime('%B')
 
-        # resp = requests.get('http://127.0.0.1:5004/downloadReport/'+kode_laporan)
+        # resp = requests.get(micro4+'downloadReport/'+kode_laporan)
 
-        namaF = requests.get('http://127.0.0.1:5004/getNamaFile/'+kode_laporan)
-        namaResp = json.dumps(namaF.json())
-        namaFi = json.loads(namaResp)
-        namaFile = str(namaFi).replace("['","").replace("']","")
+        namaF       = requests.get(micro4+'getNamaFile/'+kode_laporan)
+        namaResp    = json.dumps(namaF.json())
+        namaFi      = json.loads(namaResp)
+        namaFile    = str(namaFi).replace("['","").replace("']","")
         
         # directory = 'C:/Report/'+bln+'/'+tgl
 
@@ -1758,31 +2159,31 @@ def downloadReport():
         return send_from_directory(app.config['FOLDER_SCHEDULE'],namaFile+'.xls',attachment_filename=namaFile+'.xls', as_attachment=True)
         # return 'Downloaded'
 
-@app.route('/readNow', methods=['POST','GET'])
-def readNow():
-    if request.method == 'POST':
-        kode_laporan = request.form['kodRead']
-        namaF       = requests.get('http://127.0.0.1:5004/getNamaFile/'+kode_laporan)
-        namaResp    = json.dumps(namaF.json())
-        namaFi      = json.loads(namaResp)
-        namaFile    = str(namaFi).replace("['","").replace("']","")
+# @app.route('/readNow', methods=['POST','GET'])
+# def readNow():
+#     if request.method == 'POST':
+#         kode_laporan = request.form['kodRead']
+#         namaF       = requests.get(micro4+'getNamaFile/'+kode_laporan)
+#         namaResp    = json.dumps(namaF.json())
+#         namaFi      = json.loads(namaResp)
+#         namaFile    = str(namaFi).replace("['","").replace("']","")
         
-        df = pd.read_excel(app.config['FOLDER_SCHEDULE']+'/'+namaFile+'.xls')
-        # read = pickle.loads(base64.b64decode(excel.encode()))
-        print("=== [ readNow ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("===================")
+#         df = pd.read_excel(app.config['FOLDER_SCHEDULE']+'/'+namaFile+'.xls')
+#         # read = pickle.loads(base64.b64decode(excel.encode()))
+#         print("=== [ readNow ] ===")
+#         print('ID   : ',session['user_id']),print('Name : ',session['username'])
+#         print('Time : ',datetime.datetime.now().strftime('%X'))
+#         print("===================")
         
-        return df.to_html()
+#         return df.to_html()
 
 
 @app.route('/testJSON', methods=['POST','GET'])
 def testJSON():
     if request.method == 'POST':
-        data = request.get_json()
-        uName = data['data']['user']
-        pwd = data['data']['pass']
+        data    = request.get_json()
+        uName   = data['data']['user']
+        pwd     = data['data']['pass']
         
         print('Data JSON: ',data)
         print('=====[ POST  ]======')

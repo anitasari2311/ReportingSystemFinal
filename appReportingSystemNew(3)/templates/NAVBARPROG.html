@@ -1,19 +1,34 @@
 <html>
   <head>
-    {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}
+    
     {% endblock %}
   </head>
   <body bgcolor="#F0FFF0">
 
     <div id="navbar">
-        <div class="topnav"><ul>
-          <li><img src="/static/images/logoPharos.png" style="width: 150px; border: 0"></li>
+
+      	<div class="topnav"><ul>
+          {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
+            style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
+                <center><span style="color:white;">{{ message }}</span></center>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        
+          <li><img src="/static/images/logoPharos.png" style="width: 90px; border: 0"></li>
           <div class="topnav-right">
             {% if active_page == 'home' %}
               <li class="active"><a href="admin">HOME</a></li>
               {% else %}
-              <li><a href="admin">HOME</a></li>
+              <li><a href="/admin/home">HOME</a></li>
             {% endif %}
             
             {% if active_page == 'task' %}
@@ -29,9 +44,9 @@
             {%endif%}
 
               <div class="dropdown-content">
-                <a href="availableTask">AVAILABLE TASK</a>
-                <a href="listTask">LIST TASK</a>
-                <a href="historyTask">HISTORY TASK</a>
+                <a href="/admin/task/available">AVAILABLE TASK</a>
+                <a href="/admin/task/list">LIST TASK</a>
+                <a href="/admin/task/history">HISTORY TASK</a>
               </div>
             </div>
             
@@ -48,8 +63,8 @@
             {%endif%}
 
               <div class="dropdown-content">
-                <a href="addTemplate">NEW TEMPLATE</a>
-                <a href="formatTemplate">EDIT TEMPLATE</a>
+                <a href="/admin/template/new">NEW TEMPLATE</a>
+                <a href="/admin/template/edit">EDIT TEMPLATE</a>
               </div>
             </div>
 
@@ -68,15 +83,15 @@
 
 
               <div class="dropdown-content">
-                <a href="insertQuery">NEW QUERY</a>
-                <a href="editQuery">EDIT QUERY</a>
+                <a href="/admin/query/new">NEW QUERY</a>
+                <a href="/admin/query/edit">EDIT QUERY</a>
               </div>
             </div>
 
             {% if active_page == 'preview' %}
               <li class="active"><a href="preview">PREVIEW</a></li>
             {% else %}
-              <li><a href="preview">PREVIEW</a></li>
+              <li><a href="/admin/preview">PREVIEW</a></li>
             {% endif %}
 
 
@@ -94,29 +109,17 @@
 
 
               <div class="dropdown-content">
-                <a href="addNewSchedule">NEW SCHEDULE</a>
-                <a href="editSchedule">EDIT SCHEDULE</a>
-                <a href="runSchedule">RUN SCHEDULE</a>
+                <a href="/admin/schedule/new">NEW SCHEDULE</a>
+                <a href="/admin/schedule/edit">EDIT SCHEDULE</a>
+                <a href="/admin/schedule/run">RUN SCHEDULE</a>
               </div>
             </div>
 
-            {% if active_page == 'list' %}
-            <div class="dropdown">
-              <button class="active">LIST
-                <i class="fa fa-caret-down"></i>
-              </button>
-              {% else %}
-            <div class="dropdown">
-              <button class="dropbtn">LIST
-                <i class="fa fa-caret-down"></i>
-              </button>
+            {% if active_page == 'report' %}
+              <li class="active"><a href="listReport">LIST REPORT</a></li>
+            {% else %}
+              <li><a href="/admin/listReport">LIST REPORT</a></li>
             {% endif %}
-
-              <div class="dropdown-content">
-                <a href="listReport">LIST REPORT</a>
-                <a href="listReportSchedule">LIST SCHEDULE</a>
-              </div>
-            </div>
             
             {% if active_page == 'account' %}
               <div class="dropdown">
@@ -125,14 +128,14 @@
                 </button>
             {% else %}
               <div class="dropdown">
-                <button class="dropbtn">ACCOUNT
+                <button class="dropbtn">{{session['username']}}
                   <i class="fa fa-caret-down"></i>
                 </button>
             {% endif %}
 
                 <div class="dropdown-content">
-                  <a href="changePass">PROFILE</a>
-                  <a href="logout">LOGOUT</a>
+                  <a href="/admin/account">PROFILE</a>
+                  <a href="/logout">LOGOUT</a>
                 </div>
               </div>
 
@@ -144,6 +147,7 @@
     </div> <!-- DIV NAVBAR -->
 
     
+
     <div id="content">{% block content %}
 
     {% endblock %}</div>
@@ -159,7 +163,7 @@
     
 
 
-    <div id="footer">
+    <div id="footer" style="position: fixed; bottom:0;">
       {% block footer %}
       <br><br><br>
       &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
@@ -168,6 +172,7 @@
 
 
 
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 
     <script>
     window.onscroll = function() {scrollFunc()};
@@ -182,6 +187,14 @@
         navbar.classList.remove("sticky");
       }
     }
+
+    $(document).ready(function(){
+        $("#successMessage").delay(3000).slideUp(300);
+
+    });
+
+      
+    
 
   </script>
   </body>

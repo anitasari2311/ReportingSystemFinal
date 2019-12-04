@@ -86,7 +86,9 @@
                               {% endif %}  
                             {% endfor %}
                           </table> 
-            {% endif %}
+{% else %}
+  <p><center>Tidak ada task normal yang tersedia</center></p>
+{% endif %}
 
   </center>
 
@@ -190,7 +192,9 @@
                             </tr>
                             {% endfor %}
                           </table> 
-            {% endif %}
+{% else %}
+  <p><center>Tidak ada task important yang tersedia</center></p>
+{% endif %}
 
 </center>
 </body>

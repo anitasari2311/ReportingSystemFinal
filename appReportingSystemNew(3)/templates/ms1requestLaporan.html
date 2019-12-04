@@ -2,7 +2,7 @@
   <head>
          <title>Request Report</title>
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link rel="stylesheet" href="{{url_for('static', filename='styleUser.css')}}">
+         <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
   </head>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
   <body bgcolor="#F0FFF0">
@@ -11,7 +11,7 @@
     {% set active_page = 'newReq' %}
 
     {% block content %}
-    <br><br><br><br>
+    <br><br>
 
       <center> <div class="judul">REQUEST REPORT</div></center>
 
@@ -350,7 +350,7 @@
             <button id="tombolSubmit" class="Submit" name='Button_press' value="Submit">Submit</button></div>
 
           <div class="colBut">   
-             <form action="/user">
+             <form action="/user/home">
                 <button class="submitRed">Cancel</button>
              </form>
           </div>

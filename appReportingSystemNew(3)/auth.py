@@ -52,10 +52,10 @@ def getPosition():
         print("Error while conencting file MySQL", e)
     finally:
             #Closing DB Connection
-            if(db.is_connected()):
-                cursor.close()
-                db.close()
-            print("MySQL connection is closed")
+        if(db.is_connected()):
+            cursor.close()
+            db.close()
+        print("MySQL connection is closed")
 
 
 def getUserName():
@@ -141,7 +141,7 @@ def auth_login():
                             'SessionName' : session['username'],
                             'SessionPos' : session['position']}
 
-                r = requests.post('http://127.0.0.1:5000/sendSession', data = data)
+                # r = requests.post('http://127.0.0.1:5000/sendSession', data = data)
                 
                 #session["user_id"] = row[4]
 
@@ -152,6 +152,7 @@ def auth_login():
                     print('Date : ',datetime.datetime.now().strftime('%x'))
                     print('Time : ',datetime.datetime.now().strftime('%X'))
                     print('==================')
+                    flash('Login Successfull')
                     return redirect(url_for('user'))
                 elif userFlag == 'Admin':
                     print('==[ ADMIN LOGIN ]==')
@@ -160,6 +161,7 @@ def auth_login():
                     print('Date : ',datetime.datetime.now().strftime('%x'))
                     print('Time : ',datetime.datetime.now().strftime('%X'))
                     print('==================')
+                    flash('Login Successfull')
                     return redirect(url_for('admin'))
                 else:
                     print('==[ SPV LOGIN ]==')
@@ -168,6 +170,7 @@ def auth_login():
                     print('Date : ',datetime.datetime.now().strftime('%x'))
                     print('Time : ',datetime.datetime.now().strftime('%X'))
                     print('==================')
+                    flash('Login Successfull')
                     return redirect(url_for('spv'))
 
             flash(error)

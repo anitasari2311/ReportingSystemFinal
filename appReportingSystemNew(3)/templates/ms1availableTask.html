@@ -24,7 +24,6 @@
 
 
 <center>
-<form action="/detailRequest" method="post">
 
                 <table id="list">
                   <tr>
@@ -35,46 +34,55 @@
                     <th>Request Date</th>
                     <th>Deadline</th>
                     <th>Priority</th>
-                    <th></th>
+                    
                   </tr>
+
+              {% for x in taskProg %}
+                  {% if x['taskNormal'] == '2' and x['requestPrioritas'] == '2' or x['taskImportant'] == '3' and x['requestPrioritas'] == '1'%}
+
+
                   {% for row in listAvailTask %}
-                  <tr >
-                    <td>{{row['requestId']}}</td>
-                    <td>{{row['requestJudul']}}</td>
-                    <td>{{row['userNama']}}</td>
-                    <td>{{row['requestKategori']}}</td>
-                    <td>{{row['requestTanggal']}}</td>
-                    <td>{{row['requestDeadline']}}</td>    
-                    {% if row['requestPrioritas'] == '2' %}
-                    <td> <a class ="pri3"> </a></td>
-                    {% else %}
-                    <td> <a class ="pri1"> </a></td>
-                    {% endif %}
+                  <tr>
+                      <td>{{row['requestId']}}</td>
+                      <td>{{row['requestJudul']}}</td>
+                      <td>{{row['userNama']}}</td>
+                      <td>{{row['requestKategori']}}</td>
+                      <td>{{row['requestTanggal']}}</td>
+                      <td>{{row['requestDeadline']}}</td>    
+                      {% if row['requestPrioritas'] == '2' %}
+                        <td> <a class ="pri3"> </a></td>
+                        {% else %}
+                        <td> <a class ="pri1"> </a></td>
+                      {% endif %}
+                  </tr>
+                  {% endfor %}
 
-<!-- CODINGAN BARU -->
-                    {% for x in taskProg %}
+
+                  {% else %}
+
+
+                    {% for row in listAvailTask %}
+                    <tr onclick="window.location.href='{{ url_for( 'availableTask2', request_id=row['requestId'] ) }}';">
+                      <td>{{row['requestId']}}</td>
+                      <td>{{row['requestJudul']}}</td>
+                      <td>{{row['userNama']}}</td>
+                      <td>{{row['requestKategori']}}</td>
+                      <td>{{row['requestTanggal']}}</td>
+                      <td>{{row['requestDeadline']}}</td>    
+                      {% if row['requestPrioritas'] == '2' %}
+                        <td> <a class ="pri3"> </a></td>
+                        {% else %}
+                        <td> <a class ="pri1"> </a></td>
+                      {% endif %}
+
                     
+                  </tr>
 
-                    {% if x['taskNormal'] == '2' and row['requestPrioritas'] == '2' %}
-                      <td> <button class="submit2" name = 'buttonDetail' value="{{row['requestId']}}" disabled="">Select
-                      </button></td>
-
-                    {% elif x['taskImportant'] == '3' and row['requestPrioritas'] == '1' %}
-                      <td> <button class="submit2" name = 'buttonDetail' value="{{row['requestId']}}" disabled="">Select
-                      </button></td>
-
-                    {% else %}
-                      <td> <button class="submit" name = 'buttonDetail' value="{{row['requestId']}}">Select
-                      </button></td>
-                      
-                    {% endif %}
-            
-                    {% endfor %}
-                    
-                  </tr>{% endfor %}
+                  {% endfor %}
+                  {% endif %}
+                  {% endfor %}
                  
                 </table>
-</form>
 
                                <!--  <br><br><br>
                 <h2>__________________________________________________________________________</h2>

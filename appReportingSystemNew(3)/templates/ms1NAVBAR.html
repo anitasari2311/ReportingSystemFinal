@@ -8,31 +8,44 @@
   <body bgcolor="#F0FFF0">
 
 <div class="topnav" id="myTopnav"><ul>
+          {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
+            style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
+                <center><span style="color:white;">{{ message }}</span></center>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
   <img src="/static/images/logoPharos.png" style="width: 100px; border: 0">
 
   <div class="topnav-right">
     {% if active_page == 'home' %}
-      <a href="user" class="active">HOME</a>
+      <a href="/user/home" class="active">HOME</a>
     {% else %}
-      <a href="user">HOME</a>
+      <a href="/user/home">HOME</a>
     {% endif %}
 
     {% if active_page == 'account' %}
-      <a class="active" href="changePass">ACCOUNT</a>
+      <a class="active" href="/user/account">ACCOUNT</a>
     {% else %}
-      <a href="changePass">ACCOUNT</a>
+      <a href="/user/account">ACCOUNT</a>
     {% endif %}
 
     {% if active_page == 'newReq' %}
-      <a class="active" href="newRequest">NEW REQUEST</a>
+      <a class="active" href="/user/newRequest">NEW REQUEST</a>
     {% else %}
-      <a href="newRequest">NEW REQUEST</a>
+      <a href="/user/newRequest">NEW REQUEST</a>
     {% endif %}
 
     {% if active_page == 'editReport' %}
-      <a class="active" href="editReport">EDIT REPORT</a>
+      <a class="active" href="/user/editReport">EDIT REPORT</a>
     {% else %}
-      <a href="editReport">EDIT REPORT</a>
+      <a href="/user/editReport">EDIT REPORT</a>
     {% endif %}
 
     {% if active_page == 'list' %}
@@ -48,12 +61,12 @@
     {% endif %}
 
         <div class="dropdown-content">
-          <a href="list">LIST REQUEST</a>
-          <a href="listFinished">LIST FINISHED REQUEST</a>
-          <a href="readReport">LIST REPORT</a>
+          <a href="/user/list/request">LIST REQUEST</a>
+          <a href="/user/list/finished">LIST FINISHED REQUEST</a>
+          <a href="/user/list/readReport">LIST REPORT</a>
         </div>
       </div> 
-    <a href="logout">LOGOUT</a>
+    <a href="/logout">LOGOUT</a>
     <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="menuFunction()">&#9776;</a>
   </ul></div>
 </div>
@@ -74,7 +87,7 @@
     
 
 
-    <div id="footer">
+    <div id="footer" style="position: fixed; bottom:0;">
       {% block footer %}
       &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
       {% endblock %}
@@ -82,7 +95,7 @@
 
 
 
-
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script>
     window.onscroll = function() {scrollFunc()};
 
@@ -105,6 +118,11 @@
         x.className = "topnav";
       }
     }
+
+  $(document).ready(function(){
+        $("#successMessage").delay(3000).slideUp(300);
+
+    });
   </script>
   </body>
 </html>

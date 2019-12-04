@@ -38,31 +38,23 @@
                 <th></th>
               </tr>
              {% for row in  listTask %}
-             
+              {% if row['requestStatus'] == 'On Process'%}
               <tr>
-                <td>{{row['requestId']}}</td>
-                <td>{{row['requestJudul']}}</td>
-                <td>{{row['userName']}}</td>
-                <td>{{row['requestKategori']}}</td>
-                <td>{{row['requestTanggal']}}</td>
-                <td>{{row['requestDeadline']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestId']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestJudul']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['userName']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestKategori']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestTanggal']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestDeadline']}}</td>
 
                 {% if row['requestPrioritas'] == '2' %}
-                    <td> <a class ="pri3"> </a></td>
+                    <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';"> <a class ="pri3"> </a></td>
                     {% else %}
-                    <td> <a class ="pri1"> </a></td>
+                    <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';"> <a class ="pri1"> </a></td>
                     {% endif %}
+
                 
-
-
-
-                {% if row['requestStatus'] == 'Finished' %}
-                <td>Waiting to be Confirmed</td>
-                {% elif row['requestStatus'] == 'On Process'%}
                 <td> 
-                  <form action="/detailRequest" method="POST">
-                    <button class="submit" name='buttonDetail' value="{{row.requestId}}">View</button>
-                  </form>
                     <button id ="{{row['requestId']}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row['requestId']}}">Finish</button>
 
 
@@ -73,7 +65,7 @@
                         <span class="close" onclick="closeModal()">&times;</span>
                         <strong>{{row['requestId']}}</strong>
                         <p> Input Report Code : </p>
-                    <form action ="/finishRequest" method = 'POST' enctype="multipart/form-data">
+                    <form action ="/admin/task/list/{{row['requestId']}}" method = 'POST' enctype="multipart/form-data">
                         <input name="kodLap" list="reqFin">
                         <datalist id="reqFin">
                           <!-- <select> -->
