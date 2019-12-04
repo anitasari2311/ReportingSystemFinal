@@ -1,0 +1,332 @@
+<html>
+<head>
+	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+	<title>ADD DETAIL TEMPLATE</title>
+</head>
+<body bgcolor="#F0FFF0" onload="generateForm({{jumKol}})">
+	
+{% if session.get('position') == 'Admin' %}
+
+	{% extends "NAVBARPROG.html" %}
+	{% set active_page = 'template' %}
+
+{% else %}
+
+	{% extends "NAVBARSPV.html" %}
+	{% set active_page = 'template' %}
+
+{% endif %}
+
+{% block content %}
+<br><br>
+
+<div class="judul">
+	<center>FORMAT TEMPLATE</center>
+</div>
+
+<div class="containInsert">
+<form action="/sendFormatTemplate" autocomplete="off" method="POST">
+
+	{% if detailFormatTemplate %}
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="kodeReport">Report Code : </label>
+		  </div>
+
+		  <div class="col-55">
+		        <input type="text" class = "col-10" id="kodeLaporan" name="kodLap" value="{{detailFormatTemplate[0].reportId}}" placeholder="{{detailFormatTemplate[0].reportId}}" style="width: 120px">
+		  </div>
+		</div>
+
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="periode">Period : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="periode" name="periode" value="{{detailFormatTemplate[0].reportPeriode}}">
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="print">Print All : </label>
+		  </div>
+
+		  <div class="row-55">
+		    <input type="text" class = "col-10" id="printAll" name="printAll" value="{{detailFormatTemplate[0].reportPrintAll}}" style="width: 120px">
+		  </div>
+		</div>
+
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="namaReport">Report Name : </label>
+		  </div>
+
+		  <div class="col-85">
+		    <input type="text" id="namaReport" name="namaReport" value="{{detailFormatTemplate[0].reportJudul}}">
+		  </div>
+		</div>
+
+
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="jmlHeader">Total Header: </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="jmlHeader" name="jmlHeader" value="{{detailFormatTemplate[0].reportHeader}}" style="width: 120px">
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35" >
+		    <label for="jmlFooter">Total Footer : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="jmlFooter" name="jmlFooter" value="{{detailFormatTemplate[0].reportFooter}}" style="width: 120px">
+		  </div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="jmlKolom">Total Column  : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="number" class = "col-10" id="jmlKolom" name="jmlKolom" value="{{detailFormatTemplate[0].reportJmlTampilan}}"
+		    onchange="generateForm(this.value)" onkeyup="generateForm(this.value)" style="width:120px; height: 35px;" max="25">
+		  </div>
+		</div>
+	
+
+	<div class="row">
+		  	{% for i in range(1, 26) %}
+		  		<div id="areaKolom{{i}}" style="display: inline-block;">
+		  			<div style="display: inline-block; width: 200px">
+			  			<b>Column {{i}}:</b>
+			  			<br>
+			  			<input type="text" id="kolom{{i}}" name="kolom{{i}}" style='width:200px;'/>
+		  			</div>
+		  			<div style="display: inline-block; width: 200px">
+			  			<b>Position:</b>
+			  			<br>
+			  			<select name="posisi{{i}}">
+			  				<option value='B8'>B8</option>
+			  				<option value='B9'>B9</option>
+			  				<option value='C8'>C8</option>
+			  				<option value='C9'>C9</option>
+			  				<option value='D8'>D8</option>
+			  				<option value='D9'>D9</option>
+			  				<option value='E8'>E8</option>
+			  				<option value='E9'>E9</option>
+			  				<option value='F8'>F8</option>
+			  				<option value='F9'>F9</option>
+			  				<option value='G8'>G8</option>
+			  				<option value='G9'>G9</option>
+			  				<option value='H8'>H8</option>
+			  				<option value='H9'>H9</option>
+			  				<option value='I8'>I8</option>
+			  				<option value='I9'>I9</option>
+			  				<option value='J8'>J8</option>
+			  				<option value='J9'>J9</option>
+			  				<option value='K8'>K8</option>
+			  				<option value='K9'>K9</option>
+			  				<option value='L8'>L8</option>
+			  				<option value='L9'>L9</option>
+			  				<option value='M8'>M8</option>
+			  				<option value='M9'>M9</option>
+			  				<option value='N8'>N8</option>
+			  				<option value='N9'>N9</option>
+			  			</select>
+		  			</div>
+	          		<div  style="display: inline-block; width: 200px">
+	          			<b>Type:</b>
+	          			<br>
+	          			<select name="tipe{{i}}">
+	          				<option value='String'>String</option>
+	          				<option value='Integer'>Integer</option>
+	          				<option value='Decimal'>Decimal</option>
+	          				<option value='Percentage'>Percentage</option>
+	          				<option value='Date'>Date</option>
+	          				<option value='Time'>Time</option>
+	          				<option value='Datetime'>Datetime</option>
+	          			</select>
+          			</div>
+          			<div style="display: inline-block; width: 200px">
+			  			<b>Width:</b>
+			  			<br>
+			  			<input type='text' id="kolom{{i}}" name="lebar{{i}}" style='width:200px;'/>
+			  		</div>
+		  		</div>
+          	
+		  	{% endfor %}
+		  
+		</div>
+{% endif %}
+
+		<div class="row">
+			<div class="col-35">
+				<label for="kolomMerge">Merge Column :</label>				
+			</div>
+			
+			<div class="col-55">
+				<input type="text" class="col-10" id="kolomMerge" name="kolomMerge">
+			</div>
+		</div>
+
+		<div class="row">
+		  <div class ="col-35">
+		    <label for="rataKanan">Right Column  : </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="rataKanan" name="rataKanan">
+		  </div>
+		</div>
+
+		<div class="row">
+			<div class="col-35">
+				<label for="rataKiri">Center Column : </label>
+			</div>
+			
+			<div class="col-55">
+				<input type="text" class="col-10" id="rataTengah" name="rataTengah">
+			</div>
+		</div>
+
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="footer">Footer 1: </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="kolF" name="kolomFooter1" >
+		  </div>
+		</div>
+
+		<!-- CHECKBOX UNTUK LETAK FOOTER -->
+		<div class ="myBox" name="checkbox1">
+		  <input type="checkbox" name="B1" value="B">B
+		  <input type="checkbox" name="C1" value="C">C
+		  <input type="checkbox" name="D1" value="D">D
+		  <input type="checkbox" name="E1" value="E">E
+		  <input type="checkbox" name="F1" value="F">F
+		  <input type="checkbox" name="G1" value="G">G
+		  <input type="checkbox" name="H1" value="H">H
+		  <input type="checkbox" name="I1" value="I">I
+		  <input type="checkbox" name="J1" value="J">J
+		  <input type="checkbox" name="K1" value="K">K
+		  <input type="checkbox" name="L1" value="L">L
+		  <input type="checkbox" name="M1" value="M">M
+		  <input type="checkbox" name="N1" value="N">N
+		</div>
+
+		<div class ="row">
+		  <div class ="col-35">
+		    <label for="footer">Footer 2: </label>
+		  </div>
+
+		  <div class="col-55">
+		    <input type="text" class = "col-10" id="kolF" name="kolomFooter2" >
+		  </div>
+		</div>
+
+		<div class ="myBox" name="checkbox2">
+		  <input type="checkbox" name="B2" value="B">B
+		  <input type="checkbox" name="C2" value="C">C
+		  <input type="checkbox" name="D2" value="D">D
+		  <input type="checkbox" name="E2" value="E">E
+		  <input type="checkbox" name="F2" value="F">F
+		  <input type="checkbox" name="G2" value="G">G
+		  <input type="checkbox" name="H2" value="H">H
+		  <input type="checkbox" name="I2" value="I">I
+		  <input type="checkbox" name="J2" value="J">J
+		  <input type="checkbox" name="K2" value="K">K
+		  <input type="checkbox" name="L2" value="L">L
+		  <input type="checkbox" name="M2" value="M">M
+		  <input type="checkbox" name="N2" value="N">N
+		</div>
+		
+		<center>
+  <div class="colBut">
+<button class="submit"> SAVE </button></div>
+
+</form>
+
+<div class="colBut">
+<form action="/admin"><button class="submitred"> CANCEL </button></form></div>
+</center>
+
+</div>
+</body>
+{% endblock %}
+
+{% block script %}
+<script>
+      function generateForm(loop)
+      {
+        var fieldCount = loop;
+        console.log(fieldCount);
+        for (i = 1; i < 25; i++)
+        {
+        	var value = "areaKolom"+i.toString();
+        	console.log(value);
+          	var kolom  = document.getElementById(value);
+          	kolom.style.display = "inline";
+        
+        }
+        for (i = 25; i > fieldCount; i--)
+        {
+        	var value = "areaKolom"+i.toString();
+        	console.log(value);
+          	var kolom  = document.getElementById(value);
+          	kolom.style.display = "none";
+        }
+ 
+      }
+
+/*      function testtt(){
+      	for (i = 5){
+      		var values = "areaKolom"+i.toString();
+      		console.log(values);
+      		var kolom = document.getElementById(values);
+      		kolom.style.display = "inline";
+      	}
+
+      }*/
+
+      function addFields(){
+            // Number of inputs to create
+            var number = document.getElementById("member").value;
+            // containerq <div> where dynamic content will be placed
+            var containerq = document.getElementById("containerq");
+            // Clear previous contents of the containerq
+            while (containerq.hasChildNodes()) {
+                containerq.removeChild(containerq.lastChild);
+            }
+            for (i=0;i<number;i++){
+                // Append a node with a random text
+                containerq.appendChild(document.createTextNode("Member " + (i+1)));
+                // Create an <input> element, set its type and name attributes
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "member" + i;
+                containerq.appendChild(input);
+                // Append a line break 
+                containerq.appendChild(document.createElement("br"));
+            }
+        }
+    
+
+    function test(){
+    	alert('Berhasil!');
+    }
+
+    /*window.onload = test;*/
+
+    </script>
+</html>
+{% endblock %}

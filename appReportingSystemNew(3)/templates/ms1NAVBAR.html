@@ -1,0 +1,110 @@
+<html>
+  <head>
+    {% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+    {% endblock %}
+  </head>
+  <body bgcolor="#F0FFF0">
+
+<div class="topnav" id="myTopnav"><ul>
+  <img src="/static/images/logoPharos.png" style="width: 100px; border: 0">
+
+  <div class="topnav-right">
+    {% if active_page == 'home' %}
+      <a href="user" class="active">HOME</a>
+    {% else %}
+      <a href="user">HOME</a>
+    {% endif %}
+
+    {% if active_page == 'account' %}
+      <a class="active" href="changePass">ACCOUNT</a>
+    {% else %}
+      <a href="changePass">ACCOUNT</a>
+    {% endif %}
+
+    {% if active_page == 'newReq' %}
+      <a class="active" href="newRequest">NEW REQUEST</a>
+    {% else %}
+      <a href="newRequest">NEW REQUEST</a>
+    {% endif %}
+
+    {% if active_page == 'editReport' %}
+      <a class="active" href="editReport">EDIT REPORT</a>
+    {% else %}
+      <a href="editReport">EDIT REPORT</a>
+    {% endif %}
+
+    {% if active_page == 'list' %}
+      <div class="dropdown">
+        <button class="active">LIST 
+          <i class="fa fa-caret-down"></i>
+        </button>
+    {% else %}
+      <div class="dropdown">
+        <button class="dropbtn">LIST 
+          <i class="fa fa-caret-down"></i>
+        </button>
+    {% endif %}
+
+        <div class="dropdown-content">
+          <a href="list">LIST REQUEST</a>
+          <a href="listFinished">LIST FINISHED REQUEST</a>
+          <a href="readReport">LIST REPORT</a>
+        </div>
+      </div> 
+    <a href="logout">LOGOUT</a>
+    <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="menuFunction()">&#9776;</a>
+  </ul></div>
+</div>
+
+    
+    <div id="content">{% block content %}
+
+    {% endblock %}</div>
+
+
+    <div id="script">
+    {% block script %}
+    {% endblock %}
+  </div>
+    <!-- </div> -->
+
+
+    
+
+
+    <div id="footer">
+      {% block footer %}
+      &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div>
+
+
+
+
+    <script>
+    window.onscroll = function() {scrollFunc()};
+
+    var navbar = document.getElementById("navbar");
+    var sticky = navbar.offsetTop;
+
+    function scrollFunc() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+
+    function menuFunction() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+  </script>
+  </body>
+</html>
