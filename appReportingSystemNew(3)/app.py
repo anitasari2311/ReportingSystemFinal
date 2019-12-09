@@ -1679,6 +1679,7 @@ def sendNewTemplate():
         loadDetail  = json.loads(detDump)
         
         jumKol = loadDetail[0]['reportJmlTampilan']
+        jmlFooter = loadDetail[0]['reportFooter']
 
         print("=== [ sendNewTemplate ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -1686,7 +1687,7 @@ def sendNewTemplate():
         print("===========================")
 
         return render_template('addTemplate.html', detailFormatTemplate = loadDetail,
-            jumKol=jumKol)
+            jumKol=jumKol, jmlFooter=jmlFooter)
 
 # [Save detail kolom ke detailh dan detailf]
 @app.route('/sendFormatTemplate',  methods =  ['POST', 'GET'])
@@ -1741,7 +1742,7 @@ def sendFormatTemplate():
                 lebarTemp1 = json.dumps(lebarTemp)
         print(lebarTemp1)
 
-        for posisiFooter in ['B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'J1', 'K1', 'L1', 'M1', 'N1']:
+        for posisiFooter in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N']:
             if request.form.get(posisiFooter) is not None:
                 if posisi_footer1 == '':
                     posisi_footer1 += request.form.get(posisiFooter)
@@ -1749,7 +1750,15 @@ def sendFormatTemplate():
                     posisi_footer1 += ", "+request.form.get(posisiFooter)
         print(posisi_footer1)
 
-        for posisiFooter2 in ['B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'J2', 'K2', 'L2', 'M2', 'N2']:
+        # for posisiFooter2 in ['B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2', 'J2', 'K2', 'L2', 'M2', 'N2']:
+        #     if request.form.get(posisiFooter2) is not None:
+        #         if posisi_footer2 == '':
+        #             posisi_footer2 += request.form.get(posisiFooter2)
+        #         else:
+        #             posisi_footer2 += ", "+request.form.get(posisiFooter2)
+        # print(posisi_footer2)
+
+        for posisiFooter2 in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N']:
             if request.form.get(posisiFooter2) is not None:
                 if posisi_footer2 == '':
                     posisi_footer2 += request.form.get(posisiFooter2)
@@ -1805,6 +1814,7 @@ def formatTemplate():
         formatMerge     = loadDetail[0]['formatMerge']
         formatTengah    = loadDetail[0]['formatTengah']
         formatKanan    = loadDetail[0]['formatKanan']
+        jmlFooter       =loadDetail[0]['reportFooter']
         # namaKolomF = loadDetail[0]['namaKolomF']
         # urutanFooter = loadDetail[0]['urutanFooter']
 
@@ -1853,7 +1863,7 @@ def formatTemplate():
 
         return render_template('ms2formatTemplate2.html', kode_laporan=kode_laporan
             ,detailTemplate=loadDetail,
-            jumKol=jumKol, namKol=namaKolom, lokasiKolom=lokasiKolom, tipeData=tipeData,
+            jumKol=jumKol, jmlFooter = jmlFooter, namKol=namaKolom, lokasiKolom=lokasiKolom, tipeData=tipeData,
             lebarKolom=lebarKolom, formatMerge=formatMerge, formatTengah=formatTengah,
             formatKanan=formatKanan, namaKolomFooter=namaKolomFooter, lokasiFooter=lokasiFooter)
 
@@ -1878,6 +1888,7 @@ def formatTemplateSPV():
         formatMerge     = loadDetail[0]['formatMerge']
         formatTengah    = loadDetail[0]['formatTengah']
         formatKanan    = loadDetail[0]['formatKanan']
+        jmlFooter       =loadDetail[0]['reportFooter']
         # namaKolomF = loadDetail[0]['namaKolomF']
         # urutanFooter = loadDetail[0]['urutanFooter']
 
@@ -1926,7 +1937,7 @@ def formatTemplateSPV():
 
         return render_template('ms2formatTemplate2.html', kode_laporan=kode_laporan
             ,detailTemplate=loadDetail,
-            jumKol=jumKol, namKol=namaKolom, lokasiKolom=lokasiKolom, tipeData=tipeData,
+            jumKol=jumKol, jmlFooter = jmlFooter, namKol=namaKolom, lokasiKolom=lokasiKolom, tipeData=tipeData,
             lebarKolom=lebarKolom, formatMerge=formatMerge, formatTengah=formatTengah,
             formatKanan=formatKanan, namaKolomFooter=namaKolomFooter, lokasiFooter=lokasiFooter)
 
@@ -2122,10 +2133,159 @@ def previewSPV():
 
                 return send_from_directory(app.config['FOLDER_PREVIEW'],namaFileExcel+'.xls',attachment_filename=namaFileExcel+'.xls', as_attachment=True)
                 # return redirect(url_for('admin'))
-
-            
         
         return render_template('ms3preview.html', kodeReportAdaQuery = kELoad)
+
+#=========================================================================================
+#=========================================================================================
+#==================================[    SETTING      ]====================================
+#=========================================================================================
+#=========================================================================================
+
+@app.route('/spv/setting/kategori/add')
+def addKategori():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        return render_template('ms1addKategori.html')
+
+@app.route('/spv/setting/kategori/edit', methods=['POST', 'GET'])
+def editKategori():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        listKategoriId        = requests.get(micro1+'allKategori')
+        listKategoriIdResp    = json.dumps(listKategoriId.json())
+        loadListRep         = json.loads(listKategoriIdResp)
+
+        if request.method == 'POST':
+            idKat = request.form['kodeKategori']
+
+            listKategori        = requests.get(micro1+'getNamaKat/'+idKat)
+            listKategoriResp    = json.dumps(listKategori.json())
+            loadListKat         = json.loads(listKategoriResp)
+            
+            return render_template('ms1editKategori.html',  detailKategori = loadListKat)
+        return render_template('ms1editKategori.html', listIdKategori = loadListRep)
+
+@app.route('/sendDataKategori', methods=['POST', 'GET'])
+def sendDataKategori():
+    if request.method == 'POST':
+        idKategori = request.form['idKat']
+        namaKategori = request.form['namaKat']
+        aktifYN = request.form['aktifYN']
+
+        request_data = {
+        'kategoriId' : idKategori,
+        'kategoriName' : namaKategori,
+        'kategoriAktif' : aktifYN
+        }
+
+        dataRequest = json.dumps(request_data)
+
+        requests.post(micro1+'insertDataKategori/'+dataRequest)
+
+    return render_template('ms2homeSPV.html')
+
+@app.route('/spv/setting/organisasi/add')
+def addOrganisasi():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        return render_template('ms1addOrganisasi.html')
+
+@app.route('/spv/setting/organisasi/edit', methods=['POST', 'GET'])
+def editOrganisasi():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        listOrganisasiId        = requests.get(micro1+'allOrganisasi')
+        listOrganisasiIdResp    = json.dumps(listOrganisasiId.json())
+        loadListRep             = json.loads(listOrganisasiIdResp)
+
+        if request.method == 'POST':
+            idOrg = request.form['kodeOrganisasi']
+
+            listOrganisasi        = requests.get(micro1+'getNamaOrg/'+idOrg)
+            listOrganisasiResp    = json.dumps(listOrganisasi.json())
+            loadListOrg         = json.loads(listOrganisasiResp)
+            
+            return render_template('ms1editOrganisasi.html',  detailOrganisasi = loadListOrg)
+        return render_template('ms1editOrganisasi.html', listIdOrganisasi = loadListRep)
+
+@app.route('/sendDataOrganisasi', methods=['POST', 'GET'])
+def sendDataOrganisasi():
+    if request.method == 'POST':
+        idOrganisasi = request.form['idOrg']
+        namaOrganisasi = request.form['namaOrg']
+        aktifYN = request.form['aktifYN']
+
+        request_data = {
+        'organisasiId' : idOrganisasi,
+        'organisasiName' : namaOrganisasi,
+        'organisasiAktif' : aktifYN
+        }
+
+        dataRequest = json.dumps(request_data)
+
+        requests.post(micro1+'insertDataOrganisasi/'+dataRequest)
+
+    return render_template('ms2homeSPV.html')
+
+@app.route('/spv/setting/server/add')
+def addServer():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        return render_template('ms2addServer.html')
+
+@app.route('/spv/setting/server/edit', methods=['POST', 'GET'])
+def editServer():
+    if session.get('user_id') is None:
+        return render_template('ms1login.html')
+    else:
+        listServerId        = requests.get(micro2+'allServer')
+        listServerIdResp    = json.dumps(listServerId.json())
+        loadListRep             = json.loads(listServerIdResp)
+
+        if request.method == 'POST':
+            idServer = request.form['kodeServer']
+
+            listServer       = requests.get(micro2+'getNamaServer/'+idServer)
+            listServerResp   = json.dumps(listServer.json())
+            loadListServer   = json.loads(listServerResp)
+            
+            return render_template('ms2editServer.html',  detailServer = loadListServer)
+        return render_template('ms2editServer.html', listIdServer = loadListRep)
+
+@app.route('/sendDataServer', methods=['POST', 'GET'])
+def sendDataServer():
+    if request.method == 'POST':
+        idServer = request.form['idServer']
+        namaServer = request.form['namaServer']
+        login = request.form['loginName']
+        password = request.form['password']
+        host = request.form['host']
+        port = request.form['port']
+        jenis = request.form['jenis']
+        aktifYN = request.form['aktifYN']
+        
+        request_data = {
+        'serverId' : idServer,
+        'serverName' : namaServer,
+        'serverLoginName' : login,
+        'serverPass' : password,
+        'serverHost' : host,
+        'serverPort' : port,
+        'serverJenis' : jenis,
+        'serverAktif' : aktifYN,
+        }
+
+        dataRequest = json.dumps(request_data)
+
+        requests.post(micro2+'insertDataServer/'+dataRequest)
+
+    return render_template('ms2homeSPV.html')
 
 @app.route('/downloadReport', methods=['POST','GET'])
 def downloadReport():

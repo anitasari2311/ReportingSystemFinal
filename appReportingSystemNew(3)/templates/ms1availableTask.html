@@ -62,7 +62,7 @@
 
 
                     {% for row in listAvailTask %}
-                    <tr onclick="window.location.href='{{ url_for( 'availableTask2', request_id=row['requestId'] ) }}';">
+                    <tr onclick="window.location.href='{{ url_for( 'detailTask', request_id=row['requestId'] ) }}';">
                       <td>{{row['requestId']}}</td>
                       <td>{{row['requestJudul']}}</td>
                       <td>{{row['userNama']}}</td>

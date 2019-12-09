@@ -24,7 +24,9 @@
         {% endwith %}
         
           <li><img src="/static/images/logoPharos.png" style="width: 90px; border: 0"></li>
-          <div class="topnav-right">
+          
+          <!-- <div class="topnav-right"> -->
+
             {% if active_page == 'home' %}
               <li class="active"><a href="/spv/home">HOME</a></li>
               {% else %}
@@ -121,6 +123,25 @@
             {% else %}
               <li><a href="/spv/listReport">LIST REPORT</a></li>
             {% endif %}
+
+            {% if active_page == 'setting' %}  
+              <div class="dropdown">
+                <button class="active">SETTING
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% else %}
+              <div class="dropdown">
+                <button class="dropbtn">SETTING
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% endif %}
+            
+                <div class="dropdown-content">
+                  <a href="/spv/setting/kategori/add">KATEGORI</a>
+                  <a href="/spv/setting/organisasi/add">ORGANISASI</a>
+                  <a href="/spv/setting/server/add">SERVER</a>
+                </div>
+              </div>
             
             {% if active_page == 'account' %}
               <div class="dropdown">
@@ -140,7 +161,8 @@
                 </div>
               </div>
 
-          </div> <!-- DIV TOPNAV RIGHT -->
+
+          <!-- </div> --> <!-- DIV TOPNAV RIGHT -->
         </ul>
 
           </div> <!-- DIV TOPNAV -->

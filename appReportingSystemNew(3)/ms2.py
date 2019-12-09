@@ -205,7 +205,7 @@ class Template:
             db = databaseCMS.db_template()
             cursor = db.cursor()
 
-            cursor.execute(' SELECT nama_kolom, lokasi, urutan FROM m_detailF WHERE report_id = "'+kode_laporan+'"  ')
+            cursor.execute(' SELECT nama_kolom, lokasi, jenisFooter FROM m_detailF WHERE report_id = "'+kode_laporan+'"  ')
 
             detailFooterTemplate = cursor.fetchall()
 
@@ -359,19 +359,19 @@ class Template:
                 cursor.execute(' INSERT INTO m_detailf VALUES (%s, %s, %s, %s)', (reportId, namaFooter2, posisiFooter2, "2"))
                 db.commit()
 
-                cursor.execute('UPDATE m_report set report_footer = "2" ')
+                cursor.execute('UPDATE m_report set report_footer = "2" WHERE report_id="'+reportId+'" ')
                 db.commit()
             elif (namaFooter1 != '') and (namaFooter2 == ''):
                 cursor.execute(' INSERT INTO m_detailf VALUES (%s, %s, %s, %s)', (reportId, namaFooter1, posisiFooter1, "1"))
                 db.commit()
 
-                cursor.execute('UPDATE m_report set report_footer = "1" ')
+                cursor.execute('UPDATE m_report set report_footer = "1" WHERE report_id="'+reportId+'" ')
                 db.commit()
             else:
                 cursor.execute('DELETE FROM m_detailF WHERE report_id="'+reportId+'"')
                 db.commit()
 
-                cursor.execute('UPDATE m_report set report_footer = "" ')
+                cursor.execute('UPDATE m_report set report_footer = "0" WHERE report_id="'+reportId+'" ')
                 db.commit()
 
         except Error as e :
@@ -775,8 +775,117 @@ class Template:
    
 
           
+    @app.route('/allServer', methods=['POST', 'GET'])
+    def allServer():
+        try: 
+            db = databaseCMS.db_template()
+
+            cursor = db.cursor()
+     
+            cursor.execute('SELECT server_id, server_nama from m_server ORDER BY server_nama')
+            
+            resultServer = cursor.fetchall()
+
+            serverList = []
+            for row in resultServer:
+                serverDict = {
+                'Id' : row[0],
+                'Nama' : row[1]
+                }
+                serverList.append(serverDict)
+            serverResult = json.dumps(serverList)
+
+            print("=== [ allServer ] ===")
+            print("==========================")
+            
+            return serverResult
+
+        except Error as e :
+                print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+                print("MySQL connection is closed")
+
+    @app.route('/getNamaServer/<idServer>', methods=['POST', 'GET'])
+    def getNamaServer(idServer):
+        try: 
+            db = databaseCMS.db_template()
+
+            cursor = db.cursor()
+     
+            cursor.execute('SELECT server_id, server_nama, server_loginName, server_password, server_host, server_port, server_jenis, server_aktifYN from m_server WHERE server_id = "'+idServer+'" ')
+            
+            resultServer = cursor.fetchall()
+
+            serverList = []
+            for row in resultServer:
+                serverDict = {
+                'Id' : row[0],
+                'Name' : row[1],
+                'LoginName' : row[2],
+                'Pass' : row[3],
+                'Host' : row[4],
+                'Port' : row[5],
+                'Jenis' : row[6],
+                'AktifYN' : row[7]
+                }
+                serverList.append(serverDict)
+            serverResult = json.dumps(serverList)
+
+            print("=== [ allServer ] ===")
+            print("==========================")
+            
+            return serverResult
+
+        except Error as e :
+                print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+                print("MySQL connection is closed")
+
+    @app.route('/insertDataServer/<data>', methods=['POST', 'GET'])
+    def insertDataServer(data):
+        if request.method == 'POST' :
+            dataServer = json.loads(data)
+
+            for x in dataServer:
+                id_server = dataServer['serverId']
+                nama_server = dataServer['serverName']
+                login_server = dataServer['serverLoginName']
+                pass_server = dataServer['serverPass']
+                host_server = dataServer['serverHost']
+                port_server = dataServer['serverPort']
+                jenis_server = dataServer['serverJenis']
+                aktif_YN = dataServer['serverAktif']
 
 
+            try:
+                db = databaseCMS.db_template()
+                cursor = db.cursor()
+
+                cursor.execute(' DELETE FROM m_server WHERE server_id = "'+id_server+'" ')
+                db.commit()
+
+                cursor.execute(' INSERT INTO m_server VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (id_server, nama_server, login_server, pass_server, aktif_YN, host_server, port_server, jenis_server))
+                db.commit()
+
+                print("berhasil")
+            except Error as e:
+                print("Error while connecting file MySQL", e)
+                flash('Error,', e)
+
+            finally:
+                    #Closing DB Connection.
+                if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+                print("MySQL connection is closed")
 #=========================================================================================
 #=========================================================================================
 #===================================[    SCHEDULING     ]================================
@@ -939,7 +1048,7 @@ class Schedule:
 
                 cursor.execute('INSERT INTO t_schedule VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                     (kode_laporan, jadwalHari, jadwalBln, jadwalTgl, grouping,
-                        reportPIC, org, kategori, lastUpdate, aktifYN, keterangan, note, reportPenerima))
+                        reportPIC, org, kategori, lastUpdate, aktifYN, "", note, reportPenerima))
                 db.commit()
 
                 # cursor.execute('UPDATE m_report SET report_scheduleYN = "Y", report_judul ="'+header+'", report_deskripsi="'+keterangan+'"  WHERE report_id = "'+kode_laporan+'" ')

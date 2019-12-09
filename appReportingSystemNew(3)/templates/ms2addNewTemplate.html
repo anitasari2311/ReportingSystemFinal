@@ -117,8 +117,7 @@
         </div>
 
         <div class="col-55">
-          <input type="text" id="jmlKolom" name="jmlTampilan" 
-          style="width: 120px">
+            <input type="number" class = "col-10" id="jmlKolom" name="jmlTampilan" style="width:120px; height: 35px;" min= "1"; max="25">
         </div>
       </div>
       <br>
@@ -129,11 +128,7 @@
         </div>
 
         <div class="col-55">
-          <select id="jmlHeader" name="jmlHeader" style="width: 120px">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
+            <input type="number" class = "col-10" id="jmlHeader" name="jmlHeader" style="width:120px; height: 35px;" max="2">
         </div>
       </div>
       <br>
@@ -144,11 +139,7 @@
         </div>
 
         <div class="col-55">
-          <select id="jmlFooter" name="jmlFooter" style="width: 120px">
-            <option value="0">0</option>
-            <option value="1">1</option> 
-            <option value="2">2</option>
-          </select>
+          <input type="number" class = "col-10" id="jmlFooter" name="jmlFooter" style="width:120px; height: 35px;" min= "0"; max="2">
         </div>
       </div>
       <br>
@@ -196,7 +187,7 @@
         </div>
       {% else %}
         <div class="colBut">
-          <form action="/spv">
+          <form action="/spv/home">
             <button class="submitRed">Exit</button>
           </form>
         </div>

@@ -1175,7 +1175,7 @@ class RequestLaporan:
             db = databaseCMS.db_request()
             cursor = db.cursor()
 
-            cursor.execute('SELECT org_nama, org_id from m_organisasi WHERE org_id ="'+idOrg+'"')
+            cursor.execute('SELECT org_nama, org_id, org_aktifYN from m_organisasi WHERE org_id ="'+idOrg+'"')
 
             org = cursor.fetchall()
             # clear = str(org).replace("('",'').replace("',)","")
@@ -1183,7 +1183,8 @@ class RequestLaporan:
             for i in org:
                 orgDict = {
                 'org_name' : i[0],
-                'org_id' : i[1]
+                'org_id' : i[1],
+                'org_aktifYN' : i[2]
                 }
                 orgList.append(orgDict)
 
@@ -1213,14 +1214,16 @@ class RequestLaporan:
             db = databaseCMS.db_request()
             cursor = db.cursor()
 
-            cursor.execute('SELECT ktgri_nama from m_kategori WHERE ktgri_id ="'+idKat+'"')
+            cursor.execute('SELECT ktgri_nama, ktgri_id, ktgri_aktifYN from m_kategori WHERE ktgri_id ="'+idKat+'"')
 
             kategori = cursor.fetchall()
 
             katList = []
             for i in kategori:
                 katDict = {
-                'kat_name' : i[0]
+                'kat_name' : i[0],
+                'kat_id' : i[1],
+                'kat_aktif' : i[2]
                 }
                 katList.append(katDict)
 
@@ -1304,7 +1307,76 @@ class RequestLaporan:
             print("==========================")
             
             return deptResult
+
+        except Error as e :
+                print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
+    @app.route('/allKategori', methods=['POST', 'GET'])
+    def allKategori():
+        try: 
+            db = databaseCMS.db_request()
+
+            cursor = db.cursor()
+     
+            cursor.execute('SELECT ktgri_id, ktgri_nama, ktgri_aktifYN from m_kategori ORDER BY ktgri_nama')
             
+            resultKat = cursor.fetchall()
+
+            katList = []
+            for row in resultKat:
+                katDict = {
+                'Id' : row[0],
+                'Nama' : row[1],
+                'AktifYN' : row[2]
+                }
+                katList.append(katDict)
+            katResult = json.dumps(katList)
+
+            print("=== [ allKategori ] ===")
+            print("==========================")
+            
+            return katResult
+
+        except Error as e :
+                print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
+    @app.route('/allOrganisasi', methods=['POST', 'GET'])
+    def allOrganisasi():
+        try: 
+            db = databaseCMS.db_request()
+
+            cursor = db.cursor()
+     
+            cursor.execute('SELECT org_id, org_nama, org_aktifYN from m_organisasi ORDER BY org_nama')
+            
+            resultOrg = cursor.fetchall()
+
+            orgList = []
+            for row in resultOrg:
+                orgDict = {
+                'Id' : row[0],
+                'Nama' : row[1],
+                'AktifYN' : row[2]
+                }
+                orgList.append(orgDict)
+            orgResult = json.dumps(orgList)
+
+            print("=== [ allOrganisasi ] ===")
+            print("==========================")
+            
+            return orgResult
 
         except Error as e :
                 print("Error while connecting file MySQL", e)
@@ -1552,6 +1624,69 @@ class RequestLaporan:
                     print("MySQL connection is closed") 
 
 
+    @app.route('/insertDataKategori/<data>', methods=['POST', 'GET'])
+    def insertDataKategori(data):
+        if request.method == 'POST' :
+            dataKategori = json.loads(data)
+
+            for x in dataKategori:
+                id_kategori = dataKategori['kategoriId']
+                nama_kategori = dataKategori['kategoriName']
+                aktif_YN = dataKategori['kategoriAktif']
+
+            try:
+                db = databaseCMS.db_request()
+                cursor = db.cursor()
+
+                cursor.execute(' DELETE FROM m_kategori WHERE ktgri_id = "'+id_kategori+'" ')
+                db.commit()
+
+                cursor.execute(' INSERT INTO m_kategori VALUES (%s, %s, %s)', (id_kategori, nama_kategori, aktif_YN))
+                db.commit()
+
+                print("berhasil")
+            except Error as e:
+                print("Error while connecting file MySQL", e)
+                flash('Error,', e)
+
+            finally:
+                    #Closing DB Connection.
+                if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+                print("MySQL connection is closed")
+
+    @app.route('/insertDataOrganisasi/<data>', methods=['POST', 'GET'])
+    def insertDataOrganisasi(data):
+        if request.method == 'POST' :
+            dataOrganisasi = json.loads(data)
+
+            for x in dataOrganisasi:
+                id_organisasi = dataOrganisasi['organisasiId']
+                nama_organisasi = dataOrganisasi['organisasiName']
+                aktif_YN = dataOrganisasi['organisasiAktif']
+
+            try:
+                db = databaseCMS.db_request()
+                cursor = db.cursor()
+
+                cursor.execute(' DELETE FROM m_organisasi WHERE org_id = "'+id_organisasi+'" ')
+                db.commit()
+
+                cursor.execute(' INSERT INTO m_organisasi VALUES (%s, %s, %s)', (id_organisasi, nama_organisasi, aktif_YN))
+                db.commit()
+
+                print("berhasil")
+            except Error as e:
+                print("Error while connecting file MySQL", e)
+                flash('Error,', e)
+
+            finally:
+                    #Closing DB Connection.
+                if(db.is_connected()):
+                    cursor.close()
+                    db.close()
+                print("MySQL connection is closed")
 
 if __name__ == "__main__":
     app.run(debug=True, port='5001')
